@@ -21,7 +21,6 @@ const NewChallenge = ({ onAdd }) => {
 
   return (
     <div className="form-group challenge-form">
-      <h1>Create New Challenge</h1>
       <Formik
         initialValues={initialValues}
         onSubmit={onSubmit}

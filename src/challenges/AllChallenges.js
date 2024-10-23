@@ -13,18 +13,33 @@ const AllChallenges = (props) => {
   }
 
   function deleteChallenge(id) {
-    setChallenges(preChallenges => {
+    setChallenges((preChallenges) => {
       return preChallenges.filter((challengeItem, index) => {
         return index != id;
-      })
-    })
+      });
+    });
   }
- 
 
   return (
     <div>
       <NewChallenge onAdd={addChallenge} />
-      <h1 className="heading">ALL CHALLENGES</h1>
+      <div className="container">
+        <div className="row align-items-center">
+          <div className="col">
+            <h1>ALL CHALLENGES</h1>
+          </div>
+          <div className="col text-end">
+            <button
+              type="button"
+              class="btn btn-primary"
+              data-bs-toggle="modal"
+              data-bs-target="#exampleModal"
+            >
+              Create New Challenge
+            </button>
+          </div>
+        </div>
+      </div>
       <div>
         {challenges.map((item, index) => {
           return (
