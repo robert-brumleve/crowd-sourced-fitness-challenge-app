@@ -8,7 +8,7 @@ const Navbar = (props) => {
     <nav className="navbar navbar-expand-lg bg-body-tertiary">
       <div className="container-fluid">
         <a className="navbar-brand" href="#">
-          <img src={`./person-arms-up.svg`} />
+          <img src={`./person-arms-up.svg`} alt="person-arms-up" />
           Fitness Challenge
         </a>
         <button
@@ -25,17 +25,13 @@ const Navbar = (props) => {
         <div className="collapse navbar-collapse" id="navbarSupportedContent">
           <ul className="navbar-nav me-auto mb-2 mb-lg-0">
             <li className="nav-item">
-              <NavLink
-                className="nav-link"
-                aria-current="page"
-                to="/account"
-              >
-                Create Account
+              <NavLink className="nav-link active" aria-current="page" to="/">
+                Dashboard
               </NavLink>
             </li>
             <li className="nav-item">
-              <NavLink className="nav-link active" aria-current="page" to="/">
-                Dashboard
+              <NavLink className="nav-link" aria-current="page" to="/account">
+                Create Account
               </NavLink>
             </li>
             <li className="nav-item">
@@ -55,7 +51,7 @@ const Navbar = (props) => {
               >
                 My challenges
               </NavLink>
-            </li>            
+            </li>
           </ul>
           <form className="d-flex" role="search">
             <input

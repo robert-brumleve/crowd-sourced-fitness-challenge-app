@@ -35,7 +35,7 @@ const AllChallenges = (props) => {
               data-bs-toggle="modal"
               data-bs-target="#exampleModal"
             >
-              Create New Challenge
+              Create A New Challenge
             </button>
           </div>
         </div>

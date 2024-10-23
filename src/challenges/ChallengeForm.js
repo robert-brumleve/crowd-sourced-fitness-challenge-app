@@ -14,7 +14,7 @@ const ChallengeForm = () => {
         <div className="modal-dialog">
           <div className="modal-content">
             <div className="modal-header">
-              <h5 className="modal-title fw-bold fs-3" id="exampleModalLabel">
+              <h5 className="modal-title fw-bold fs-4" id="exampleModalLabel">
                 Add A New Challenge
               </h5>
               <button
