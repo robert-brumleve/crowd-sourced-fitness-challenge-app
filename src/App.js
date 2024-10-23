@@ -12,6 +12,7 @@ import UserChallenges from "./challenges/UserChallenges";
 import UpdateChallenge from "./challenges/UpdateChallenge";
 import DashBoard from "./dashboard/DashBoard";
 import AllChallenges from "./challenges/AllChallenges";
+import NewAccount from "./account/NewAccount";
 
 const App = () => {
   return (
@@ -19,6 +20,7 @@ const App = () => {
       <Navbar />
       <Routes>
         <Route path="/" exact element={<DashBoard />} />
+        <Route path="/account" element={<NewAccount />} />
         <Route path="/challenges" element={<AllChallenges />} />
         <Route path="/:userId/challenges" element={<UserChallenges />} />
         <Route path="/challenges/new" element={<NewChallenge />} />
