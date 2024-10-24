@@ -23,6 +23,9 @@ CREATE TABLE IF NOT EXISTS `Challenges` (
   `name` VARCHAR(32) NOT NULL,
   `description` VARCHAR(1024) NOT NULL,
   `difficulty` VARCHAR(8) NOT NULL,
+  `creatorID` INT NOT NULL,
+  `created_at` TIMESTAMP(6) NOT NULL,
+  `imageURL` VARCHAR(1024) NULL,
   PRIMARY KEY (`challengeID`),
   UNIQUE INDEX `name_UNIQUE` (`name` ASC) VISIBLE)
 
