@@ -1,5 +1,5 @@
 import React from "react";
-import { Formik, Field, Form, ErrorMessage } from "formik";
+import { Field, Form, ErrorMessage } from "formik";
 
 const ChallengeForm = () => {
   return (

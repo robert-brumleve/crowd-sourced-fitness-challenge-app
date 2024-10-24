@@ -2,7 +2,7 @@ import React, { useState } from "react";
 
 import Card from "../others/Card";
 
-import DATA_CHALLENGES from "../DUMMY_DATAS";
+// import DATA_CHALLENGES from "../DUMMY_DATAS";
 import NewChallenge from "./NewChallenge";
 
 const AllChallenges = (props) => {
@@ -15,7 +15,7 @@ const AllChallenges = (props) => {
   function deleteChallenge(id) {
     setChallenges((preChallenges) => {
       return preChallenges.filter((challengeItem, index) => {
-        return index != id;
+        return index !== id;
       });
     });
   }

@@ -7,10 +7,11 @@ const Navbar = (props) => {
   return (
     <nav className="navbar navbar-expand-lg bg-body-tertiary">
       <div className="container-fluid">
-        <a className="navbar-brand" href="#">
+        <NavLink className="navbar-brand" aria-current="page" to="/">
           <img src={`./person-arms-up.svg`} alt="person-arms-up" />
           Fitness Challenge
-        </a>
+        </NavLink>
+
         <button
           className="navbar-toggler"
           type="button"
