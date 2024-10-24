@@ -1,5 +1,6 @@
 import React from "react";
 import { NavLink } from "react-router-dom";
+import personArmsUp from "./person-arms-up.svg";
 
 // import './NavLinks.css';
 
@@ -8,7 +9,11 @@ const Navbar = (props) => {
     <nav className="navbar navbar-expand-lg bg-body-tertiary">
       <div className="container-fluid">
         <NavLink className="navbar-brand" aria-current="page" to="/">
-          <img src={`./person-arms-up.svg`} alt="person-arms-up" />
+          <img
+            src={personArmsUp}
+            alt="person-arms-up"
+            style={{ width: "50px", height: "50px" }}
+          />
           Fitness Challenge
         </NavLink>
 
