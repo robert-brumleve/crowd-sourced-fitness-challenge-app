@@ -6,7 +6,10 @@ import personArmsUp from "./person-arms-up.svg";
 
 const Navbar = (props) => {
   return (
+
+
     <nav className="navbar navbar-expand-lg bg-body-tertiary">
+
       <div className="container-fluid">
         <NavLink className="navbar-brand" aria-current="page" to="/">
           <img
@@ -46,7 +49,7 @@ const Navbar = (props) => {
                 aria-current="page"
                 to="/challenges"
               >
-                All challenges
+                Community challenges
               </NavLink>
             </li>
             <li className="nav-item">
@@ -70,6 +73,15 @@ const Navbar = (props) => {
               Search
             </button>
           </form>
+          <div className="nav-item">
+              <NavLink
+                className="nav-link"
+                aria-current="page"
+                to=""
+              >
+                Log in
+              </NavLink>
+            </div>
         </div>
       </div>
     </nav>
