@@ -1,45 +1,53 @@
-import React, { useState } from 'react';
+import React, { useEffect } from 'react';
 import ChatList from './ChatList';
 import ChatBox from './ChatBox';
-
+import ChatLogin from './ChatLogin';
+import {auth} from "./firebase"
+//import {getAuth} from 'firebase/auth'
+//import {UserProvider, UserContext} from './UserContext'
 
 import './chatroom.css';
+import { onAuthStateChanged } from 'firebase/auth';
+import { useUserStore } from './lib/UserStore';
 
-import {auth} from "./firebase";
-import {GoogleAuthProvider, signInWithRedirect} from "firebase/auth";
 
 function ChatRoom() {
-  const [user, setUser] = useState(false);
-  /*
-  const googleSignIn = () =>{
-    auth.signInWithPopup(GoogleAuthProvider());
-    //or auth.signInWithRedirect(auth, GoogleAuthProvider());
-    //setUser(true);
-  };
-  const signOut = () =>{
-    auth.signOut();
-    //setUser(false);
-  };
-  */
-  return(    
-    <div class="container"> 
+  const {currentUser, isLoading, fetchUserInfo} = useUserStore();
+  useEffect(()=>{
+      const unSub = onAuthStateChanged(auth, (user)=>{
+        fetchUserInfo(user?.uid);
+      });
 
-      <ChatList/>
-      <ChatBox/>
-      
-    </div>
+      return()=>{
+        unSub();
+      };
+
+
+  },[fetchUserInfo]);
+
+  return(  
+      <div class="container"> 
+        {
   
+        currentUser ? (
+          <>
+          <ChatList/>
+          <ChatBox/>
+          <ChatLogin/>
+          
+          </>
+        ): (
+          <>
+          <ChatLogin/>
+          
+          </>
+        
+        )
+      
+      }
+      </div>
   );
 }
-/*
-      {user ?(<button onClick={signOut} type="button">
-        sign out
-        </button>
-      ):( 
-      <button onClick={googleSignIn} type="button">
-        sign in
-        </button>
-      )};
-      */
+
 
 export default ChatRoom;
