@@ -1,10 +1,17 @@
-import React, { useState } from 'react'
+import React, { useRef, useState, useEffect } from 'react'
 import './chatroom.css'
 
 const ChatBox = () => {
   const [text, setText] = useState("");
-
-  console.log(text);
+  
+  const lastMessageRef = useRef(null);
+  /* TODO fix auto scroll not working atm*/
+  useEffect(() => {
+    if (lastMessageRef.current) {
+      lastMessageRef.current.scrollIntoView({ behavior: 'smooth' });
+    }
+  }, []);
+  
   return (
     <div class="chatbox">
 
@@ -18,7 +25,52 @@ const ChatBox = () => {
       </div>
 
       <div class="center">
+        <div class="message">
+          <img src='img/chat/avatar2.jpg' alt=''/>
+          <div class="texts">
+            <span>:other_user_name</span>
+            <p>
+              This is a test message. qwertyasdfgzxcv.
+            </p>
+            <span>timestamp</span>
+            
+          </div>
+        </div>
+        <div class="message mine">
+          <div class="texts">
+            <p>
+              This is a test message. qwertyasdfgzxcv.
+            </p>
+            <span>timestamp</span>
+          </div>
+        </div>
+        
+        <div class="message">
+          <img src='img/chat/avatar2.jpg' alt=''/>
+          <div class="texts">
+          <span>:other_user_name</span>
+          <img src='img/chat/pic_example.png' alt=''/>
+            <p>
+              This is a test message. qwertyasdfgzxcv.
+            </p>
+            <span>timestamp</span>
+          </div>
+        </div>
+        <div class="message mine">
+          
+          <div class="texts">
+            <img src='img/chat/pic_example2.png'/>
+            <p>
+              This is a test message. qwertyasdfgzxcv.
+            </p>
+            <span>timestamp</span>
+          </div>
+        </div>
+        
       </div>
+
+      {/* auto scroll to bottom */}
+      <div ref={lastMessageRef} /> 
 
       <div class="bottom">
         <div class="icons">
