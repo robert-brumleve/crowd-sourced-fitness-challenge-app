@@ -13,6 +13,7 @@ import UpdateChallenge from "./challenges/UpdateChallenge";
 import DashBoard from "./dashboard/DashBoard";
 import AllChallenges from "./challenges/AllChallenges";
 import NewAccount from "./account/NewAccount";
+import ChatRoom from "./chat/ChatRoom";
 
 const App = () => {
   return (
@@ -26,6 +27,8 @@ const App = () => {
         <Route path="/challenges/new" element={<NewChallenge />} />
         <Route path="/challenges/:cId" element={<UpdateChallenge />} />
         <Route path="*" element={<Navigate to="/" />} />
+        {/* chat room should possibly be /:uid/chatroom/:chat_id */}
+        <Route path="/chatroom" element={<ChatRoom/>}/>
       </Routes>
     </BrowserRouter>
   );
