@@ -1,21 +1,18 @@
 import { React, useEffect, useState } from "react";
 import "./chatroom.css";
-import { auth, db } from "./firebase";
+import { auth, db } from "./lib/firebase";
 import {
   GoogleAuthProvider,
   signInWithPopup,
-  getAuth,
-  signOut,
   onAuthStateChanged,
 } from "firebase/auth";
-import { setDoc, doc, Timestamp } from "firebase/firestore";
+import { setDoc, doc } from "firebase/firestore";
 
 const ChatLogin = () => {
   const provider = new GoogleAuthProvider();
   //const auth = getAuth();
   const [user, setUser] = useState(null);
 
-  
   //console.log("UserProvider:", user);
 
   const googleSignIn = () => {
@@ -67,7 +64,7 @@ const ChatLogin = () => {
   //listen for auth state changes
   useEffect(() => {
     const unSub = onAuthStateChanged(auth, (currentUser) => {
-      setUser(currentUser)
+      setUser(currentUser);
     });
 
     return () => {

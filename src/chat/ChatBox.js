@@ -2,7 +2,7 @@ import React, { useRef, useState, useEffect } from 'react'
 import './chatroom.css'
 
 const ChatBox = () => {
-  const [text, setText] = useState("");
+  const [ setText] = useState("");
   
   const lastMessageRef = useRef(null);
   /* TODO fix auto scroll not working atm*/
@@ -59,7 +59,7 @@ const ChatBox = () => {
         <div class="message mine">
           
           <div class="texts">
-            <img src='img/chat/pic_example2.png'/>
+            <img src='img/chat/pic_example2.png' alt=''/>
             <p>
               This is a test message. qwertyasdfgzxcv.
             </p>
@@ -74,13 +74,15 @@ const ChatBox = () => {
 
       <div class="bottom">
         <div class="icons">
-          <img src="img/chat/picture.png" alt=""/>
+          <img src="img/chat/add.png" alt="Attach"/>
         </div>
         <input 
         type="text" 
         placeholder="Type a message..."
         onChange={e=>setText(e.target.value)}/>
-        <button class="sendButton">Send</button>
+        <button class="sendButton">
+          <img src='img/chat/send.png' alt='Send'/>
+        </button>
       </div>
 
     </div>
