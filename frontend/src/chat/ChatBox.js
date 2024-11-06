@@ -13,21 +13,21 @@ const ChatBox = () => {
   }, []);
   
   return (
-    <div class="chatbox">
+    <div className="chatbox">
 
-      <div class="top">
-        <div class="challenge">
+      <div className="top">
+        <div className="challenge">
           :challenge name
         </div>
-        <div class="icons">
+        <div className="icons">
           <img src="img/chat/info.png" alt=""/>
         </div>
       </div>
 
-      <div class="center">
-        <div class="message">
+      <div className="center">
+        <div className="message">
           <img src='img/chat/avatar2.jpg' alt=''/>
-          <div class="texts">
+          <div className="texts">
             <span>:other_user_name</span>
             <p>
               This is a test message. qwertyasdfgzxcv.
@@ -36,8 +36,8 @@ const ChatBox = () => {
             
           </div>
         </div>
-        <div class="message mine">
-          <div class="texts">
+        <div className="message mine">
+          <div className="texts">
             <p>
               This is a test message. qwertyasdfgzxcv.
             </p>
@@ -45,9 +45,9 @@ const ChatBox = () => {
           </div>
         </div>
         
-        <div class="message">
+        <div className="message">
           <img src='img/chat/avatar2.jpg' alt=''/>
-          <div class="texts">
+          <div className="texts">
           <span>:other_user_name</span>
           <img src='img/chat/pic_example.png' alt=''/>
             <p>
@@ -56,9 +56,9 @@ const ChatBox = () => {
             <span>timestamp</span>
           </div>
         </div>
-        <div class="message mine">
+        <div className="message mine">
           
-          <div class="texts">
+          <div className="texts">
             <img src='img/chat/pic_example2.png' alt=''/>
             <p>
               This is a test message. qwertyasdfgzxcv.
@@ -72,15 +72,15 @@ const ChatBox = () => {
       {/* auto scroll to bottom */}
       <div ref={lastMessageRef} /> 
 
-      <div class="bottom">
-        <div class="icons">
+      <div className="bottom">
+        <div className="icons">
           <img src="img/chat/add.png" alt="Attach"/>
         </div>
         <input 
         type="text" 
         placeholder="Type a message..."
         onChange={e=>setText(e.target.value)}/>
-        <button class="sendButton">
+        <button className="sendButton">
           <img src='img/chat/send.png' alt='Send'/>
         </button>
       </div>

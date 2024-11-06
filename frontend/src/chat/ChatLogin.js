@@ -73,7 +73,7 @@ const ChatLogin = () => {
   }, []);
 
   return (
-    <div class="chatlogin">
+    <div className="chatlogin">
       {user ? (
         <>
           <button onClick={googleSignOut} type="button">

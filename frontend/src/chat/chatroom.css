@@ -41,6 +41,29 @@
         }
     }
 
+    .addChat{
+        flex: .01;
+        display:flex;
+
+        input{
+            
+            background-color: rgba(17,25, 40, .05);
+            border:none;
+            outline:none;
+            padding:5px;
+            border-radius: 10px;
+            font-size: 14px;;
+        }
+
+        button{
+            border-radius:10px;
+            font-size:14px;
+            border:none;
+            background-color: transparent;    
+        }    
+            
+    }
+
     .challengelist{
         flex:1;
         overflow: Auto;
@@ -126,7 +149,7 @@
                 align-self:flex-end;
                 .texts{
                     p{
-                        background-color: aqua;
+                        background-color: #82b4f4;
                     }
                 }    
 
@@ -206,6 +229,41 @@
     }
 }
 
+.addUser{
+    width:max-content;
+    height:max-content;
+    padding:10px;
+    background-color:rgba(17, 25, 40, 0.303);
+    border-radius: 10px;
+    position: absolute;
+    top:0;
+    bottom: 0;
+    left:0;
+    right:0;
+    margin: auto;
+
+    form{
+        display:flex;
+        gap:20px;
+        input{
+            padding:5px;
+            border-radius:10px;
+        }
+
+        button{
+            padding:5px;
+            border-radius:10px;
+            cursor:pointer;
+        }
+    }
+    .user{
+        margin-top:50px;
+        display:flex;
+        align-items:center;
+        justify-content: space-between;
+    }
+
+}
 
 
 

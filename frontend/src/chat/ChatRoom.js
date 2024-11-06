@@ -25,7 +25,7 @@ function ChatRoom() {
   console.log(currentUser);
 
   return (
-    <div class="container">
+    <div className="container">
       {currentUser ? (
         <>
           <ChatList />
