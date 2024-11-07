@@ -1,6 +1,14 @@
-import React from "react";
+import React, {useEffect, useState} from 'react';
 
 const DashBoard = () => {
+  const [data, setData] = useState([])
+  useEffect (() =>{
+    fetch('http://localhost:5050/challenges')
+    .then(res => res.json())
+    .then(data => setData(data))
+    .catch(err => console.log(err));
+  }, [])
+
   return (
   <div>
   {/* Reference: https://getbootstrap.com/docs/5.1/examples/
@@ -21,8 +29,6 @@ const DashBoard = () => {
           }
         }
       </style> */}
-
-
 
 
       {/* <header>
@@ -143,6 +149,27 @@ const DashBoard = () => {
         </div>
       </div>
       </div>
+
+{/* TESTING TABLLE to check if data can be pull from backend */}
+  <div>
+      <table>
+        <caption>COMMUNICATION TESTING TABLE</caption>
+        <thead>
+          <th>Challenge ID</th>
+          <th>Name</th>
+          <th>Description</th>
+        </thead>
+        <tbody>
+          {data.map((d, i) => (
+            <tr key = {i}>
+              <td>{d.challengeID}</td>
+              <td>{d.name}</td>
+              <td>{d.description}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+  </div>
 
   </div>
 )
