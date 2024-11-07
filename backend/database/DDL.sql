@@ -7,12 +7,12 @@ SET AUTOCOMMIT = 0;
 CREATE TABLE IF NOT EXISTS `Users` (
   `userID` INT NOT NULL AUTO_INCREMENT,
   `username` VARCHAR(16) NOT NULL,
-  `password` VARCHAR(32) NOT NULL,
+  `password` VARCHAR(255) NOT NULL,
   `email` VARCHAR(255) NOT NULL,
-  `created_at` TIMESTAMP(6) NOT NULL,
+  `created_at` DATE NOT NULL,
   PRIMARY KEY (`userID`),
-  UNIQUE INDEX `email_UNIQUE` (`email` ASC) VISIBLE,
-  UNIQUE INDEX `username_UNIQUE` (`username` ASC) VISIBLE)
+  UNIQUE INDEX `email_UNIQUE` (`email` ASC),
+  UNIQUE INDEX `username_UNIQUE` (`username` ASC));
 
 
 -- -----------------------------------------------------
@@ -27,7 +27,7 @@ CREATE TABLE IF NOT EXISTS `Challenges` (
   `created_at` TIMESTAMP(6) NOT NULL,
   `imageURL` VARCHAR(1024) NULL,
   PRIMARY KEY (`challengeID`),
-  UNIQUE INDEX `name_UNIQUE` (`name` ASC) VISIBLE)
+  UNIQUE INDEX `name_UNIQUE` (`name` ASC));
 
 
 -- -----------------------------------------------------
@@ -37,8 +37,8 @@ CREATE TABLE IF NOT EXISTS `Users_has_Challenges` (
   `userID` INT NOT NULL,
   `challengeID` INT NOT NULL,
   PRIMARY KEY (`userID`, `challengeID`),
-  INDEX `fk_Users_has_Challenges_Challenges1_idx` (`challengeID` ASC) VISIBLE,
-  INDEX `fk_Users_has_Challenges_Users_idx` (`userID` ASC) VISIBLE,
+  INDEX `fk_Users_has_Challenges_Challenges1_idx` (`challengeID` ASC),
+  INDEX `fk_Users_has_Challenges_Users_idx` (`userID` ASC),
   CONSTRAINT `fk_Users_has_Challenges_Users`
     FOREIGN KEY (`userID`)
     REFERENCES `Users` (`userID`)
@@ -48,7 +48,7 @@ CREATE TABLE IF NOT EXISTS `Users_has_Challenges` (
     FOREIGN KEY (`challengeID`)
     REFERENCES `Challenges` (`challengeID`)
     ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
+    ON UPDATE NO ACTION);
 
 
 -- -----------------------------------------------------
@@ -59,13 +59,13 @@ CREATE TABLE IF NOT EXISTS `Badges` (
   `name` VARCHAR(32) NOT NULL,
   `challengeID` INT NOT NULL,
   PRIMARY KEY (`badgeID`, `challengeID`),
-  UNIQUE INDEX `name_UNIQUE` (`name` ASC) VISIBLE,
-  INDEX `fk_Badges_Challenges1_idx` (`challengeID` ASC) VISIBLE,
+  UNIQUE INDEX `name_UNIQUE` (`name` ASC),
+  INDEX `fk_Badges_Challenges1_idx` (`challengeID` ASC),
   CONSTRAINT `fk_Badges_Challenges1`
     FOREIGN KEY (`challengeID`)
     REFERENCES `Challenges` (`challengeID`)
     ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
+    ON UPDATE NO ACTION);
 
 
 -- -----------------------------------------------------
@@ -75,8 +75,8 @@ CREATE TABLE IF NOT EXISTS `Users_has_Badges` (
   `userID` INT NOT NULL,
   `badgeID` INT NOT NULL,
   PRIMARY KEY (`userID`, `badgeID`),
-  INDEX `fk_Users_has_Badges_Badges1_idx` (`badgeID` ASC) VISIBLE,
-  INDEX `fk_Users_has_Badges_Users1_idx` (`userID` ASC) VISIBLE,
+  INDEX `fk_Users_has_Badges_Badges1_idx` (`badgeID` ASC),
+  INDEX `fk_Users_has_Badges_Users1_idx` (`userID` ASC),
   CONSTRAINT `fk_Users_has_Badges_Users1`
     FOREIGN KEY (`userID`)
     REFERENCES `Users` (`userID`)
@@ -86,7 +86,7 @@ CREATE TABLE IF NOT EXISTS `Users_has_Badges` (
     FOREIGN KEY (`badgeID`)
     REFERENCES `Badges` (`badgeID`)
     ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
+    ON UPDATE NO ACTION);
 
 
 SET FOREIGN_KEY_CHECKS=1;
