@@ -1,10 +1,8 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import axios from "axios";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
-const UpdateChallenge = () => {
-  const { id } = useParams();
-  const navigate = useNavigate();
+const CreateChallenge = (props) => {
   const [challenge, setChallenge] = useState({
     name: "",
     description: "",
@@ -13,59 +11,52 @@ const UpdateChallenge = () => {
     imageURL: "",
   });
 
-  useEffect(() => {
-    axios
-      .get(`http://localhost:5000/api/challenges/view/${id}`)
-      .then((res) => {
-        console.log(res);
-        setChallenge(res.data[0]);
-      })
-      .catch((err) => console.log(err));
-  }, [id]);
+  const navigate = useNavigate();
 
-  const handleChange = (event) => {
+  function handleChange(event) {
     const { name, value } = event.target;
-    setChallenge((prevChallenge) => ({
-      ...prevChallenge,
-      [name]: value,
-    }));
-  };
 
-  function submitUpdate(event) {
+    setChallenge((prevChallenges) => {
+      return {
+        ...prevChallenges,
+        [name]: value,
+      };
+    });
+  }
+
+  function submitChallenge(event) {
     event.preventDefault();
-    console.log("Updating challenge with data:", challenge);
+    console.log("Submitting challenge:", challenge);
+
     axios
-      .patch(`http://localhost:5000/api/challenges/update/${id}`, challenge, {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      })
-      .then((res) => {
-        console.log("Challenge updated:", res);
+      .post("http://localhost:5000/api/challenges", challenge)
+      .then((response) => {
+        console.log("Challenge added:", response.data);
+
+        // props.onAdd(challenge);
         navigate("/challenges");
       })
-      .catch((err) => {
-        console.log(err);
-        navigate("/challenges");
+      .catch((error) => {
+        console.error("There was an error adding new challenge!", error);
       });
   }
   return (
     <div className="row justify-content-center">
       <div className="w-50 bg-white rounded p-3">
-        <form onSubmit={submitUpdate}>
-          <h2>UPDATE CHALLENGE</h2>
+        <form onSubmit={submitChallenge}>
+          <h2>ADD CHALLENGE</h2>
           <div className="mb-2">
             <label htmlFor="">Name</label>
             <input
               type="text"
-              //   readonly
+              placeholder="Add a new challenge name"
               className="form-control"
               name="name"
               value={challenge.name}
               onChange={handleChange}
             />
           </div>
-          <div className="mb-2">
+          <div className="='mb-2">
             <label htmlFor="">Description</label>
             <input
               type="text"
@@ -76,18 +67,18 @@ const UpdateChallenge = () => {
               onChange={handleChange}
             />
           </div>
-          <div className="mb-2">
+          <div className="='mb-2">
             <label htmlFor="">Difficulty</label>
             <input
               type="text"
-              // placeholder="difficulty"
+              // placeholder="Add a new challenge name"
               className="form-control"
               name="difficulty"
               value={challenge.difficulty}
               onChange={handleChange}
             />
           </div>
-          <div className="mb-2">
+          <div className="='mb-2">
             <label htmlFor="">Creator</label>
             <input
               type="text"
@@ -98,7 +89,7 @@ const UpdateChallenge = () => {
               onChange={handleChange}
             />
           </div>
-          <div className="mb-2">
+          <div className="='mb-2">
             <label htmlFor="">Image URL</label>
             <input
               type="text"
@@ -109,14 +100,11 @@ const UpdateChallenge = () => {
               onChange={handleChange}
             />
           </div>
-          <button className="btn btn-info mx-2">Submit</button>
-          <Link to="/challenges" className="btn btn-primary">
-            Back
-          </Link>
+          <button className="btn btn-success ">Add</button>
         </form>
       </div>
     </div>
   );
 };
 
-export default UpdateChallenge;
+export default CreateChallenge;

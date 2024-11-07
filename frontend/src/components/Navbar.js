@@ -1,15 +1,12 @@
 import React from "react";
 import { NavLink } from "react-router-dom";
-import personArmsUp from "./person-arms-up.svg";
+import personArmsUp from "../image/person-arms-up.svg";
 
 // import './NavLinks.css';
 
 const Navbar = (props) => {
   return (
-
-
     <nav className="navbar navbar-expand-lg bg-body-tertiary">
-
       <div className="container-fluid">
         <NavLink className="navbar-brand" aria-current="page" to="/">
           <img
@@ -19,7 +16,6 @@ const Navbar = (props) => {
           />
           Fitness Challenge
         </NavLink>
-
         <button
           className="navbar-toggler"
           type="button"
