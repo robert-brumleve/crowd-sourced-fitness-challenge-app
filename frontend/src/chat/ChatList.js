@@ -6,8 +6,7 @@ import React, { useEffect, useState } from "react";
 import "./chatroom.css";
 
 import { useUserStore } from "./lib/UserStore";
-import { arrayUnion, collection, doc, 
-  getDoc, onSnapshot, serverTimestamp, setDoc, updateDoc } from "firebase/firestore";
+import { doc, getDoc, onSnapshot  } from "firebase/firestore";
 import { db } from"./lib/firebase";
 import AddUser from "./component/AddUser";
 import { useChatStore } from "./lib/ChatStore";
@@ -17,10 +16,9 @@ const ChatList = () => {
   const{currentUser} = useUserStore();
   const{ changeChat} = useChatStore();
   const [chats, setChats] =useState([]);
-  const [user] = useState([]);
   const [addMode, setAddMode] = useState(false);
 
-  {/*TODO: change to challenge when database is connected*/}
+  /*TODO: change to challenge when database is connected*/
   useEffect(()=>{
     const unsub = onSnapshot(doc(db, "userchats", currentUser.uid), async (res) => {
       const items = res.data().chats;

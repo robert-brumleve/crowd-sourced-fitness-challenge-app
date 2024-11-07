@@ -7,19 +7,15 @@ import {
   onSnapshot,
   updateDoc,
 } from "firebase/firestore";
-import { auth, db } from "./lib/firebase";
+import { db } from "./lib/firebase";
 import { useChatStore } from "./lib/ChatStore";
 import { useUserStore } from "./lib/UserStore";
-import { onAuthStateChanged } from "firebase/auth";
-import upload from "./component/Upload";
+//import upload from "./component/Upload";
 
 const ChatBox = () => {
   const [text, setText] = useState("");
   const [chat, setChat] = useState();
-  const [img, setImg] = useState({
-    file: null,
-    url: "",
-  });
+  
 
   const { chatId, user } = useChatStore();
   const { currentUser } = useUserStore();

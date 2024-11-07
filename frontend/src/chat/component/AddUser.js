@@ -3,7 +3,8 @@
 
 import React, { useState } from 'react'
 import "../chatroom.css"
-import { arrayUnion, collection, doc, getDoc, getDocs, query, serverTimestamp, setDoc, updateDoc, where } from 'firebase/firestore';
+import { arrayUnion, collection, doc,  getDocs, 
+  query, serverTimestamp, setDoc, updateDoc, where } from 'firebase/firestore';
 import { db } from '../lib/firebase';
 import { useUserStore } from '../lib/UserStore';
 
@@ -41,7 +42,7 @@ const AddUser = () => {
         }
     }
 
-    {/* Adds new chat */}
+    /* Adds new chat */
     const handleAdd = async ()=>{
 
         const chatRef = collection(db,"chats");
@@ -49,7 +50,7 @@ const AddUser = () => {
         
         try{
           const newChatRef = doc(chatRef);
-          {/*creates new chat*/}
+          /*creates new chat*/
           await setDoc(newChatRef,{
             createdAt:serverTimestamp(),
             challengeId:".",
@@ -58,7 +59,7 @@ const AddUser = () => {
           })
           console.log(newChatRef);
           
-          {/**update other's userchat */}
+          /**update other's userchat */
           await updateDoc(doc(userChatRef, user.uid),{
             chats:arrayUnion({
               chatId: newChatRef.id,
@@ -68,7 +69,7 @@ const AddUser = () => {
             })
           })
 
-          {/**update user's userchat */}
+          /**update user's userchat */
           await updateDoc(doc(userChatRef, currentUser.uid),{
             chats:arrayUnion({
               chatId: newChatRef.id,
