@@ -51,11 +51,7 @@ const AllChallenges = () => {
             {challenges.map((item) => {
               return (
                 <tr key={item.challengeID}>
-                  <td
-                    scope="row"
-                    className="text-center"
-                    style={{ width: "33.33%" }}
-                  >
+                  <td className="text-center" style={{ width: "33.33%" }}>
                     {item.name}
                   </td>
                   <td className="text-center" style={{ width: "33.33%" }}>
