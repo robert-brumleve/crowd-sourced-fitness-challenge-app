@@ -10,10 +10,12 @@ import { arrayUnion, collection, doc,
   getDoc, onSnapshot, serverTimestamp, setDoc, updateDoc } from "firebase/firestore";
 import { db } from"./lib/firebase";
 import AddUser from "./component/AddUser";
+import { useChatStore } from "./lib/ChatStore";
 
 const ChatList = () => {
 
   const{currentUser} = useUserStore();
+  const{ changeChat} = useChatStore();
   const [chats, setChats] =useState([]);
   const [user] = useState([]);
   const [addMode, setAddMode] = useState(false);
@@ -42,32 +44,9 @@ const ChatList = () => {
     }
   },[currentUser.uid])
 
-  const handleAdd = async ()=>{
-
-    const chatRef = collection(db,"chats");
-    const userChatRef = collection(db,"userchats")
-    
-    try{
-      const newChatRef = doc(chatRef);
-      {/*creates new chat*/}
-      await setDoc(newChatRef,{
-        createdAt:serverTimestamp(),
-        challengeId:"",
-        challengeName:"",
-        messages: [],
-      })
-
-      await updateDoc(doc(userChatRef, user.uid),{
-        chats:arrayUnion({
-          chatId: newChatRef.id,
-          lastMessage:"",
-          receiverId:currentUser.uid,
-          updatedAt: Date.now(),
-        })
-      })
-    }catch (err){
-      console.log(err);
-    }
+  /* handle when chat from the list is selected*/
+  const handleSelect = async (chat) =>{
+    changeChat(chat.chatId)
   }
 
   return (
@@ -88,12 +67,9 @@ const ChatList = () => {
       {/* Add User/challenge REMOVE LATER */}
       <div className="addChat">
       
-      <input 
-        type="text" 
-        placeholder="search"
-        />
+  
         <button onClick={()=> setAddMode((prev) => !prev)}>
-          {addMode ? "sub": "add"}
+          {addMode ? "minimize": "add chat"}
         </button>
           
       </div>
@@ -104,10 +80,12 @@ const ChatList = () => {
       <div className="challengelist">
         
         {chats.map((chat) =>(
-          <div className="item" key={chat.chatId}>
+          <div className="item" key={chat.chatId}
+          onClick={() =>handleSelect(chat)}>
             <img src="img/chat/fitness.png" alt="" />
             <div className="texts">
-              <span>:challenge name</span>
+              {/*TODO: change to challenge name */}
+              <span>{chat.chatId}</span>
               <p>{chat.lastMessage}</p>
             </div>
           </div>

@@ -9,9 +9,13 @@ import { auth } from "./lib/firebase";
 import "./chatroom.css";
 import { onAuthStateChanged } from "firebase/auth";
 import { useUserStore } from "./lib/UserStore";
+import { useChatStore } from "./lib/ChatStore";
+
 
 function ChatRoom() {
   const { currentUser, fetchUserInfo } = useUserStore();
+  const{ chatId} =useChatStore();
+
   useEffect(() => {
     const unsub = onAuthStateChanged(auth, (user) => {
       fetchUserInfo(user?.uid);
@@ -29,7 +33,7 @@ function ChatRoom() {
       {currentUser ? (
         <>
           <ChatList />
-          <ChatBox />
+          {chatId && <ChatBox />}
           <ChatLogin />
         </>
       ) : (
