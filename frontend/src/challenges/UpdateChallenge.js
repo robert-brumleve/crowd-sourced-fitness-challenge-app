@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { Link, useNavigate, useParams } from "react-router-dom";
+import Header from "../components/Header";
 
 const UpdateChallenge = () => {
   const { id } = useParams();
@@ -51,9 +52,9 @@ const UpdateChallenge = () => {
   }
   return (
     <div className="row justify-content-center">
+        <Header header="UPDATE CHALLENGE"/>
       <div className="w-50 bg-white rounded p-3">
         <form onSubmit={submitUpdate}>
-          <h2>UPDATE CHALLENGE</h2>
           <div className="mb-2">
             <label htmlFor="">Name</label>
             <input

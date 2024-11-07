@@ -24,7 +24,7 @@ const AllChallenges = () => {
   };
 
   return (
-    <div className="container mt-4">
+    <div className="border p-3">
       <Header header="COMMUNITY CHALLENGES" />
       <div className="d-flex justify-content-end">
         <Link to="/challenges/create" className="btn btn-success">
@@ -36,6 +36,9 @@ const AllChallenges = () => {
         <table className="table table-sm table-bordered table-hover">
           <thead>
             <tr>
+            <th scope="col" className="text-center col-sm-1">
+                ID
+              </th>
               <th scope="col" className="text-center col-sm-1">
                 Name
               </th>
@@ -51,6 +54,7 @@ const AllChallenges = () => {
             {challenges.map((item) => {
               return (
                 <tr key={item.challengeID}>
+                  <th scope="row">{item.challengeID}</th>
                   <td className="text-center" style={{ width: "33.33%" }}>
                     {item.name}
                   </td>
