@@ -4,7 +4,6 @@
 
 
 import { create } from "zustand";
-import { useUserStore } from "./UserStore";
 
 export const useChatStore = create((set) => ({
   chatId: null,
