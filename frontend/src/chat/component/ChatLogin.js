@@ -1,6 +1,6 @@
 import { React, useEffect, useState } from "react";
-import "./chatroom.css";
-import { auth, db } from "./lib/firebase";
+import "../chatroom.css";
+import { auth, db } from "../lib/firebase";
 import {
   GoogleAuthProvider,
   signInWithPopup,

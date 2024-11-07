@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import ChatList from "./ChatList";
 import ChatBox from "./ChatBox";
-import ChatLogin from "./ChatLogin";
+import ChatLogin from "./component/ChatLogin";
 import { auth } from "./lib/firebase";
 //import {getAuth} from 'firebase/auth'
 //import {UserProvider, UserContext} from './UserContext'
@@ -11,10 +11,9 @@ import { onAuthStateChanged } from "firebase/auth";
 import { useUserStore } from "./lib/UserStore";
 import { useChatStore } from "./lib/ChatStore";
 
-
 function ChatRoom() {
   const { currentUser, fetchUserInfo } = useUserStore();
-  const{ chatId} =useChatStore();
+  const { chatId } = useChatStore();
 
   useEffect(() => {
     const unsub = onAuthStateChanged(auth, (user) => {
