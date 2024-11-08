@@ -21,23 +21,17 @@ const ChatList = () => {
   /*TODO: change to challenge when database is connected*/
   useEffect(()=>{
     const unsub = onSnapshot(doc(db, "userchats", currentUser.uid), async (res) => {
-      console.log(currentUser.uid);
-      console.log("res:",res.data());
+      
       const items = res.data().chats;
-      console.log("items:", items);
 
       const promises = items.map(async(item)=>{
-        console.log("inside promise");
         const userDocRef = doc(db, "users", item.receiverId);
         const userDocSnap = await getDoc(userDocRef);
 
         const user = userDocSnap.data();
-      console.log("user",user);
         return{...item, user};
         
       });
-      console.log("outside promise");
-      console.log("promise: ", promises);
       const chatData = await Promise.all(promises);
       /* sort list by updated status*/
       console.log("chatdata:",chatData);

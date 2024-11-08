@@ -13,11 +13,14 @@ import { useChatStore } from "./lib/ChatStore";
 
 function ChatRoom() {
   const { currentUser, fetchUserInfo } = useUserStore();
-  const { chatId } = useChatStore();
+  const { chatId, resetChat } = useChatStore();
 
   useEffect(() => {
     const unsub = onAuthStateChanged(auth, (user) => {
       fetchUserInfo(user?.uid);
+      console.log("user?:", user?.uid);
+      //reset chat when new user is in
+      
     });
 
     return () => {
@@ -25,7 +28,7 @@ function ChatRoom() {
     };
   }, [fetchUserInfo]);
 
-  console.log(currentUser);
+  //console.log(currentUser);
 
   return (
     <div className="container">
