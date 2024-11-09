@@ -11,7 +11,6 @@ import { useChatStore } from "../lib/ChatStore";
 
 const ChatLogin = () => {
   const provider = new GoogleAuthProvider();
-  //const auth = getAuth();
   const [user, setUser] = useState(null);
   const {resetChat} = useChatStore();
 
@@ -28,8 +27,6 @@ const ChatLogin = () => {
         console.log(error.message);
       });
 
-    //signInWithRedirect(auth, provider);
-    //setUser(true);
   };
   const googleSignOut = () => {
     auth

@@ -34,7 +34,6 @@ const ChatList = () => {
       });
       const chatData = await Promise.all(promises);
       /* sort list by updated status*/
-      console.log("chatdata:",chatData);
       setChats(chatData.sort((a,b)=>b.updatedAt - a.updatedAt));
     });
 
