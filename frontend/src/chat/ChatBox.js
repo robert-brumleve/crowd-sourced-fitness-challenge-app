@@ -5,7 +5,6 @@ import {
   doc,
   getDoc,
   onSnapshot,
-  query,
   updateDoc,
 } from "firebase/firestore";
 import { db } from "./lib/firebase";
@@ -105,11 +104,11 @@ useEffect(()=>{
     const senderData = await Promise.all(promises);
     
     //set sender display for each message
-    const info = senderData.map(async(data)=>{
+    senderData.map(async(data)=>{
       
       setSender(data.sender.displayName);
       setSenderPic(data.sender.photoURL);
-      console.log(senderPic);
+      //console.log(senderPic);
     })
   });
 
