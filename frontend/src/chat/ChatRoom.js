@@ -27,8 +27,6 @@ function ChatRoom() {
     };
   }, [fetchUserInfo]);
 
-  //console.log(currentUser);
-
   return (
     <div className="container">
       {currentUser ? (
