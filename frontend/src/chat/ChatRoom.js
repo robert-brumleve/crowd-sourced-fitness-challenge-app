@@ -28,7 +28,7 @@ function ChatRoom() {
   }, [fetchUserInfo]);
 
   return (
-    <div className="container">
+    <div className="chatContainer">
       {currentUser ? (
         <>
           <ChatList />
