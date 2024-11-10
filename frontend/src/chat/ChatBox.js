@@ -16,10 +16,10 @@ const ChatBox = () => {
   const [text, setText] = useState("");
   const [chat, setChat] = useState();
   
-
   const { chatId, user } = useChatStore();
   const { currentUser } = useUserStore();
   const lastMessageRef = useRef(null);
+
   /* TODO fix auto scroll not working atm*/
   useEffect(() => {
     if (lastMessageRef.current) {
@@ -27,17 +27,24 @@ const ChatBox = () => {
     }
   }, []);
 
-  /*fetch messages*/
-  useEffect(() => {
-    const unsub = onSnapshot(doc(db, "chats", chatId), (res) => {
-      setChat(res.data());
+useEffect(() => {
+  const unsub = onSnapshot(doc(db, "chats", chatId), async(res) => {
+    const items = res.data().messages;
+
+    const promises = items.map(async(item)=>{
+      const senderDocRef = doc(db, "users", item.senderId);
+      const senderDocSnap = await getDoc(senderDocRef);
+      const sender = senderDocSnap.data();
+      return{...item, sender};
     });
+    const senderData = await Promise.all(promises);
+    setChat(senderData);
+  });
 
-    return () => {
-      unsub();
-    };
-  }, [chatId]);
-
+  return () => {
+    unsub();
+  };
+}, [chatId]);
   /*TODO:fetch other user info from messager senderid*/
 
   /*TODO: handle image upload*/
@@ -85,6 +92,8 @@ const ChatBox = () => {
     setText("");
   };
 
+  
+
   return (
     <div className="chatbox">
       <div className="top">
@@ -97,24 +106,27 @@ const ChatBox = () => {
         </div>
       </div>
 
+      {/* Message Section */}
       <div className="center">
-        {chat?.messages?.map((message) => (
+        {chat?.map((message) => (
           <div
             className={
-              message?.senderId === currentUser.uid ? "message mine" : "message"
+              message.senderId === currentUser.uid ? "message mine" : "message"
             }
-            key={message?.createdAt}
+            key={message.createdAt}
           >
             {/* show image and name if message is not current user's */}
-            {message.senderId !== currentUser.uid && <img src="" alt="" />}
+            {message.senderId !== currentUser.uid && 
+            <img src={ message.sender.photoURL || "/img/chat/avatar.png" } alt="." />}
 
             <div className="texts">
               {message.senderId !== currentUser.uid && (
-                <span>{message.senderId}</span>
+                <span>{message.sender.displayName}</span>
               )}
               {message.img && <img src={message.img} alt="" />}
               <p>{message.text}</p>
-              {/*<span>{message}</span>*/}
+              <span>{message.createdAt.toDate().toLocaleDateString() + " @ "+
+              message.createdAt.toDate().toLocaleTimeString()}</span>
             </div>
           </div>
         ))}

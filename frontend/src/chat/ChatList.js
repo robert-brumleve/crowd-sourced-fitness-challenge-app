@@ -21,17 +21,17 @@ const ChatList = () => {
   /*TODO: change to challenge when database is connected*/
   useEffect(()=>{
     const unsub = onSnapshot(doc(db, "userchats", currentUser.uid), async (res) => {
-      const items = res.data().chats;
       
+      const items = res.data().chats;
+
       const promises = items.map(async(item)=>{
         const userDocRef = doc(db, "users", item.receiverId);
         const userDocSnap = await getDoc(userDocRef);
 
         const user = userDocSnap.data();
-
         return{...item, user};
+        
       });
-
       const chatData = await Promise.all(promises);
       /* sort list by updated status*/
       setChats(chatData.sort((a,b)=>b.updatedAt - a.updatedAt));

@@ -18,14 +18,14 @@ function ChatRoom() {
   useEffect(() => {
     const unsub = onAuthStateChanged(auth, (user) => {
       fetchUserInfo(user?.uid);
+      //console.log("user?:", user?.uid);
+      
     });
 
     return () => {
       unsub();
     };
   }, [fetchUserInfo]);
-
-  console.log(currentUser);
 
   return (
     <div className="container">
