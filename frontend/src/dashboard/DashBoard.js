@@ -1,76 +1,53 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 
 const DashBoard = () => {
+  const [data, setData] = useState([])
+  useEffect (() =>{
+    fetch('http://localhost:5000/api/challenges')
+    .then(res => res.json())
+    .then(data => setData(data))
+    .catch(err => console.log(err));
+  }, [])
+
+// const DashBoard = () => {
+//   const [challenges, setChallenges] = useState([]);
+//   const {id} = useParams();
+
+//   useEffect (() =>{
+//     // fetch(`http://localhost:5000/api/challenges/view/${id}`)
+//     fetch('http://localhost:5000/api/challenges')
+//     // .then((res) => {
+//       // console.log(res);
+//       // setChallenge(res.data[0]);
+//     .then(res => res.json())
+//     .then((res) => setChallenges(res.data))
+//     // .then((res) => setChallenge(res.data))
+//     // })
+//     .catch(err => console.log(err));
+//   }, [])
+
+
   return (
   <div>
   {/* Reference: https://getbootstrap.com/docs/5.1/examples/
   <link href="../assets/dist/css/bootstrap.min.css" rel="stylesheet"> */}
-
-      {/* <style>
-        .bd-placeholder-img {
-          font-size: 1.125rem;
-          text-anchor: middle;
-          -webkit-user-select: none;
-          -moz-user-select: none;
-          user-select: none;
-        }
-
-        @media (min-width: 768px) {
-          .bd-placeholder-img-lg {
-            font-size: 3.5rem;
-          }
-        }
-      </style> */}
-
-
-
-
-      {/* <header>
-      <div class="collapse bg-dark" id="navbarHeader">
-      <div class="container">
-        <div class="row">
-          <div class="col-sm-8 col-md-7 py-4">
-            <h4 class="text-white">About</h4>
-            <p class="text-muted">Add some information about the album below, the author, or any other background context. Make it a few sentences long so folks can pick up some informative tidbits. Then, link them off to some social networking sites or contact information.</p>
-          </div>
-          <div class="col-sm-4 offset-md-1 py-4">
-            <h4 class="text-white"> My Account</h4>
-            <ul class="list-unstyled">
-              <li><a href="/placeholder" class="text-white">Personal Information</a></li>
-              <li><a href="/placeholder" class="text-white">Change Password</a></li>
-            </ul>
-          </div>
-        </div>
-      </div>
-      </div>
-      <div class="navbar navbar-dark bg-dark shadow-sm">
-      <div class="container">
-         NEED TO CHANGE PICTURE
-        <a href="/placeholder" class="navbar-brand d-flex align-items-center">
-          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" aria-hidden="true" class="me-2" viewBox="0 0 24 24"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
-          <strong>Badges</strong>
-        </a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarHeader" aria-controls="navbarHeader" aria-expanded="false" aria-label="Toggle navigation">
-          <span class="navbar-toggler-icon"></span>
-        </button>
-      </div>
-      </div>
-      </header> */}
-
-
       <section class="py-5 text-center container">
       <div class="row py-lg-5">
         <div class="col-lg-6 col-md-8 mx-auto">
           <h1 class="fw-light">Challenge Dashboard</h1>
           <p class="lead text-muted">This dashboard displays the most recent challenges you have participated in. Keep moving!</p>
           <p>
-            <a href="/placeholder" class="btn btn-primary my-2">My Challenges</a>
-            <a href="/placeholder" class="btn btn-secondary my-2">Community Challenges</a>
+            {/* <a href="/placeholder" class="btn btn-primary my-2">My Challenges</a> */}
+            <a href="/challenges" class="btn btn-secondary my-2">Community Challenges</a>
           </p>
         </div>
       </div>
       </section>
 
+      <div>
+      {data.map((d, i) => {
+          return (
       <div class="album py-5 bg-light">
       <div class="container">
 
@@ -79,72 +56,36 @@ const DashBoard = () => {
             <div class="card shadow-sm">
               <svg class="bd-placeholder-img card-img-top" width="100%" height="225" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="#55595c"/><text x="50%" y="50%" fill="#eceeef" dy=".3em">Thumbnail</text></svg>
 
-              <div class="card-body">
-                <p class="card-text">Challenge name & Description.</p>
+              <div class="card-body" key = {i}>
+
+                <p class="card-text">{d.name}</p>
                 <div class="d-flex justify-content-between align-items-center">
                   <div class="btn-group">
-                    <button type="button" class="btn btn-sm btn-outline-secondary">View</button>
-                    <button type="button" class="btn btn-sm btn-outline-secondary">Edit</button>
+                    <button type="button" class="btn btn-sm btn-outline-secondary">
+                      <Link to={`/challenges/view/${d.challengeID}`}
+                      className="btn btn-info btn-sm">View </Link>
+                      </button>
+
+                    <button type="button" class="btn btn-sm btn-outline-secondary">
+                    <Link
+                      to={`/challenges/update/${d.challengeID}`}
+                      className="btn btn-sm btn-primary mx-2"> Edit </Link>
+                      </button>
                   </div>
                   <small class="text-muted">9 mins</small>
                 </div>
               </div>
-            </div>
-          </div>
-          <div class="col">
-            <div class="card shadow-sm">
-              <svg class="bd-placeholder-img card-img-top" width="100%" height="225" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="#55595c"/><text x="50%" y="50%" fill="#eceeef" dy=".3em">Thumbnail</text></svg>
 
-              <div class="card-body">
-                <p class="card-text">Challenge name & Description.</p>
-                <div class="d-flex justify-content-between align-items-center">
-                  <div class="btn-group">
-                    <button type="button" class="btn btn-sm btn-outline-secondary">View</button>
-                    <button type="button" class="btn btn-sm btn-outline-secondary">Edit</button>
-                  </div>
-                  <small class="text-muted">9 mins</small>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="col">
-            <div class="card shadow-sm">
-              <svg class="bd-placeholder-img card-img-top" width="100%" height="225" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="#55595c"/><text x="50%" y="50%" fill="#eceeef" dy=".3em">Thumbnail</text></svg>
-
-              <div class="card-body">
-                <p class="card-text">Challenge name & Description.</p>
-                <div class="d-flex justify-content-between align-items-center">
-                  <div class="btn-group">
-                    <button type="button" class="btn btn-sm btn-outline-secondary">View</button>
-                    <button type="button" class="btn btn-sm btn-outline-secondary">Edit</button>
-                  </div>
-                  <small class="text-muted">9 mins</small>
-                </div>
-              </div>
             </div>
           </div>
 
-          <div class="col">
-            <div class="card shadow-sm">
-              <svg class="bd-placeholder-img card-img-top" width="100%" height="225" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="#55595c"/><text x="50%" y="50%" fill="#eceeef" dy=".3em">Thumbnail</text></svg>
-
-              <div class="card-body">
-                <p class="card-text">Challenge name & Description.</p>
-                <div class="d-flex justify-content-between align-items-center">
-                  <div class="btn-group">
-                    <button type="button" class="btn btn-sm btn-outline-secondary">View</button>
-                    <button type="button" class="btn btn-sm btn-outline-secondary">Edit</button>
-                  </div>
-                  <small class="text-muted">9 mins</small>
-                </div>
-              </div>
-            </div>
-          </div>
         </div>
       </div>
       </div>
-
-  </div>
+          )
+          })}
+      </div>
+</div>
 )
 };
 
