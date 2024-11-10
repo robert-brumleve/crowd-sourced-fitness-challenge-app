@@ -9,7 +9,7 @@ import CreateChallenge from "./challenges/CreateChallenge";
 import ViewChallenge from "./challenges/ViewChallenge";
 import UpdateChallenge from "./challenges/UpdateChallenge";
 
-// import ChatRoom from "./chat/ChatRoom";
+import ChatRoom from "./chat/ChatRoom";
 
 const App = () => {
   return (
@@ -23,8 +23,7 @@ const App = () => {
         <Route path="/challenges/view/:id" element={<ViewChallenge />} />
         <Route path="/challenges/update/:id" element={<UpdateChallenge />} />
         <Route path="*" element={<Navigate to="/" />} />
-        {/* chat room should possibly be /:uid/chatroom/:chat_id */}
-        {/* <Route path="/chatroom" element={<ChatRoom/>}/> */}
+        <Route path="/chatroom" element={<ChatRoom/>}/>
       </Routes>
     </BrowserRouter>
   );
