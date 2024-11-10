@@ -1,33 +1,8 @@
-const express = require('express');
-const mysql = require('mysql2');
 const bcrypt = require('bcryptjs');
-const bodyParser = require('body-parser');
-const cors = require('cors');
+const db = require('../db_connection');  // Importing the database connection
 
-const app = express();
-const port = 5000;
-
-app.use(cors()); // Enable CORS for frontend-backend communication
-app.use(bodyParser.json()); // Parse JSON bodies
-
-// MySQL connection
-const db = mysql.createConnection({
-  host: '99.106.34.153',
-  user: 'csfca',
-  password: 'sIvenTaIDE2024',
-  database: 'csfca',
-});
-
-db.connect((err) => {
-  if (err) {
-    console.error('Error connecting to the database: ', err);
-    return;
-  }
-  console.log('Connected to the database');
-});
-
-// User registration endpoint
-app.post('/register', async (req, res) => {
+// User registration logic
+const registerUser = async (req, res) => {
   const { username, email, password } = req.body;
 
   if (!username || !email || !password) {
@@ -60,9 +35,6 @@ app.post('/register', async (req, res) => {
         res.status(201).json({ message: 'Account created successfully!' });
     });
   });
-});
+};
 
-// Start the server
-app.listen(port, () => {
-  console.log(`Server running on http://localhost:${port}`);
-});
+module.exports = { registerUser };
