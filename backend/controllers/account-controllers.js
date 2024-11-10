@@ -1,5 +1,6 @@
 const bcrypt = require('bcryptjs');
-const db = require('../db_connection');  // Importing the database connection
+const jwt = require('jsonwebtoken');
+const { connection, port } = require("../db_connection");
 
 // User registration logic
 const registerUser = async (req, res) => {
@@ -10,7 +11,7 @@ const registerUser = async (req, res) => {
   }
 
   // Check if the username or email already exists
-  db.query('SELECT * FROM Users WHERE username = ? OR email = ?', [username, email], async (err, results) => {
+  connection.query('SELECT * FROM Users WHERE username = ? OR email = ?', [username, email], async (err, results) => {
     if (err) {
       console.error('Error querying the database: ', err);
       return res.status(500).json({ message: 'Database error' });
@@ -25,7 +26,7 @@ const registerUser = async (req, res) => {
 
     // Insert new user into the database
     const createdAt = new Date();
-    db.query('INSERT INTO Users (username, email, password, created_at) VALUES (?, ?, ?, ?)', 
+    connection.query('INSERT INTO Users (username, email, password, created_at) VALUES (?, ?, ?, ?)', 
       [username, email, hashedPassword, createdAt], (err, result) => {
         if (err) {
           console.error('Error inserting user: ', err);
@@ -37,4 +38,47 @@ const registerUser = async (req, res) => {
   });
 };
 
-module.exports = { registerUser };
+const login = (req, res) => {
+  const { username, password } = req.body;
+
+  if (!username || !password) {
+    return res.status(400).json({ message: 'Both username and password are required' });
+  }
+
+  // Look for the user in the database (by username or email)
+  connection.query('SELECT * FROM Users WHERE username = ? OR email = ?', [username, username], (err, results) => {
+    if (err) {
+      console.error('Error querying the database: ', err);
+      return res.status(500).json({ message: 'Database error' });
+    }
+
+    if (results.length === 0) {
+      return res.status(401).json({ message: 'Invalid username or password' });
+    }
+
+    const user = results[0];
+
+    // Compare provided password with stored hashed password
+    bcrypt.compare(password, user.password, (err, isMatch) => {
+      if (err) {
+        return res.status(500).json({ message: 'Error comparing passwords' });
+      }
+
+      if (!isMatch) {
+        return res.status(401).json({ message: 'Invalid username or password' });
+      }
+
+      // Generate a JWT token (valid for 1 hour)
+      const token = jwt.sign({ userID: user.userID, username: user.username }, 'your_jwt_secret', { expiresIn: '1h' });
+
+      // Respond with success and the JWT token
+      res.status(200).json({
+        message: 'Login successful',
+        token, // You can store this token on the frontend for session management
+      });
+    });
+  });
+};
+
+exports.registerUser = registerUser;
+exports.login = login;

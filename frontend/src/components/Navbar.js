@@ -40,6 +40,11 @@ const Navbar = (props) => {
               </NavLink>
             </li>
             <li className="nav-item">
+              <NavLink className="nav-link" aria-current="page" to="/login">
+                Login
+              </NavLink>
+            </li>
+            <li className="nav-item">
               <NavLink
                 className="nav-link"
                 aria-current="page"

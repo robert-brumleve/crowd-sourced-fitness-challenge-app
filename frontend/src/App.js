@@ -5,6 +5,7 @@ import Navbar from "./components/Navbar";
 import DashBoard from "./dashboard/DashBoard";
 import CommunityChallenges from "./challenges/CommunityChallenges";
 import NewAccount from "./account/NewAccount";
+import Login from "./account/login";
 import CreateChallenge from "./challenges/CreateChallenge";
 import ViewChallenge from "./challenges/ViewChallenge";
 import UpdateChallenge from "./challenges/UpdateChallenge";
@@ -18,6 +19,7 @@ const App = () => {
       <Routes>
         <Route path="/" exact element={<DashBoard/>} />
         <Route path="/account" element={<NewAccount />} />
+        <Route path="/login" element={<Login />} />
         <Route path="/challenges" element={<CommunityChallenges />} />
         <Route path="/challenges/create" element={<CreateChallenge />} />
         <Route path="/challenges/view/:id" element={<ViewChallenge />} />
