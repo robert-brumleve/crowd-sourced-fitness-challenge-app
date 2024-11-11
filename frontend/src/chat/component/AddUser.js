@@ -27,11 +27,6 @@ const AddUser = () => {
             const q = query(userRef, where("displayName", "==", displayName));
 
             const querySnapShot = await getDocs(q);
-            /*
-            querySnapShot.forEach((doc)=>{
-                console.log(doc.id, " => ", doc.data());
-            });
-            */
             
             if(!querySnapShot.empty){
                 setUser(querySnapShot.docs[0].data());

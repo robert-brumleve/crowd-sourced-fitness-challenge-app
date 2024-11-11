@@ -266,6 +266,60 @@
 }
 
 
+.nav_menu{
+    position:relative;
+    background-color: transparent;
+    
+    border-top: 1px solid #dddddd;
+    
+    height: 4rem;
+    gap: 20px;
+    padding: 5px;
+    align-content: center;
+    
+    .nav_list{
+        display: flex;
+        justify-content: space-around;
+        list-style: none;
+    }
+    li{
+        button{
+            display:flex;
+            flex-direction: column;
+            border:none;
+            border-radius:10px;
+            background-color: transparent;
+            
+            align-items: center;
+            cursor: pointer;
+            
+            
+  
+        }
+        button.active{
+            color:red;
+            left: 0;
+            top:0;
+        }
+        
+        
+        
+    }
+    
+}
+@media screen and (max-width:500px){
+    .chatContainer{
+        flex-direction: row-reverse;
+    }
+    .chatbox{
+        flex-grow:1;
+    }
+    .chatlist{
+        flex-grow:1;
+    }
+    
+    
+}
 
 
 
