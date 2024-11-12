@@ -4,9 +4,11 @@ import { Link, useParams } from "react-router-dom";
 import Header from "../components/Header";
 
 const ViewChallenge = () => {
+  // Get the challengeID from the URL parameters
   const { id } = useParams();
   const [challenge, setChallenge] = useState([]);
   useEffect(() => {
+    // Get challenge data based on the ID
     axios
       .get(`http://localhost:5000/api/challenges/view/${id}`)
       .then((res) => {
