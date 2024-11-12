@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { Link, useParams } from "react-router-dom";
-import Header from "../components/Header";
+import Challenge from "../components/Challenge";
 
 const ViewChallenge = () => {
   const { id } = useParams();
@@ -17,29 +17,24 @@ const ViewChallenge = () => {
   }, [id]);
   return (
     <div>
-      <Header header="CHALLENGE DETAIL" />
-      <div className="card mx-auto" style={{ width: "45rem" }}>
-        <div className="card-body">
-          <h5 class="card-title">{challenge.name}</h5>
-          <p className="card-text">{challenge.description}</p>
-        </div>
-        <ul class="list-group list-group-flush">
-          <li class="list-group-item">Level: {challenge.difficulty}</li>
-          <li class="list-group-item">Creator: {challenge.creatorID}</li>
-          <li class="list-group-item">Image URL: {challenge.imageURL}</li>
-        </ul>
-        <div class="card-body">
-          <Link
-            to={`/challenges/update/${challenge.challengeID}`}
-            className="btn btn-info btn-sm"
-          >
-            Update
-          </Link>
-          <Link to="/challenges" className="btn btn-primary btn-sm mx-2">
-            Back
+      {challenge ? (
+        <Challenge
+          challengeID={challenge.challengeID}
+          name={challenge.name}
+          description={challenge.description}
+          difficulty={challenge.difficulty}
+          creatorID={challenge.creatorID}
+          imageURL={challenge.imageURL}
+        />
+      ) : (
+        <div>
+          <p>No challenge available. Create a new one</p>
+          <Link to="/challenges/create" className="btn btn-primary btn-sm mx-2">
+            CREATE
           </Link>
         </div>
-      </div>
+      )}
+      ;
     </div>
   );
 };

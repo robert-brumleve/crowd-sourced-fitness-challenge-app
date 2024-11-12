@@ -1,24 +1,26 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { Link } from "react-router-dom";
-// import Card from "../components/Card";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import Header from "../components/Header";
+import Challenge from "../components/Challenge";
 
-const AllChallenges = () => {
+const Search = () => {
+  const { keywords } = useParams();
   const [challenges, setChallenges] = useState([]);
-
   useEffect(() => {
     axios
-      .get("http://localhost:5000/api/challenges")
-      .then((res) => setChallenges(res.data))
+      .get(`http://localhost:5000/api/challenges/search/${keywords}`)
+      .then((res) => {
+        console.log(res);
+        setChallenges(res.data);
+      })
       .catch((err) => console.log(err));
-  }, []);
+  }, [keywords]);
 
   const handleDelete = (id) => {
     axios
       .delete(`http://localhost:5000/api/challenges/delete/${id}`)
       .then((res) => {
-        // window.location.reload();
         setChallenges((prevChallenges) =>
           prevChallenges.filter((challenge) => challenge.challengeID !== id)
         );
@@ -28,7 +30,7 @@ const AllChallenges = () => {
 
   return (
     <div className="border p-3">
-      <Header header="COMMUNITY CHALLENGES" />
+      <Header header="SEARCH RESULTS" />
       <div className="d-flex justify-content-end">
         <Link to="/challenges/create" className="btn btn-success">
           Create
@@ -56,15 +58,13 @@ const AllChallenges = () => {
           <tbody>
             {challenges.map((item) => {
               return (
-                <tr key={item.challengeID}>
+                <tr key={item.challengeID} className="text-center">
                   <th scope="row">{item.challengeID}</th>
-                  <td className="text-center" style={{ width: "33.33%" }}>
-                    {item.name}
-                  </td>
+                  <td style={{ width: "33.33%" }}>{item.name}</td>
                   <td className="text-center" style={{ width: "33.33%" }}>
                     {item.difficulty}
                   </td>
-                  <td className="text-center" style={{ width: "33.33%" }}>
+                  <td style={{ width: "33.33%" }}>
                     <Link
                       to={`/challenges/view/${item.challengeID}`}
                       className="btn btn-info btn-sm"
@@ -94,4 +94,4 @@ const AllChallenges = () => {
   );
 };
 
-export default AllChallenges;
+export default Search;

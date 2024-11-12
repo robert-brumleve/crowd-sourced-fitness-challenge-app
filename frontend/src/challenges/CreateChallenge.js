@@ -1,6 +1,10 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
+import Select from "react-dropdown-select";
+import options from "../data/difficulty";
+import setting from "../data/setting";
 
 const CreateChallenge = (props) => {
   const [challenge, setChallenge] = useState({
@@ -12,6 +16,19 @@ const CreateChallenge = (props) => {
   });
 
   const navigate = useNavigate();
+
+  const handleSelectedDifficulty = (selected) => {
+    const selectedDifficulty = selected[0].label || "";
+    setChallenge((prevChallenge) => ({
+      ...prevChallenge,
+      difficulty: selectedDifficulty,
+    }));
+  };
+
+  // Get the value of selected difficulty
+  const getSelectedDifficultyLabel = () => {
+    return options.filter((option) => option.label === challenge.difficulty);
+  };
 
   function handleChange(event) {
     const { name, value } = event.target;
@@ -29,11 +46,9 @@ const CreateChallenge = (props) => {
     console.log("Submitting challenge:", challenge);
 
     axios
-      .post("http://localhost:5000/api/challenges", challenge)
+      .post(`${setting.backend_challenges_api}`, challenge)
       .then((response) => {
         console.log("Challenge added:", response.data);
-
-        // props.onAdd(challenge);
         navigate("/challenges");
       })
       .catch((error) => {
@@ -42,9 +57,16 @@ const CreateChallenge = (props) => {
   }
   return (
     <div className="row justify-content-center">
-      <div className="w-50 bg-white rounded p-3">
+      <div class="card" style={{ width: "30rem" }}>
         <form onSubmit={submitChallenge}>
           <h2>ADD CHALLENGE</h2>
+          <Link
+            type="button"
+            class="btn-close"
+            aria-label="Close"
+            style={{ position: "absolute", top: "10px", right: "10px" }}
+            to="/challenges"
+          ></Link>
           <div className="mb-2">
             <label htmlFor="">Name</label>
             <input
@@ -56,10 +78,10 @@ const CreateChallenge = (props) => {
               onChange={handleChange}
             />
           </div>
-          <div className="='mb-2">
+          <div className="mb-2">
             <label htmlFor="">Description</label>
-            <input
-              type="text"
+            <textarea
+              rows="3"
               placeholder="Enter description"
               className="form-control"
               name="description"
@@ -67,18 +89,17 @@ const CreateChallenge = (props) => {
               onChange={handleChange}
             />
           </div>
-          <div className="='mb-2">
+          <div className="mb-2">
             <label htmlFor="">Difficulty</label>
-            <input
-              type="text"
-              // placeholder="Add a new challenge name"
+            <Select
               className="form-control"
+              options={options}
+              onChange={handleSelectedDifficulty}
+              values={getSelectedDifficultyLabel()}
               name="difficulty"
-              value={challenge.difficulty}
-              onChange={handleChange}
             />
           </div>
-          <div className="='mb-2">
+          <div className="mb-2">
             <label htmlFor="">Creator</label>
             <input
               type="text"
@@ -89,7 +110,7 @@ const CreateChallenge = (props) => {
               onChange={handleChange}
             />
           </div>
-          <div className="='mb-2">
+          <div className="mb-2">
             <label htmlFor="">Image URL</label>
             <input
               type="text"

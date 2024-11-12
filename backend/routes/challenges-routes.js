@@ -10,10 +10,11 @@ router.post("/", challengesControllers.createChallenge);
 
 router.get("/view/:id", challengesControllers.getChallengeById);
 
-// router.get("/user/:uID", challengesControllers.getChallengesByUserId);
-
 router.delete("/delete/:id", challengesControllers.deleteChallengeById);
 
 router.patch("/update/:id", challengesControllers.updateChallenge);
+
+router.get("/search/:keywords", challengesControllers.searchChallenge);
+
 
 module.exports = router;
