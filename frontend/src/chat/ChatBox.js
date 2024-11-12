@@ -19,7 +19,7 @@ const ChatBox = () => {
   const [text, setText] = useState("");
   const [chat, setChat] = useState();
   
-  const { chatId, fetchChatInfo, currentChat } = useChatStore();
+  const { currentChatId, fetchChatInfo, currentChat } = useChatStore();
   const { currentUser } = useUserStore();
   const lastMessageRef = useRef(null);
 
@@ -34,18 +34,18 @@ const ChatBox = () => {
 
 //listen for chat
 useEffect(() => {
-  const unsub = fetchChatInfo(chatId);
+  const unsub = fetchChatInfo(currentChatId);
     
   return () => {
     if (typeof unsub === "function") {
       unsub();
     }
   };
-}, [chatId, fetchChatInfo]);
+}, [currentChatId, fetchChatInfo]);
 
  //listens for each messages 
 useEffect(() => {
-  const unsub = onSnapshot(doc(db, "chats", chatId), async(res) => {
+  const unsub = onSnapshot(doc(db, "chats", currentChatId), async(res) => {
     const items = res.data().messages;
 
     const promises = items.map(async(item)=>{
@@ -61,7 +61,7 @@ useEffect(() => {
   return () => {
     unsub();
   };
-}, [chatId]);
+}, [currentChatId]);
   /*TODO:fetch other user info from messager senderid*/
 
   /*TODO: handle image upload*/
@@ -70,7 +70,7 @@ useEffect(() => {
     if (text === "") return;
 
     try {
-      await updateDoc(doc(db, "chats", chatId), {
+      await updateDoc(doc(db, "chats", currentChatId), {
         messages: arrayUnion({
           senderId: currentUser.uid,
           text,
@@ -92,7 +92,7 @@ useEffect(() => {
 
           //find index of the matching chat
           const chatIndex = userChatsData.chats.findIndex(
-            (c) => c.chatId === chatId
+            (c) => c.chatId === currentChatId
           );
 
           userChatsData.chats[chatIndex].lastMessage = text;
@@ -120,7 +120,7 @@ useEffect(() => {
       <div className="top">
         <div className="challenge">
           {/*TODO: change to challenge name later */}
-          {chatId}
+          {currentChatId}
         </div>
         <div className="icons">
           <img src="img/chat/info.png" alt="" />

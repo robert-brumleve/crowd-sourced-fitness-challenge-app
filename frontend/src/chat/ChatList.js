@@ -14,7 +14,7 @@ import { useChatStore } from "./lib/ChatStore";
 
 const ChatList = () => {
   const { currentUser } = useUserStore();
-  const { changeChat } = useChatStore();
+  const { changeChat, currentChatId } = useChatStore();
   const [chats, setChats] = useState([]);
   const [addMode, setAddMode] = useState(false);
 
@@ -71,7 +71,7 @@ const ChatList = () => {
       <div className="userinfo">
         <div className="user">
           <img src={currentUser.photoURL || "/img//chat/avatar.png"} alt="" />
-          <h5>{currentUser.displayName}</h5>
+          <span>{currentUser.displayName}</span>
         </div>
 
         {/*user information - to add later*/}
@@ -92,7 +92,7 @@ const ChatList = () => {
         {chats && chats.length > 0 ? (
           chats.map((chat) => (
             <div
-              className="item"
+              className={chat.chatId === currentChatId ? "item active":"item"}
               key={chat.chatId}
               onClick={() => handleSelect(chat)}
             >
@@ -100,15 +100,17 @@ const ChatList = () => {
               <div className="texts">
                 {/*TODO: change to challenge name */}
                 <span>{chat.chatId}</span>
-                <div className="lastMessage">
-                  <p>{chat.lastMessage}</p>
-                </div>
+                <p className ="lastMessage">
+                    {chat.lastMessage}</p>
+                
               </div>
               {/* show icon if there is unread msg */}
-              {chat.isSeen ? (
+              {chat.lastMessage === "" || chat.isSeen === true ? (
                 <> </>
               ) : (
+
                 <i className="bx bx-message-rounded-detail bx-xs"></i>
+                
               )}
             </div>
           ))

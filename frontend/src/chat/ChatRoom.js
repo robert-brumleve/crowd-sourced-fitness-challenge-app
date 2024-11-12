@@ -16,7 +16,7 @@ function ChatRoom() {
 
 
   const { currentUser, fetchUserInfo } = useUserStore();
-  const { chatId } = useChatStore();
+  const { currentChatId } = useChatStore();
   const [isMobileView, setIsMobileView] = useState(false);
   const [activeListView,setActiveListView] =useState(true);
 
@@ -49,7 +49,7 @@ function ChatRoom() {
         !isMobileView?(
           <>
           <ChatList />
-          {chatId && <ChatBox />}
+          {currentChatId && <ChatBox />}
           <ChatLogin />
           </>
         ) :(
@@ -78,13 +78,8 @@ function ChatRoom() {
               </li>*/}
             </ul>
               
-            
-            
-            
-              
            </nav>
           </>
-          
           
         )
         

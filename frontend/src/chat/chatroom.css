@@ -1,3 +1,7 @@
+/*colors
+    background-color: #82b4f4
+*/
+
 .chatContainer {
     display: flex;
     height:80vh;
@@ -8,13 +12,14 @@
 
 }
 
+
 .chatlist{
     flex:1;
     display:flex;
     flex-direction: column;
 
     .userinfo{
-        padding: 20px;
+        padding: 15px;
         display: flex;
         align-items: center;
         justify-content: space-between;
@@ -23,12 +28,21 @@
             display: flex;
             align-items: center;
             gap: 20px;
+
+            
             img{
-                width: 50px;
-                height: 50px;
+                width: 40px;
+                height: 40px;
                 border-radius: 50%;
                 object-fit: cover;
             }
+            span{
+                font-weight:bold;
+
+            }
+            
+                
+        
         }
     
         .icons{
@@ -66,17 +80,27 @@
 
     .challengelist{
         flex:1;
-        overflow: Auto;
         max-width: 350px;
+        overflow-y: auto;
+        scrollbar-width: thin;
+        scrollbar-color: #82b4f4 white;
     
         .item{
             display:flex;
             align-items: center;
             gap:20px;
-            padding:15px;
+            padding-left:15px;
+            padding-right:15px;
             cursor: pointer;
             border-bottom: 1px solid #dddddd;
-        
+            border-radius: 10px;
+            margin-left:5px;
+            margin-right: 5px;
+            min-height: 12vh;
+            
+            &.active{
+                background-color: #82b4f4;
+            }
             img{
                 width:50px;
                 height:50px;
@@ -95,16 +119,18 @@
                 }
                 
                 .lastMessage{
-                    flex:1;
-                    display:flex;
-                    justify-content: space-between;
-                    
+        
                     font-size:12px;
                     font-weight:300;
                     flex-grow: 1;
                     height:auto;
                     margin:0;
                     padding:0;
+                    white-space:nowrap;
+                    overflow:hidden;
+                    text-overflow:ellipsis;
+                    
+                    width:150px;
                     
                 }   
             }
@@ -156,7 +182,9 @@
         flex: 1;
         
         padding:10px;
-        overflow-y: scroll;
+        overflow-y: auto;
+        scrollbar-width: thin;
+        scrollbar-color: #82b4f4 white;
         display:flex;
         flex-direction: column;
         gap:20px;
