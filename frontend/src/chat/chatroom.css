@@ -67,12 +67,13 @@
     .challengelist{
         flex:1;
         overflow: Auto;
+        max-width: 350px;
     
         .item{
             display:flex;
             align-items: center;
             gap:20px;
-            padding:20px;
+            padding:15px;
             cursor: pointer;
             border-bottom: 1px solid #dddddd;
         
@@ -83,20 +84,39 @@
                 object-fit:cover;
             }
     
-            .text{
+            .texts{
+                flex-grow: 1;
                 display:flex;
                 flex-direction:column;
                 gap:10px;
+                span{
+                    font-size: 15px;
+                    font-weight:500;
+                }
+                
+                .lastMessage{
+                    flex:1;
+                    display:flex;
+                    justify-content: space-between;
+                    
+                    font-size:12px;
+                    font-weight:300;
+                    flex-grow: 1;
+                    height:auto;
+                    margin:0;
+                    padding:0;
+                    
+                }   
+            }
+            i{
+                padding:5px;
+                border-radius: 50%;
+                background-color: red;
+                color:white;
+                display:inline-block;
             }
     
-            span{
-                font-weight:500;
-            }
-    
-            p{
-                font-size:14px;
-                font-weight:300;
-            }
+            
         }
     }
 

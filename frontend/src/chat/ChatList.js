@@ -5,8 +5,9 @@
 import React, { useEffect, useState } from "react";
 import "./chatroom.css";
 
+import "boxicons/css/boxicons.min.css";
 import { useUserStore } from "./lib/UserStore";
-import { doc, getDoc, onSnapshot } from "firebase/firestore";
+import { doc, getDoc, onSnapshot, updateDoc } from "firebase/firestore";
 import { db } from "./lib/firebase";
 import AddUser from "./component/AddUser";
 import { useChatStore } from "./lib/ChatStore";
@@ -44,6 +45,22 @@ const ChatList = () => {
 
   /* handle when chat from the list is selected*/
   const handleSelect = async (chat) => {
+    //update isSeen status
+    const userChatsRef = doc(db, "userchats", currentUser.uid);
+    const userChatsSnapshot = await getDoc(userChatsRef);
+    if (userChatsSnapshot.exists()) {
+      const userChatsData = userChatsSnapshot.data();
+      //find index of the matching chat
+      const chatIndex = userChatsData.chats.findIndex(
+        (c) => c.chatId === chat.chatId
+      );
+      userChatsData.chats[chatIndex].isSeen = true;
+      await updateDoc(userChatsRef, {
+        chats: userChatsData.chats,
+      });
+    }
+
+    //change chatId
     changeChat(chat.chatId);
   };
 
@@ -72,7 +89,7 @@ const ChatList = () => {
 
       <div className="challengelist">
         {/*if chat list exists and at least one chat*/}
-        {chats && chats.length >0 ? (
+        {chats && chats.length > 0 ? (
           chats.map((chat) => (
             <div
               className="item"
@@ -83,8 +100,16 @@ const ChatList = () => {
               <div className="texts">
                 {/*TODO: change to challenge name */}
                 <span>{chat.chatId}</span>
-                <p>{chat.lastMessage}</p>
+                <div className="lastMessage">
+                  <p>{chat.lastMessage}</p>
+                </div>
               </div>
+              {/* show icon if there is unread msg */}
+              {chat.isSeen ? (
+                <> </>
+              ) : (
+                <i className="bx bx-message-rounded-detail bx-xs"></i>
+              )}
             </div>
           ))
         ) : (
