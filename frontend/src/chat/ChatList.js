@@ -7,7 +7,7 @@ import "./chatroom.css";
 
 import "boxicons/css/boxicons.min.css";
 import { useUserStore } from "./lib/UserStore";
-import { doc, getDoc, onSnapshot, updateDoc } from "firebase/firestore";
+import { arrayRemove, doc, getDoc, onSnapshot, updateDoc } from "firebase/firestore";
 import { db } from "./lib/firebase";
 import AddUser from "./component/AddUser";
 import { useChatStore } from "./lib/ChatStore";
@@ -43,7 +43,49 @@ const ChatList = () => {
     };
   }, [currentUser.uid]);
 
-  /* handle when chat from the list is selected*/
+  // Handle when a chat is deleted, remove the chat from the userchat
+  useEffect(() => {
+    const unsub = onSnapshot(
+      doc(db, "userchats", currentUser.uid),
+      async (res) => {
+        const items = res.data().chats;
+        
+        const chatIdToRemove = [];
+
+        const promises = items.map(async (item) => {
+          const chatDocRef = doc(db, "chats", item.chatId);
+          
+          try{
+            const chatDocSnap = await getDoc(chatDocRef);
+            //remove if chat does not exist anymore
+            if(!chatDocSnap.exists()){
+              //console.log("chatid ", item.chatId," does not exist anymore. removing.");
+              chatIdToRemove.push(item);
+              
+              await  updateDoc(doc(db, "userchats",currentUser.uid),{
+                chats: arrayRemove(item),
+              });
+
+            }
+          }
+          catch (err){
+            console.log(err);
+          }  
+
+        });
+        
+        await Promise.all(promises);
+
+      }
+    );
+
+    return () => {
+      unsub();
+    };
+  }, [currentUser.uid]);
+
+
+  // handle when chat from the list is selected
   const handleSelect = async (chat) => {
     //update isSeen status
     const userChatsRef = doc(db, "userchats", currentUser.uid);
@@ -128,7 +170,7 @@ const ChatList = () => {
           <>
             {/*if no chat list from the data*/}
             <div className="item">
-              {console.log("no list")}
+              
               <img src="img/chat/fitness.png" alt="" />
               <div className="texts">
                 <span>No challenges joined yet</span>
