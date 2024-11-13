@@ -178,12 +178,9 @@
             font-size: 18px;
             font-weight:bold;
         }
-        .icons{
+        .homeicon{
             cursor:pointer;
-            img{
-                width:20px;
-                height:20px;
-            }
+            
         }
         
     }
@@ -260,9 +257,8 @@
         gap:20px;
         border-top: 1px solid #dddddd;
         margin-top: auto;
-        img{
-                width:20px;
-                height:20px;
+        i{
+                
                 cursor: pointer;
         }
         
@@ -283,8 +279,7 @@
         }
 
         .sendButton{
-            border-radius:10px;
-            font-size:14px;
+            
             border:none;
             background-color: transparent;    
             

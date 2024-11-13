@@ -3,6 +3,7 @@
 
 import React, { useRef, useState, useEffect } from "react";
 import "./chatroom.css";
+import "boxicons/css/boxicons.min.css";
 import {
   arrayUnion,
   doc,
@@ -122,8 +123,9 @@ useEffect(() => {
           {/*TODO: change to challenge name later */}
           {currentChatId}
         </div>
-        <div className="icons">
-          <img src="img/chat/info.png" alt="" />
+        <div className="homeicon">
+          {/*TODO: link to the challenge page*/}
+          <i className="bx bx-home bx-sm"></i>
         </div>
       </div>
 
@@ -160,7 +162,7 @@ useEffect(() => {
       <div className="bottom">
         <div className="icons">
           <label htmlFor="file">
-            <img src="img/chat/add.png" alt="Attach" />
+            <i className="bx bx-image-add bx-sm" ></i>
           </label>
           <input type="file" id="file" style={{ display: "none" }} />
         </div>
@@ -171,7 +173,7 @@ useEffect(() => {
           onChange={(e) => setText(e.target.value)}
         />
         <button className="sendButton">
-          <img src="img/chat/send.png" alt="Send" onClick={handleSend} />
+          <i className="bx bx-send bx-sm" onClick={handleSend} />
         </button>
       </div>
     </div>
