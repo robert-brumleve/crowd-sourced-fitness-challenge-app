@@ -6,7 +6,8 @@
 
 .chatContainer {
     display: flex;
-    height:80vh;
+    height:85vh;
+    border-bottom: 1px solid #dddddd;
 }
 
 .chatlogin{
@@ -162,7 +163,6 @@
     flex:2;
     border-left: 1px solid #dddddd;
     border-right: 1px solid #dddddd;
-    height:80vh;
     display:flex;
     flex-direction: column;
 
@@ -190,7 +190,7 @@
 
     .center{
         flex: 1;
-        
+        flex-grow: 1;
         padding:10px;
         overflow-y: auto;
         scrollbar-width: thin;
@@ -230,6 +230,7 @@
                     background-color:lightgray;
                     border-radius: 10px;
                     font-size:12px;
+                    display:inline;
                 }
 
                 span{
@@ -251,6 +252,7 @@
     }
 
     .bottom{
+        position:relative;
         display:flex;
         padding:20px;
         align-items: center;
@@ -329,7 +331,7 @@
 
 
 .nav_menu{
-    position:absolute;
+    position:relative;
     bottom:0;
     left:0;
     width:100%;
@@ -381,15 +383,18 @@
 @media screen and (max-width:500px){
     .chatContainer{
         flex-direction: column;
+        
     }
     
     .chatlist{
-        flex-grow: 1;
+        flex: 1;
         width: 100%;
     }
     .chatbox{
-        flex-grow:1;
+        flex:1;
+        overflow-y: auto;
     }
+    
     
     
 }
