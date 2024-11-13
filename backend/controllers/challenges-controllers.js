@@ -44,6 +44,7 @@ const createChallenge = async (req, res, next) => {
   });
 };
 
+// Retrieve a specific challenge by ID
 const getChallengeById = async (req, res, next) => {
   const id = req.params.id;
   console.log("challengeId " + id);
@@ -60,22 +61,7 @@ const getChallengeById = async (req, res, next) => {
   });
 };
 
-// const getChallengesByUserId = async (req, res, next) => {
-//   const uID = req.params.uID;
-//   console.log("userId " + uID);
-
-//   const sql = "SELECT * FROM challenges WHERE creatorID = ?";
-//   connection.query(sql, [uID], (err, result) => {
-//     if (result.length === 0) {
-//       return next(new Error("User not found."));
-//     }
-//     if (err) {
-//       return next(new Error("Database error"));
-//     }
-//     res.json(result);
-//   });
-// };
-
+// delete a challenge by ID
 const deleteChallengeById = async (req, res, next) => {
   //string stype to int
   const id = parseInt(req.params.id, 10);
@@ -91,6 +77,7 @@ const deleteChallengeById = async (req, res, next) => {
       return next(new Error("Challenge not found"));
     }
 
+     // Get updated list of challenges after deletion
     connection.query("SELECT * FROM challenges", function (err, result) {
       if (err) throw err;
       res.json(result);
@@ -98,6 +85,7 @@ const deleteChallengeById = async (req, res, next) => {
   });
 };
 
+// update the challenge with the provided values
 const updateChallenge = async (req, res, next) => {
   const id = req.params.id;
   console.log("challengeID " + id);
@@ -105,14 +93,7 @@ const updateChallenge = async (req, res, next) => {
   const sql = `UPDATE challenges SET name=?, description=?, difficulty=?, creatorID=?, imageURL=? WHERE challengeID=?`;
   const values = [name, description, difficulty, creatorID, imageURL, id];
   connection.query(sql, values, (err, result) => {
-    if (err) {
-      // if (err.code === "ER_DUP_ENTRY") {
-      //   return next(
-      //     new Error(
-      //       "Challenge name already exists. Please choose a different name."
-      //     )
-      //   );
-      // }
+    if (err) {      
       console.error("Database error:", err);
       return next(err);
     }
@@ -128,6 +109,5 @@ const updateChallenge = async (req, res, next) => {
 exports.getChallenges = getChallenges;
 exports.createChallenge = createChallenge;
 exports.getChallengeById = getChallengeById;
-// exports.getChallengesByUserId = getChallengesByUserId;
 exports.deleteChallengeById = deleteChallengeById;
 exports.updateChallenge = updateChallenge;
