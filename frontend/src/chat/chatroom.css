@@ -1,6 +1,8 @@
-/*colors
-    background-color: #82b4f4
-*/
+:root{
+    --primary-color: #82b4f4; 
+}
+    
+
 
 .chatContainer {
     display: flex;
@@ -30,12 +32,13 @@
             gap: 20px;
 
             
-            img{
+            .user-img{
                 width: 40px;
                 height: 40px;
                 border-radius: 50%;
                 object-fit: cover;
             }
+            
             span{
                 font-weight:bold;
 
@@ -80,28 +83,28 @@
 
     .challengelist{
         flex:1;
-        max-width: 350px;
+        max-width: 100%;
         overflow-y: auto;
         scrollbar-width: thin;
-        scrollbar-color: #82b4f4 white;
+        scrollbar-color: var(--primary-color) white;
     
         .item{
             display:flex;
             align-items: center;
             gap:20px;
-            padding-left:15px;
-            padding-right:15px;
+            padding:10px;
             cursor: pointer;
             border-bottom: 1px solid #dddddd;
             border-radius: 10px;
             margin-left:5px;
             margin-right: 5px;
-            min-height: 12vh;
+            min-height: 8vh;
+            max-height:10vh;
             
             &.active{
-                background-color: #82b4f4;
+                border: solid var(--primary-color);
             }
-            img{
+            .chal-img{
                 width:50px;
                 height:50px;
                 border-radius: 50%;
@@ -134,12 +137,18 @@
                     
                 }   
             }
-            i{
-                padding:5px;
+            
+            .unread-icon{
+                
+                width:30px;
+                height:30px;
                 border-radius: 50%;
-                background-color: red;
+                background-color: var(--primary-color);
                 color:white;
-                display:inline-block;
+                display:flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 20px;
             }
     
             
@@ -184,7 +193,7 @@
         padding:10px;
         overflow-y: auto;
         scrollbar-width: thin;
-        scrollbar-color: #82b4f4 white;
+        scrollbar-color: var(--primary-color) white;
         display:flex;
         flex-direction: column;
         gap:20px;
@@ -198,14 +207,14 @@
                 align-self:flex-end;
                 .texts{
                     p{
-                        background-color: #82b4f4;
+                        background-color: var(--primary-color);
                     }
                 }    
 
             }
             img{
-                width:20px;
-                height:20px;
+                width:40px;
+                height:40px;
                 border-radius:50%;
                 object-fit:cover;
             }
@@ -319,11 +328,15 @@
 
 
 .nav_menu{
-    position:relative;
-    background-color: transparent;
+    position:absolute;
+    bottom:0;
+    left:0;
+    width:100%;
+    background-color: white;
     
     border-top: 1px solid #dddddd;
-    
+    border-bottom: 1px solid #ddd;
+    border-radius: 10px;
     height: 4rem;
     gap: 20px;
     padding: 5px;
@@ -331,27 +344,32 @@
     
     .nav_list{
         display: flex;
+        width:100%;
         justify-content: space-around;
         list-style: none;
     }
-    li{
+    .nav_list li{
+        flex:1;
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        
         button{
+            width:80%;
             display:flex;
             flex-direction: column;
             border:none;
-            border-radius:10px;
             background-color: transparent;
-            
+            justify-content: center; 
             align-items: center;
             cursor: pointer;
-            
-            
-  
+            font-size: 25px;
         }
+        
         button.active{
-            color:red;
-            left: 0;
-            top:0;
+            color: var(--primary-color);
+            border-bottom: 3px solid var(--primary-color);
+            
         }
         
         
@@ -361,12 +379,14 @@
 }
 @media screen and (max-width:500px){
     .chatContainer{
-        flex-direction: row-reverse;
+        flex-direction: column;
+    }
+    
+    .chatlist{
+        flex-grow: 1;
+        width: 100%;
     }
     .chatbox{
-        flex-grow:1;
-    }
-    .chatlist{
         flex-grow:1;
     }
     

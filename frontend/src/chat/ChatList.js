@@ -70,7 +70,11 @@ const ChatList = () => {
 
       <div className="userinfo">
         <div className="user">
-          <img src={currentUser.photoURL || "/img//chat/avatar.png"} alt="" />
+          {currentUser.photoURL ? (
+            <img className="user-img" src={currentUser.photoURL} alt="" />
+          ) : (
+            <i className="bx bx-user-circle user-img"></i>
+          )}
           <span>{currentUser.displayName}</span>
         </div>
 
@@ -92,25 +96,31 @@ const ChatList = () => {
         {chats && chats.length > 0 ? (
           chats.map((chat) => (
             <div
-              className={chat.chatId === currentChatId ? "item active":"item"}
+              className={chat.chatId === currentChatId ? "item active" : "item"}
               key={chat.chatId}
               onClick={() => handleSelect(chat)}
             >
-              <img src="img/chat/fitness.png" alt="" />
+              {/* Challenge photo */}
+              {/*
+              {currentUser.photoURL? 
+              <img className="chal-img" src={:challenge_phto}/>
+              :
+            <i className="bx bx-run chal-img"></i>
+            }
+            */}
+              <img className="chal-img" src="img/chat/fitness.png" alt=""/>
               <div className="texts">
                 {/*TODO: change to challenge name */}
                 <span>{chat.chatId}</span>
-                <p className ="lastMessage">
-                    {chat.lastMessage}</p>
-                
+                <p className="lastMessage">{chat.lastMessage}</p>
               </div>
               {/* show icon if there is unread msg */}
               {chat.lastMessage === "" || chat.isSeen === true ? (
                 <> </>
               ) : (
-
-                <i className="bx bx-message-rounded-detail bx-xs"></i>
-                
+                <div className="unread-icon">
+                <i className="bx bx-message-rounded-detail"></i>
+                </div>
               )}
             </div>
           ))
@@ -121,7 +131,7 @@ const ChatList = () => {
               {console.log("no list")}
               <img src="img/chat/fitness.png" alt="" />
               <div className="texts">
-                <span>No challenges joined</span>
+                <span>No challenges joined yet</span>
               </div>
             </div>
           </>

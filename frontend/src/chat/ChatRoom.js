@@ -7,7 +7,7 @@ import { auth } from "./lib/firebase";
 //import {UserProvider, UserContext} from './UserContext'
 
 import "./chatroom.css";
-import "boxicons/css/boxicons.min.css";
+import 'boxicons/css/boxicons.min.css';
 import { onAuthStateChanged } from "firebase/auth";
 import { useUserStore } from "./lib/UserStore";
 import { useChatStore } from "./lib/ChatStore";
@@ -35,7 +35,7 @@ function ChatRoom() {
 
   //listen for window size change
   useEffect(() => {
-    const handleResize = () => setIsMobileView(window.innerWidth <=500);
+    const handleResize = () => setIsMobileView(window.innerWidth <=550);
     handleResize();
     window.addEventListener("resize", handleResize);
     return ()=>{
@@ -58,24 +58,33 @@ function ChatRoom() {
             <ChatList/> : <ChatBox/> }
            <nav className="nav_menu" >
             <ul className="nav_list">
-              <li 
+              {/*<li 
               >
                 <button  className={activeListView ? "active" : ""}
                 onClick={()=>setActiveListView(prevState => !prevState)}>
                 <i class={activeListView ? 'bx bx-chat bx-sm':'bx bx-list-ul bx-sm'}></i>
                 </button>
                 
+              </li>*/}
+              
+              <li  
+              >
+                <button  className={activeListView ? "active" : ""}
+                onClick={() => setActiveListView(true)}>
+                  <i className="bx bx-list-ul"></i>
+                
+                </button>
+                
               </li>
-              {/*
               <li  
               >
                 <button  className={!activeListView ? "active" : ""}
-                onClick={() => setActiveListView(false)}>
-                  <i class='bx bx-chat'></i>
-                <span>Chat</span>
+                onClick={() => currentChatId? setActiveListView(false) : setActiveListView(true)}>
+                  <i className="bx bx-conversation"></i>
+                
                 </button>
                 
-              </li>*/}
+              </li>
             </ul>
               
            </nav>
