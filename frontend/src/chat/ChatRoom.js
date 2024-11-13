@@ -43,6 +43,17 @@ function ChatRoom() {
     }
   },[]);
 
+  //listen for chatId switching and open chat
+  useEffect(()=>{
+    if (!currentChatId){
+      setActiveListView(true);
+    }else{
+      setActiveListView(false);
+    }
+
+
+  },[currentChatId])
+
   return (
     <div className="chatContainer">
       {currentUser ? (
