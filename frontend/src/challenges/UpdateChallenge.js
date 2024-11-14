@@ -139,18 +139,7 @@ const UpdateChallenge = () => {
               value={challenge.creatorID}
               onChange={handleChange}
             />
-          </div>
-          <div className="mb-2">
-            <label htmlFor="">Duration</label>
-            <input
-              type="text"
-              placeholder="Enter number of days"
-              className="form-control"
-              name="duration"
-              value={challenge.duration}
-              onChange={handleChange}
-            />
-          </div>
+          </div>          
           <div className="mb-2">
             <label htmlFor="">Image URL</label>
             <input
@@ -159,6 +148,17 @@ const UpdateChallenge = () => {
               className="form-control"
               name="imageURL"
               value={challenge.imageURL}
+              onChange={handleChange}
+            />
+          </div>
+          <div className="mb-2">
+            <label htmlFor="">Tags</label>
+            <input
+              type="text"
+              placeholder="Enter tags"
+              className="form-control"
+              name="tags"
+              value={challenge.tags}
               onChange={handleChange}
             />
           </div>

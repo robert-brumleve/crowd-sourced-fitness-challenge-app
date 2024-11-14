@@ -14,12 +14,6 @@ const ChallengeList = (props) => {
       <td className="text-center" style={{ width: "12%" }}>
         {props.difficulty}
       </td>
-      <td className="text-center" style={{ width: "12%" }}>
-        {props.duration}
-      </td>
-      {/* <td className="text-center" style={{ width: "12%" }}>
-        {props.days_left}
-      </td> */}
       <td style={{ width: "20%" }}>
         <Link
           to={`/challenges/view/${props.challengeID}`}
@@ -27,12 +21,6 @@ const ChallengeList = (props) => {
         >
           VIEW
         </Link>
-        {/* <Link
-          to={`/challenges/update/${props.challengeID}`}
-          className="btn btn-sm btn-primary mx-2"
-        >
-          UPDATE
-        </Link> */}
         <button
           className="btn btn-outline-danger btn-sm mx-2"
           onClick={() => props.handleDelete(props.challengeID)}

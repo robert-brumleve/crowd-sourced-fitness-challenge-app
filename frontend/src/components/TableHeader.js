@@ -4,9 +4,6 @@ const TableHeader = () => {
   return (
     <thead>
       <tr>
-        {/* <th scope="col" className="text-center col-sm-1">
-          ID
-        </th> */}
         <th scope="col" className="text-center col-sm-1">
           Name
         </th>
@@ -15,13 +12,7 @@ const TableHeader = () => {
         </th>
         <th scope="col" className="text-center col-sm-1">
           Difficulty
-        </th>
-        <th scope="col" className="text-center col-sm-1">
-          Duration
-        </th>
-        {/* <th scope="col" className="text-center col-sm-1">
-          Days left
-        </th> */}
+        </th>        
         <th scope="col" className="text-center col-sm-1">
           Action
         </th>

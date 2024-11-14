@@ -7,15 +7,15 @@ import TableHeader from "../components/TableHeader";
 import challengeURL from "../data/challengeURL";
 
 const AllChallenges = () => {
-  const calculateDaysLeft = (created_at, duration) => {
-    const createdDate = new Date(created_at);
-    const endDate = new Date(createdDate);
-    endDate.setDate(createdDate.getDate() + duration);
+  // const calculateDaysLeft = (created_at, duration) => {
+  //   const createdDate = new Date(created_at);
+  //   const endDate = new Date(createdDate);
+  //   endDate.setDate(createdDate.getDate() + duration);
 
-    const currentDate = new Date();
-    const timeDifference = endDate - currentDate;
-    return Math.ceil(timeDifference / (1000 * 3600 * 24));
-  };
+  //   const currentDate = new Date();
+  //   const timeDifference = endDate - currentDate;
+  //   return Math.ceil(timeDifference / (1000 * 3600 * 24));
+  // };
 
   const [challenges, setChallenges] = useState([]);
 
@@ -41,7 +41,7 @@ const AllChallenges = () => {
     <div className="border p-3">
       <Header header="COMMUNITY CHALLENGES" />
       <div className="d-flex justify-content-end">
-        <Link to="/challenges/create" className="btn btn-success">
+        <Link to="/challenges/create" className="btn btn-outline-success">
           Create
         </Link>
       </div>
@@ -58,8 +58,6 @@ const AllChallenges = () => {
                   type={item.type}
                   name={item.name}
                   difficulty={item.difficulty}
-                  duration={item.duration}
-                  // days_left={calculateDaysLeft(item.created_at, item.duration)}
                   handleDelete={handleDelete}
                 />
               );

@@ -8,5 +8,8 @@ const types = [
   { value: 7, label: "Pilates" },
   { value: 8, label: "Rowing" },
   { value: 9, label: "HIIT" },
+  { value: 10, label: "Core" },
+  { value: 11, label: "wellness" },
+  
 ];
 export default types;

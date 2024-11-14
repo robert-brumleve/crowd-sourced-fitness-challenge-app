@@ -27,12 +27,12 @@ const ViewChallenge = () => {
       {challenge ? (
         <Challenge
           key={challenge.challengeID}
+          challengeID={challenge.challengeID}
           name={challenge.name}
           description={challenge.description}
           type={challenge.type}
           difficulty={challenge.difficulty}
           creatorID={challenge.creatorID}
-          duration={challenge.duration}
           imageURL={challenge.imageURL}
           created_at={formattedDate}
           tags={challenge.tags}

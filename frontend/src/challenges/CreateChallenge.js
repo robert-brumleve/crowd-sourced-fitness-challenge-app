@@ -6,32 +6,22 @@ import Select from "react-dropdown-select";
 import difficulty_options from "../data/difficulty";
 import types from "../data/types";
 import challengeURL from "../data/challengeURL";
-import {useFormik} from "formik";
+import { useFormik } from "formik";
 import FormValidation from "../components/FormValidation";
 
 const CreateChallenge = (props) => {
   const initialValues = {
-    name:"",
-    type:"",
-    description:"",
-    difficulty:"Easy",
+    name: "Sample Challenge",
+    type: "Yoga",
+    description: "A sample description",
+    difficulty: "Easy",
     creatorID: 1,
-    duration: 30,
-    imageURL:"",
-  }
-  const [challenge, setChallenge] = useState({
-    name: "",
-    type: "",
-    description: "",
-    difficulty: "",
-    creatorID: "",
-    imageURL: "",
-    duration: "",
-  });
+    imageURL: "image.com",
+    tags: "yoga, wellness",
+  };
+  const [challenge, setChallenge] = useState(initialValues);
 
   const navigate = useNavigate();
-
-  // const {values, handleBur, }
 
   const handleSelectedType = (selected) => {
     const selectedType = selected[0]?.label || "";
@@ -135,29 +125,18 @@ const CreateChallenge = (props) => {
               className="form-control"
               options={difficulty_options}
               onChange={handleSelectedDifficulty}
-              value={getSelectedDifficultyLabel()}
+              values={getSelectedDifficultyLabel()}
               name="difficulty"
             />
           </div>
           <div className="mb-2">
             <label htmlFor="">Creator</label>
             <input
-              type="text"
+              type="number"
               placeholder="Enter creator"
               className="form-control"
               name="creatorID"
               value={challenge.creatorID}
-              onChange={handleChange}
-            />
-          </div>
-          <div className="mb-2">
-            <label htmlFor="">Duration</label>
-            <input
-              type="text"
-              placeholder="Enter number of days"
-              className="form-control"
-              name="duration"
-              value={challenge.duration}
               onChange={handleChange}
             />
           </div>

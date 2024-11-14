@@ -34,25 +34,40 @@ const Search = () => {
     <div className="border p-3">
       <Header header="SEARCH RESULTS" />
       <div className="d-flex justify-content-end">
-        <Link to="/challenges/create" className="btn btn-success">
+        <Link to="/challenges/create" className="btn btn-outline-success">
           Create
+        </Link>
+        <Link to="/challenges" className="btn btn-outline-dark">
+          Close
         </Link>
       </div>
 
       <div className="table-responsive">
         <table className="table table-sm table-bordered table-hover">
-          <TableHeader />
           <tbody>
-            {challenges.map((item) => {
-              return (
-                <ChallengeList
-                  challengeID={item.challengeID}
-                  name={item.name}
-                  difficulty={item.difficulty}
-                  handleDelete={handleDelete}
-                />
-              );
-            })}
+            {challenges && challenges.length > 0 && <TableHeader /> ? (
+              <>
+                {challenges.map((item) => (
+                  <ChallengeList
+                    key={item.challengeID}
+                    challengeID={item.challengeID}
+                    name={item.name}
+                    type={item.type}
+                    difficulty={item.difficulty}
+                    handleDelete={handleDelete}
+                  />
+                ))}
+              </>
+            ) : (
+              <h4 className="text-center">
+                No challenges found for "{keywords}". Create your own!
+              </h4>
+              // <tr>
+              //   <td colSpan="4" className="text-center">
+              //     No challenges found for "{keywords}". Create your own!
+              //   </td>
+              // </tr>
+            )}
           </tbody>
         </table>
       </div>

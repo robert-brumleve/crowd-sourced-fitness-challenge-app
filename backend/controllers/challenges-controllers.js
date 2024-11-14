@@ -12,7 +12,8 @@ const getChallenges = async (req, res, next) => {
 
 const createChallenge = async (req, res, next) => {
   console.log("Request Body:", req.body);
-  const { name, type, description, difficulty, creatorID, duration, imageURL } = req.body;
+  const { name, type, description, difficulty, creatorID, imageURL, tags } =
+    req.body;
 
   // check if name is duplicate
   const checkName = "SELECT * FROM challenges WHERE name = ?";
@@ -29,11 +30,20 @@ const createChallenge = async (req, res, next) => {
     }
 
     // add new challenge if name is unique
-    const sql = `INSERT INTO challenges (name, type, description, difficulty, creatorID, duration, created_at, imageURL)
-     VALUES (?, ?, ?, ?, ?, ?, NOW(), ?)`;
-    const values = [name, type, description, difficulty, duration, creatorID, imageURL];
+    const sql = `INSERT INTO challenges (name, type, description, difficulty, creatorID, created_at, imageURL, tags)
+     VALUES (?, ?, ?, ?, ?, NOW(), ?, ?)`;
+    const values = [
+      name,
+      type,
+      description,
+      difficulty,
+      creatorID,
+      imageURL,
+      tags,
+    ];
     connection.query(sql, values, (err, result) => {
       if (err) {
+        console.error("Error inserting challenge:", err);
         return next(new Error("Database error"));
       }
       res.status(201).json({
@@ -76,7 +86,7 @@ const deleteChallengeById = async (req, res, next) => {
       return next(new Error("Challenge not found"));
     }
 
-     // Get updated list of challenges after deletion
+    // Get updated list of challenges after deletion
     connection.query("SELECT * FROM challenges", function (err, result) {
       if (err) throw err;
       res.json(result);
@@ -88,9 +98,19 @@ const deleteChallengeById = async (req, res, next) => {
 const updateChallenge = async (req, res, next) => {
   const id = req.params.id;
   console.log("challengeID " + id);
-  const { name, type, description, difficulty, creatorID, duration, imageURL } = req.body;
-  const sql = `UPDATE challenges SET name=?,type=?, description=?, difficulty=?, creatorID=?, duration=?, imageURL=? WHERE challengeID=?`;
-  const values = [name, type, description, difficulty, creatorID, duration, imageURL, id];
+  const { name, type, description, difficulty, creatorID, imageURL, tags } =
+    req.body;
+  const sql = `UPDATE challenges SET name=?,type=?, description=?, difficulty=?, creatorID=?, imageURL=?, tags=? WHERE challengeID=?`;
+  const values = [
+    name,
+    type,
+    description,
+    difficulty,
+    creatorID,
+    imageURL,
+    tags,
+    id,
+  ];
   connection.query(sql, values, (err, result) => {
     if (err) {
       console.error("Database error:", err);
