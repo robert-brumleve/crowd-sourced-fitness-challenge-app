@@ -20,14 +20,17 @@ CREATE TABLE IF NOT EXISTS `Users` (
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `Challenges` (
   `challengeID` INT NOT NULL AUTO_INCREMENT,
-  `name` VARCHAR(32) NOT NULL,
+  `name` VARCHAR(100) NOT NULL,
   `description` VARCHAR(1024) NOT NULL,
+  `type` VARCHAR(32) NOT NULL,
   `difficulty` VARCHAR(8) NOT NULL,
   `creatorID` INT NOT NULL,
   `created_at` TIMESTAMP(6) NOT NULL,
+  `tags` VARCHAR(50) NULL,
   `imageURL` VARCHAR(1024) NULL,
   PRIMARY KEY (`challengeID`),
-  UNIQUE INDEX `name_UNIQUE` (`name` ASC));
+  UNIQUE INDEX `name_UNIQUE` (`name` ASC)
+);
 
 
 -- -----------------------------------------------------

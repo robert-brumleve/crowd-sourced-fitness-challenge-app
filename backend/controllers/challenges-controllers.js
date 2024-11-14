@@ -12,7 +12,8 @@ const getChallenges = async (req, res, next) => {
 
 const createChallenge = async (req, res, next) => {
   console.log("Request Body:", req.body);
-  const { name, description, difficulty, creatorID, imageURL } = req.body;
+  const { name, type, description, difficulty, creatorID, imageURL, tags } =
+    req.body;
 
   // check if name is duplicate
   const checkName = "SELECT * FROM challenges WHERE name = ?";
@@ -29,11 +30,20 @@ const createChallenge = async (req, res, next) => {
     }
 
     // add new challenge if name is unique
-    const sql = `INSERT INTO challenges (name, description, difficulty, creatorID, created_at, imageURL)
-     VALUES (?, ?, ?, ?, NOW(), ?)`;
-    const values = [name, description, difficulty, creatorID, imageURL];
+    const sql = `INSERT INTO challenges (name, type, description, difficulty, creatorID, created_at, imageURL, tags)
+     VALUES (?, ?, ?, ?, ?, NOW(), ?, ?)`;
+    const values = [
+      name,
+      type,
+      description,
+      difficulty,
+      creatorID,
+      imageURL,
+      tags,
+    ];
     connection.query(sql, values, (err, result) => {
       if (err) {
+        console.error("Error inserting challenge:", err);
         return next(new Error("Database error"));
       }
       res.status(201).json({
@@ -61,7 +71,6 @@ const getChallengeById = async (req, res, next) => {
   });
 };
 
-// delete a challenge by ID
 const deleteChallengeById = async (req, res, next) => {
   //string stype to int
   const id = parseInt(req.params.id, 10);
@@ -77,7 +86,7 @@ const deleteChallengeById = async (req, res, next) => {
       return next(new Error("Challenge not found"));
     }
 
-     // Get updated list of challenges after deletion
+    // Get updated list of challenges after deletion
     connection.query("SELECT * FROM challenges", function (err, result) {
       if (err) throw err;
       res.json(result);
@@ -89,11 +98,21 @@ const deleteChallengeById = async (req, res, next) => {
 const updateChallenge = async (req, res, next) => {
   const id = req.params.id;
   console.log("challengeID " + id);
-  const { name, description, difficulty, creatorID, imageURL } = req.body;
-  const sql = `UPDATE challenges SET name=?, description=?, difficulty=?, creatorID=?, imageURL=? WHERE challengeID=?`;
-  const values = [name, description, difficulty, creatorID, imageURL, id];
+  const { name, type, description, difficulty, creatorID, imageURL, tags } =
+    req.body;
+  const sql = `UPDATE challenges SET name=?,type=?, description=?, difficulty=?, creatorID=?, imageURL=?, tags=? WHERE challengeID=?`;
+  const values = [
+    name,
+    type,
+    description,
+    difficulty,
+    creatorID,
+    imageURL,
+    tags,
+    id,
+  ];
   connection.query(sql, values, (err, result) => {
-    if (err) {      
+    if (err) {
       console.error("Database error:", err);
       return next(err);
     }
@@ -101,8 +120,26 @@ const updateChallenge = async (req, res, next) => {
       return next(new Error("Challenge not found"));
     }
     res.status(201).json({
-      message: `Challenge ${id} updated successfully!`
+      message: `Challenge ${id} updated successfully!`,
     });
+  });
+};
+
+const searchChallenge = async (req, res, next) => {
+  const key = req.params.keywords;
+  console.log("Key words:  " + key);
+
+  const sql =
+    "SELECT * FROM challenges WHERE name LIKE ? OR description LIKE ?";
+  const keyword = `%${key}%`;
+  connection.query(sql, [keyword, keyword], (err, result) => {
+    if (result.length === 0) {
+      return next(new Error("Challenge not found."));
+    }
+    if (err) {
+      return next(new Error("Database error"));
+    }
+    res.json(result);
   });
 };
 
@@ -111,3 +148,4 @@ exports.createChallenge = createChallenge;
 exports.getChallengeById = getChallengeById;
 exports.deleteChallengeById = deleteChallengeById;
 exports.updateChallenge = updateChallenge;
+exports.searchChallenge = searchChallenge;

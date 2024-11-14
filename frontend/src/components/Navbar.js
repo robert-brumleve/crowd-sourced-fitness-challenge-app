@@ -1,10 +1,20 @@
-import React from "react";
-import { NavLink } from "react-router-dom";
-import personArmsUp from "../image/person-arms-up.svg";
-
-// import './NavLinks.css';
+import React, { useState } from "react";
+import { NavLink, useNavigate } from "react-router-dom";
+import personArmsUp from "../data/images/person-arms-up.svg";
 
 const Navbar = (props) => {
+  const [keywords, setKeywords] = useState("");
+  const navigate = useNavigate();
+
+  const handleChange = (event) => {
+    setKeywords(event.target.value);
+  };
+
+  const OnSearch = (event) => {
+    event.preventDefault();
+    console.log("Key words: ", keywords);
+    navigate(`/challenges/search/${keywords}`);
+  };
   return (
     <nav className="navbar navbar-expand-lg bg-body-tertiary">
       <div className="container-fluid">
@@ -63,26 +73,19 @@ const Navbar = (props) => {
               </NavLink>
             </li>
           </ul>
-          <form className="d-flex" role="search">
+          <form className="d-flex" onSubmit={OnSearch}>
             <input
               className="form-control me-2"
-              type="search"
+              type="text"
               placeholder="Challenge keyword"
               aria-label="Search"
-            />
+              value={keywords}
+              onChange={handleChange}
+            />            
             <button className="btn btn-outline-success" type="submit">
               Search
             </button>
           </form>
-          <div className="nav-item">
-              <NavLink
-                className="nav-link"
-                aria-current="page"
-                to=""
-              >
-                Log in
-              </NavLink>
-            </div>
         </div>
       </div>
     </nav>

@@ -15,7 +15,7 @@ app.use(cors());
 
 //app.use(bodyParser.json());
 
-app.use("/api/challenges", challengesRoutes); // api/challenges
+app.use("/challenges", challengesRoutes); 
 app.use("/", accountRoutes);
 
 

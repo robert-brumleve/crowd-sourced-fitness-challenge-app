@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 const DashBoard = () => {
   const [data, setData] = useState([])
   useEffect (() =>{
-    fetch('http://localhost:5000/api/challenges')
+    fetch('http://localhost:5000/challenges')
     .then(res => res.json())
     .then(data => setData(data))
     .catch(err => console.log(err));
@@ -15,8 +15,8 @@ const DashBoard = () => {
 //   const {id} = useParams();
 
 //   useEffect (() =>{
-//     // fetch(`http://localhost:5000/api/challenges/view/${id}`)
-//     fetch('http://localhost:5000/api/challenges')
+//     // fetch(`http://localhost:5000/challenges/view/${id}`)
+//     fetch('http://localhost:5000/challenges')
 //     // .then((res) => {
 //       // console.log(res);
 //       // setChallenge(res.data[0]);

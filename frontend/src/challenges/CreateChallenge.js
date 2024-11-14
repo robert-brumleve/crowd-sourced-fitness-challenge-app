@@ -1,17 +1,54 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
+import Select from "react-dropdown-select";
+import difficulty_options from "../data/difficulty";
+import types from "../data/types";
+import challengeURL from "../data/challengeURL";
+// import { useFormik } from "formik";
+// import FormValidation from "../components/FormValidation";
 
 const CreateChallenge = (props) => {
-  const [challenge, setChallenge] = useState({
-    name: "",
-    description: "",
-    difficulty: "",
-    creatorID: "",
-    imageURL: "",
-  });
+  const initialValues = {
+    name: "Sample Challenge",
+    type: "Yoga",
+    description: "A sample description",
+    difficulty: "Easy",
+    creatorID: 1,
+    imageURL: "image.com",
+    tags: "yoga, wellness",
+  };
+  const [challenge, setChallenge] = useState(initialValues);
 
   const navigate = useNavigate();
+
+  const handleSelectedType = (selected) => {
+    const selectedType = selected[0]?.label || "";
+    setChallenge((prevChallenge) => ({
+      ...prevChallenge,
+      type: selectedType,
+    }));
+  };
+
+  const getSelectedTypeLabel = () => {
+    return types.filter((option) => option.label === challenge.type);
+  };
+
+  const handleSelectedDifficulty = (selected) => {
+    const selectedDifficulty = selected[0].label || "";
+    setChallenge((prevChallenge) => ({
+      ...prevChallenge,
+      difficulty: selectedDifficulty,
+    }));
+  };
+
+  // Get the value of selected difficulty
+  const getSelectedDifficultyLabel = () => {
+    return difficulty_options.filter(
+      (option) => option.label === challenge.difficulty
+    );
+  };
 
   function handleChange(event) {
     const { name, value } = event.target;
@@ -29,11 +66,9 @@ const CreateChallenge = (props) => {
     console.log("Submitting challenge:", challenge);
 
     axios
-      .post("http://localhost:5000/api/challenges", challenge)
+      .post(`${challengeURL}`, challenge)
       .then((response) => {
         console.log("Challenge added:", response.data);
-
-        // props.onAdd(challenge);
         navigate("/challenges");
       })
       .catch((error) => {
@@ -42,9 +77,16 @@ const CreateChallenge = (props) => {
   }
   return (
     <div className="row justify-content-center">
-      <div className="w-50 bg-white rounded p-3">
+      <div class="card" style={{ width: "30rem" }}>
         <form onSubmit={submitChallenge}>
           <h2>ADD CHALLENGE</h2>
+          <Link
+            type="button"
+            class="btn-close"
+            aria-label="Close"
+            style={{ position: "absolute", top: "10px", right: "10px" }}
+            to="/challenges"
+          ></Link>
           <div className="mb-2">
             <label htmlFor="">Name</label>
             <input
@@ -56,10 +98,20 @@ const CreateChallenge = (props) => {
               onChange={handleChange}
             />
           </div>
-          <div className="='mb-2">
+          <div className="mb-2">
+            <label>Type</label>
+            <Select
+              className="form-control"
+              options={types}
+              onChange={handleSelectedType}
+              values={getSelectedTypeLabel()}
+              name="type"
+            />
+          </div>
+          <div className="mb-2">
             <label htmlFor="">Description</label>
-            <input
-              type="text"
+            <textarea
+              rows="3"
               placeholder="Enter description"
               className="form-control"
               name="description"
@@ -67,21 +119,20 @@ const CreateChallenge = (props) => {
               onChange={handleChange}
             />
           </div>
-          <div className="='mb-2">
+          <div className="mb-2">
             <label htmlFor="">Difficulty</label>
-            <input
-              type="text"
-              // placeholder="Add a new challenge name"
+            <Select
               className="form-control"
+              options={difficulty_options}
+              onChange={handleSelectedDifficulty}
+              values={getSelectedDifficultyLabel()}
               name="difficulty"
-              value={challenge.difficulty}
-              onChange={handleChange}
             />
           </div>
-          <div className="='mb-2">
+          <div className="mb-2">
             <label htmlFor="">Creator</label>
             <input
-              type="text"
+              type="number"
               placeholder="Enter creator"
               className="form-control"
               name="creatorID"
@@ -89,7 +140,7 @@ const CreateChallenge = (props) => {
               onChange={handleChange}
             />
           </div>
-          <div className="='mb-2">
+          <div className="mb-2">
             <label htmlFor="">Image URL</label>
             <input
               type="text"
@@ -97,6 +148,17 @@ const CreateChallenge = (props) => {
               className="form-control"
               name="imageURL"
               value={challenge.imageURL}
+              onChange={handleChange}
+            />
+          </div>
+          <div className="mb-2">
+            <label htmlFor="">Tags</label>
+            <input
+              type="text"
+              placeholder="Enter tags"
+              className="form-control"
+              name="tags"
+              value={challenge.tags}
               onChange={handleChange}
             />
           </div>
