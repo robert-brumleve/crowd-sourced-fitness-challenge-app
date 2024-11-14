@@ -1,5 +1,9 @@
+//This code is based
+// https://firebase.google.com/docs/firestore/manage-data/add-data
+
 import React, { useRef, useState, useEffect } from "react";
 import "./chatroom.css";
+import "boxicons/css/boxicons.min.css";
 import {
   arrayUnion,
   doc,
@@ -16,19 +20,33 @@ const ChatBox = () => {
   const [text, setText] = useState("");
   const [chat, setChat] = useState();
   
-  const { chatId, user } = useChatStore();
+  const { currentChatId, fetchChatInfo, currentChat } = useChatStore();
   const { currentUser } = useUserStore();
   const lastMessageRef = useRef(null);
 
   /* TODO fix auto scroll not working atm*/
   useEffect(() => {
     if (lastMessageRef.current) {
-      lastMessageRef.current?.scrollIntoView({ behavior: "smooth" });
+      lastMessageRef.current.scrollTop =
+      lastMessageRef.current.scrollHeight; //({ behavior: "smooth" });
     }
-  }, []);
+  }, [chat]);
 
+
+//listen for chat
 useEffect(() => {
-  const unsub = onSnapshot(doc(db, "chats", chatId), async(res) => {
+  const unsub = fetchChatInfo(currentChatId);
+    
+  return () => {
+    if (typeof unsub === "function") {
+      unsub();
+    }
+  };
+}, [currentChatId, fetchChatInfo]);
+
+ //listens for each messages 
+useEffect(() => {
+  const unsub = onSnapshot(doc(db, "chats", currentChatId), async(res) => {
     const items = res.data().messages;
 
     const promises = items.map(async(item)=>{
@@ -44,7 +62,7 @@ useEffect(() => {
   return () => {
     unsub();
   };
-}, [chatId]);
+}, [currentChatId]);
   /*TODO:fetch other user info from messager senderid*/
 
   /*TODO: handle image upload*/
@@ -53,7 +71,7 @@ useEffect(() => {
     if (text === "") return;
 
     try {
-      await updateDoc(doc(db, "chats", chatId), {
+      await updateDoc(doc(db, "chats", currentChatId), {
         messages: arrayUnion({
           senderId: currentUser.uid,
           text,
@@ -61,22 +79,26 @@ useEffect(() => {
         }),
       });
 
-      const userIds = [currentUser.uid, user.uid];
-      userIds.forEach(async (uid) => {
-        const userChatsRef = doc(db, "userchats", uid);
+      //console.log("userid: ",currentUser.uid);
+      //console.log("participants",currentChat.participantId);
+      //console.log("other id: ",user);
+      const userIds = currentChat.participantId;
+      //update status of last message seen for each users.
+      userIds.forEach(async (userchatsId) => {
+        const userChatsRef = doc(db, "userchats", userchatsId);
         const userChatsSnapshot = await getDoc(userChatsRef);
 
         if (userChatsSnapshot.exists()) {
           const userChatsData = userChatsSnapshot.data();
 
-          //find index of the latest chat
+          //find index of the matching chat
           const chatIndex = userChatsData.chats.findIndex(
-            (c) => c.chatId === chatId
+            (c) => c.chatId === currentChatId
           );
 
           userChatsData.chats[chatIndex].lastMessage = text;
           userChatsData.chats[chatIndex].isSeen =
-            uid === currentUser.uid ? true : false;
+            userchatsId === currentUser.uid ? true : false;
           userChatsData.chats[chatIndex].updatedAt = Date.now();
 
           await updateDoc(userChatsRef, {
@@ -99,15 +121,16 @@ useEffect(() => {
       <div className="top">
         <div className="challenge">
           {/*TODO: change to challenge name later */}
-          {chatId}
+          {currentChatId}
         </div>
-        <div className="icons">
-          <img src="img/chat/info.png" alt="" />
+        <div className="homeicon">
+          {/*TODO: link to the challenge page*/}
+          <i className="bx bx-home bx-sm"></i>
         </div>
       </div>
 
       {/* Message Section */}
-      <div className="center">
+      <div className="center" ref={lastMessageRef}>
         {chat?.map((message) => (
           <div
             className={
@@ -121,7 +144,7 @@ useEffect(() => {
 
             <div className="texts">
               {message.senderId !== currentUser.uid && (
-                <span>{message.sender.displayName}</span>
+                <span className="names">{message.sender.displayName}</span>
               )}
               {message.img && <img src={message.img} alt="" />}
               <p>{message.text}</p>
@@ -139,7 +162,7 @@ useEffect(() => {
       <div className="bottom">
         <div className="icons">
           <label htmlFor="file">
-            <img src="img/chat/add.png" alt="Attach" />
+            <i className="bx bx-image-add bx-sm" ></i>
           </label>
           <input type="file" id="file" style={{ display: "none" }} />
         </div>
@@ -150,7 +173,7 @@ useEffect(() => {
           onChange={(e) => setText(e.target.value)}
         />
         <button className="sendButton">
-          <img src="img/chat/send.png" alt="Send" onClick={handleSend} />
+          <i className="bx bx-send bx-sm" onClick={handleSend} />
         </button>
       </div>
     </div>
