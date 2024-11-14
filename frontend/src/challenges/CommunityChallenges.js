@@ -1,24 +1,35 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
-// import Card from "../components/Card";
 import Header from "../components/Header";
+import ChallengeList from "../components/ChallengesList";
+import TableHeader from "../components/TableHeader";
+import challengeURL from "../data/challengeURL";
 
 const AllChallenges = () => {
+  const calculateDaysLeft = (created_at, duration) => {
+    const createdDate = new Date(created_at);
+    const endDate = new Date(createdDate);
+    endDate.setDate(createdDate.getDate() + duration);
+
+    const currentDate = new Date();
+    const timeDifference = endDate - currentDate;
+    return Math.ceil(timeDifference / (1000 * 3600 * 24));
+  };
+
   const [challenges, setChallenges] = useState([]);
 
   useEffect(() => {
     axios
-      .get("http://localhost:5000/api/challenges")
+      .get(`${challengeURL}`)
       .then((res) => setChallenges(res.data))
       .catch((err) => console.log(err));
   }, []);
 
   const handleDelete = (id) => {
     axios
-      .delete(`http://localhost:5000/api/challenges/delete/${id}`)
+      .delete(`${challengeURL}/delete/${id}`)
       .then((res) => {
-        // window.location.reload();
         setChallenges((prevChallenges) =>
           prevChallenges.filter((challenge) => challenge.challengeID !== id)
         );
@@ -37,54 +48,20 @@ const AllChallenges = () => {
 
       <div className="table-responsive">
         <table className="table table-sm table-bordered table-hover">
-          <thead>
-            <tr>
-              <th scope="col" className="text-center col-sm-1">
-                ID
-              </th>
-              <th scope="col" className="text-center col-sm-1">
-                Name
-              </th>
-              <th scope="col" className="text-center col-sm-1">
-                Difficulty
-              </th>
-              <th scope="col" className="text-center col-sm-1">
-                Action
-              </th>
-            </tr>
-          </thead>
+          <TableHeader />
           <tbody>
             {challenges.map((item) => {
               return (
-                <tr key={item.challengeID}>
-                  <th scope="row">{item.challengeID}</th>
-                  <td className="text-center" style={{ width: "33.33%" }}>
-                    {item.name}
-                  </td>
-                  <td className="text-center" style={{ width: "33.33%" }}>
-                    {item.difficulty}
-                  </td>
-                  <td className="text-center" style={{ width: "33.33%" }}>
-                    <Link
-                      to={`/challenges/view/${item.challengeID}`}
-                      className="btn btn-info btn-sm"
-                    >
-                      VIEW
-                    </Link>
-                    <Link
-                      to={`/challenges/update/${item.challengeID}`}
-                      className="btn btn-sm btn-primary mx-2"
-                    >
-                      UPDATE
-                    </Link>
-                    <button
-                      className="btn btn-danger btn-sm"
-                      onClick={() => handleDelete(item.challengeID)}
-                    >
-                      DELETE
-                    </button>
-                  </td>
-                </tr>
+                <ChallengeList
+                  key={item.challengeID}
+                  challengeID={item.challengeID}
+                  type={item.type}
+                  name={item.name}
+                  difficulty={item.difficulty}
+                  duration={item.duration}
+                  // days_left={calculateDaysLeft(item.created_at, item.duration)}
+                  handleDelete={handleDelete}
+                />
               );
             })}
           </tbody>

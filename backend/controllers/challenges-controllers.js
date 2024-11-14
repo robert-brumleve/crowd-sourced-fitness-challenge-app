@@ -12,7 +12,7 @@ const getChallenges = async (req, res, next) => {
 
 const createChallenge = async (req, res, next) => {
   console.log("Request Body:", req.body);
-  const { name, description, difficulty, creatorID, imageURL } = req.body;
+  const { name, type, description, difficulty, creatorID, duration, imageURL } = req.body;
 
   // check if name is duplicate
   const checkName = "SELECT * FROM challenges WHERE name = ?";
@@ -29,9 +29,9 @@ const createChallenge = async (req, res, next) => {
     }
 
     // add new challenge if name is unique
-    const sql = `INSERT INTO challenges (name, description, difficulty, creatorID, created_at, imageURL)
-     VALUES (?, ?, ?, ?, NOW(), ?)`;
-    const values = [name, description, difficulty, creatorID, imageURL];
+    const sql = `INSERT INTO challenges (name, type, description, difficulty, creatorID, duration, created_at, imageURL)
+     VALUES (?, ?, ?, ?, ?, ?, NOW(), ?)`;
+    const values = [name, type, description, difficulty, duration, creatorID, imageURL];
     connection.query(sql, values, (err, result) => {
       if (err) {
         return next(new Error("Database error"));
@@ -85,9 +85,9 @@ const deleteChallengeById = async (req, res, next) => {
 const updateChallenge = async (req, res, next) => {
   const id = req.params.id;
   console.log("challengeID " + id);
-  const { name, description, difficulty, creatorID, imageURL } = req.body;
-  const sql = `UPDATE challenges SET name=?, description=?, difficulty=?, creatorID=?, imageURL=? WHERE challengeID=?`;
-  const values = [name, description, difficulty, creatorID, imageURL, id];
+  const { name, type, description, difficulty, creatorID, duration, imageURL } = req.body;
+  const sql = `UPDATE challenges SET name=?,type=?, description=?, difficulty=?, creatorID=?, duration=?, imageURL=? WHERE challengeID=?`;
+  const values = [name, type, description, difficulty, creatorID, duration, imageURL, id];
   connection.query(sql, values, (err, result) => {
     if (err) {
       console.error("Database error:", err);

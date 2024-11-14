@@ -3,19 +3,47 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 import Select from "react-dropdown-select";
-import options from "../data/difficulty";
-import setting from "../data/setting";
+import difficulty_options from "../data/difficulty";
+import types from "../data/types";
+import challengeURL from "../data/challengeURL";
+import {useFormik} from "formik";
+import FormValidation from "../components/FormValidation";
 
 const CreateChallenge = (props) => {
+  const initialValues = {
+    name:"",
+    type:"",
+    description:"",
+    difficulty:"Easy",
+    creatorID: 1,
+    duration: 30,
+    imageURL:"",
+  }
   const [challenge, setChallenge] = useState({
     name: "",
+    type: "",
     description: "",
     difficulty: "",
     creatorID: "",
     imageURL: "",
+    duration: "",
   });
 
   const navigate = useNavigate();
+
+  // const {values, handleBur, }
+
+  const handleSelectedType = (selected) => {
+    const selectedType = selected[0]?.label || "";
+    setChallenge((prevChallenge) => ({
+      ...prevChallenge,
+      type: selectedType,
+    }));
+  };
+
+  const getSelectedTypeLabel = () => {
+    return types.filter((option) => option.label === challenge.type);
+  };
 
   const handleSelectedDifficulty = (selected) => {
     const selectedDifficulty = selected[0].label || "";
@@ -27,7 +55,9 @@ const CreateChallenge = (props) => {
 
   // Get the value of selected difficulty
   const getSelectedDifficultyLabel = () => {
-    return options.filter((option) => option.label === challenge.difficulty);
+    return difficulty_options.filter(
+      (option) => option.label === challenge.difficulty
+    );
   };
 
   function handleChange(event) {
@@ -46,7 +76,7 @@ const CreateChallenge = (props) => {
     console.log("Submitting challenge:", challenge);
 
     axios
-      .post(`${setting.backend_challenges_api}`, challenge)
+      .post(`${challengeURL}`, challenge)
       .then((response) => {
         console.log("Challenge added:", response.data);
         navigate("/challenges");
@@ -79,6 +109,16 @@ const CreateChallenge = (props) => {
             />
           </div>
           <div className="mb-2">
+            <label>Type</label>
+            <Select
+              className="form-control"
+              options={types}
+              onChange={handleSelectedType}
+              values={getSelectedTypeLabel()}
+              name="type"
+            />
+          </div>
+          <div className="mb-2">
             <label htmlFor="">Description</label>
             <textarea
               rows="3"
@@ -93,9 +133,9 @@ const CreateChallenge = (props) => {
             <label htmlFor="">Difficulty</label>
             <Select
               className="form-control"
-              options={options}
+              options={difficulty_options}
               onChange={handleSelectedDifficulty}
-              values={getSelectedDifficultyLabel()}
+              value={getSelectedDifficultyLabel()}
               name="difficulty"
             />
           </div>
@@ -111,6 +151,17 @@ const CreateChallenge = (props) => {
             />
           </div>
           <div className="mb-2">
+            <label htmlFor="">Duration</label>
+            <input
+              type="text"
+              placeholder="Enter number of days"
+              className="form-control"
+              name="duration"
+              value={challenge.duration}
+              onChange={handleChange}
+            />
+          </div>
+          <div className="mb-2">
             <label htmlFor="">Image URL</label>
             <input
               type="text"
@@ -118,6 +169,17 @@ const CreateChallenge = (props) => {
               className="form-control"
               name="imageURL"
               value={challenge.imageURL}
+              onChange={handleChange}
+            />
+          </div>
+          <div className="mb-2">
+            <label htmlFor="">Tags</label>
+            <input
+              type="text"
+              placeholder="Enter tags"
+              className="form-control"
+              name="tags"
+              value={challenge.tags}
               onChange={handleChange}
             />
           </div>

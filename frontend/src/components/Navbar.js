@@ -81,13 +81,7 @@ const Navbar = (props) => {
               aria-label="Search"
               value={keywords}
               onChange={handleChange}
-            />
-            {/* <Link
-              to={`/challenges/${keywords}`}
-              className="btn btn-outline-success" type="submit"
-            >
-              Search
-            </Link> */}
+            />            
             <button className="btn btn-outline-success" type="submit">
               Search
             </button>

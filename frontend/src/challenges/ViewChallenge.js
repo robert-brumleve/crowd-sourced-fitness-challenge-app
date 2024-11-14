@@ -2,13 +2,18 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { Link, useParams } from "react-router-dom";
 import Challenge from "../components/Challenge";
+import challengeURL from "../data/challengeURL";
 
 const ViewChallenge = () => {
   const { id } = useParams();
   const [challenge, setChallenge] = useState([]);
+  const { created_at } = challenge;
+  const date = new Date(created_at);
+  const formattedDate = created_at ? date.toISOString().split("T")[0] : "";
+
   useEffect(() => {
     axios
-      .get(`http://localhost:5000/api/challenges/view/${id}`)
+      .get(`${challengeURL}/view/${id}`)
       .then((res) => {
         console.log(res);
         setChallenge(res.data[0]);
@@ -19,12 +24,16 @@ const ViewChallenge = () => {
     <div>
       {challenge ? (
         <Challenge
-          challengeID={challenge.challengeID}
+          key={challenge.challengeID}
           name={challenge.name}
           description={challenge.description}
+          type={challenge.type}
           difficulty={challenge.difficulty}
           creatorID={challenge.creatorID}
+          duration={challenge.duration}
           imageURL={challenge.imageURL}
+          created_at={formattedDate}
+          tags={challenge.tags}
         />
       ) : (
         <div>
