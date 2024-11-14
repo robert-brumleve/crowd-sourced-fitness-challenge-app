@@ -5,6 +5,7 @@ import Challenge from "../components/Challenge";
 import challengeURL from "../data/challengeURL";
 
 const ViewChallenge = () => {
+  // Get the challengeID from the URL parameters
   const { id } = useParams();
   const [challenge, setChallenge] = useState([]);
   const { created_at } = challenge;
@@ -12,6 +13,7 @@ const ViewChallenge = () => {
   const formattedDate = created_at ? date.toISOString().split("T")[0] : "";
 
   useEffect(() => {
+    // Get challenge data based on the ID
     axios
       .get(`${challengeURL}/view/${id}`)
       .then((res) => {

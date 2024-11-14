@@ -44,6 +44,7 @@ const createChallenge = async (req, res, next) => {
   });
 };
 
+// Retrieve a specific challenge by ID
 const getChallengeById = async (req, res, next) => {
   const id = req.params.id;
   console.log("challengeId " + id);
@@ -75,6 +76,7 @@ const deleteChallengeById = async (req, res, next) => {
       return next(new Error("Challenge not found"));
     }
 
+     // Get updated list of challenges after deletion
     connection.query("SELECT * FROM challenges", function (err, result) {
       if (err) throw err;
       res.json(result);
@@ -82,6 +84,7 @@ const deleteChallengeById = async (req, res, next) => {
   });
 };
 
+// update the challenge with the provided values
 const updateChallenge = async (req, res, next) => {
   const id = req.params.id;
   console.log("challengeID " + id);
