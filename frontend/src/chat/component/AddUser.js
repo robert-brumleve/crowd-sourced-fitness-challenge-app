@@ -1,5 +1,6 @@
 //This code uses
 // https://firebase.google.com/docs/firestore/query-data/queries
+// https://firebase.google.com/docs/firestore/manage-data/add-data
 
 import React, { useState } from 'react'
 import "../chatroom.css"
@@ -14,11 +15,11 @@ const AddUser = () => {
     const {currentUser} = useUserStore();
 
     const handleSearch = async (e)=>{
-        console.log("in handlesearch");
+        //console.log("in handlesearch");
         e.preventDefault();
         const formData = new FormData(e.target);
         const displayName = formData.get("displayName");
-        console.log(displayName);
+        //console.log(displayName);
         try{
             // Create a reference to the collection
             const userRef = collection(db, "users");
@@ -27,11 +28,6 @@ const AddUser = () => {
             const q = query(userRef, where("displayName", "==", displayName));
 
             const querySnapShot = await getDocs(q);
-            /*
-            querySnapShot.forEach((doc)=>{
-                console.log(doc.id, " => ", doc.data());
-            });
-            */
             
             if(!querySnapShot.empty){
                 setUser(querySnapShot.docs[0].data());
@@ -53,12 +49,14 @@ const AddUser = () => {
           /*creates new chat*/
           await setDoc(newChatRef,{
             createdAt:serverTimestamp(),
-            challengeId:".",
-            challengeName:".",
+            challengeId:"",
+            challengeName:"",
+            participantId:[],
             messages: [],
           })
           console.log(newChatRef);
-          
+          /*TODO: change receiverID to array for group chat */
+
           /**update other's userchat */
           await updateDoc(doc(userChatRef, user.uid),{
             chats:arrayUnion({
@@ -77,6 +75,10 @@ const AddUser = () => {
               receiverId:user.uid,
               updatedAt: Date.now(),
             })
+          })
+          console.log("newchatid:",newChatRef.id);
+          await updateDoc(doc(db, "chats",newChatRef.id),{
+            participantId:arrayUnion(currentUser.uid, user.uid),
           })
         }catch (err){
           console.log(err);
