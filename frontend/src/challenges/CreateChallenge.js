@@ -6,8 +6,8 @@ import Select from "react-dropdown-select";
 import difficulty_options from "../data/difficulty";
 import types from "../data/types";
 import challengeURL from "../data/challengeURL";
-import { useFormik } from "formik";
-import FormValidation from "../components/FormValidation";
+// import { useFormik } from "formik";
+// import FormValidation from "../components/FormValidation";
 
 const CreateChallenge = (props) => {
   const initialValues = {

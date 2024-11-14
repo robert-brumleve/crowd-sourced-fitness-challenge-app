@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import Header from "../components/Header";
 import ChallengeList from "../components/ChallengesList";
 import TableHeader from "../components/TableHeader";
@@ -62,11 +62,6 @@ const Search = () => {
               <h4 className="text-center">
                 No challenges found for "{keywords}". Create your own!
               </h4>
-              // <tr>
-              //   <td colSpan="4" className="text-center">
-              //     No challenges found for "{keywords}". Create your own!
-              //   </td>
-              // </tr>
             )}
           </tbody>
         </table>
