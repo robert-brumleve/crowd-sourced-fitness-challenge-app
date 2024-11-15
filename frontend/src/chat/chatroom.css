@@ -176,17 +176,27 @@
         gap:20px;
         align-items: center;
         padding:10px;
-        justify-content: space-evenly;
+        justify-content: space-between;
         border-bottom: 1px solid #dddddd;
         
         .challenge{
             font-size: 18px;
             font-weight:bold;
             text-overflow:ellipsis;
+            
+            span{
+                padding-left:10px;
+                padding-right:10px;
+                font-size: 10px;
+                 
+            }
         }
         .homeicon{
-            cursor:pointer;
             
+            i{
+                cursor:pointer;
+                padding-right: 10px;
+            }
         }
         
     }
@@ -195,6 +205,7 @@
         flex: 1;
         flex-grow: 1;
         padding:10px;
+        padding-bottom: 30px;
         overflow-y: auto;
         scrollbar-width: thin;
         scrollbar-color: var(--primary-color) white;
