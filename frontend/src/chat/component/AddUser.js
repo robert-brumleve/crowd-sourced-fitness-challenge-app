@@ -61,7 +61,7 @@ const AddUser = () => {
         messages: [],
       });
       console.log(newChatRef);
-      /*TODO: change receiverID to array for group chat */
+      //TODO: change receiverID to array for group chat
 
       /**update other's userchat */
       await updateDoc(doc(userChatRef, user.uid), {

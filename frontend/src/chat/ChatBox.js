@@ -52,6 +52,13 @@ const ChatBox = () => {
   //listens for each messages
   useEffect(() => {
     const unsub = onSnapshot(doc(db, "chats", currentChatId), async (res) => {
+      //exit if no chat found.
+      if (res.data() == null){
+        console.log("selected chat no longer exists")
+        alert("The chat no longer exists.");
+        return;
+      }
+      
       const items = res.data().messages;
       //retrieve sender info from each message for display
       const promises = items.map(async (item) => {

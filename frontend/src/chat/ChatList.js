@@ -27,6 +27,7 @@ const ChatList = () => {
   const { resetInput } = useInputStore();
 
   /*TODO: change to challenge when database is connected*/
+  /*
   useEffect(() => {
     const unsub = onSnapshot(
       doc(db, "userchats", currentUser.uid),
@@ -34,6 +35,7 @@ const ChatList = () => {
         const items = res.data().chats;
 
         const promises = items.map(async (item) => {
+          //TODO: remove receieverId for group chat
           const userDocRef = doc(db, "users", item.receiverId);
           const userDocSnap = await getDoc(userDocRef);
 
@@ -41,7 +43,7 @@ const ChatList = () => {
           return { ...item, user };
         });
         const chatData = await Promise.all(promises);
-        /* sort list by updated status*/
+        // sort list by updated status
         setChats(chatData.sort((a, b) => b.updatedAt - a.updatedAt));
       }
     );
@@ -50,15 +52,13 @@ const ChatList = () => {
       unsub();
     };
   }, [currentUser.uid]);
-
+*/
   // Handle when a chat is deleted, remove the chat from the userchat
   useEffect(() => {
     const unsub = onSnapshot(
       doc(db, "userchats", currentUser.uid),
       async (res) => {
         const items = res.data().chats;
-
-        const chatIdToRemove = [];
 
         const promises = items.map(async (item) => {
           const chatDocRef = doc(db, "chats", item.chatId);
@@ -67,10 +67,13 @@ const ChatList = () => {
             const chatDocSnap = await getDoc(chatDocRef);
             //add to the list if the chat does not exist
             if (!chatDocSnap.exists()) {
-              chatIdToRemove.push(item);
               updateDoc(doc(db, "userchats", currentUser.uid), {
                 chats: arrayRemove(item),
               });
+              console.log("removing deleted chat:",item.chatId);
+            }else{
+              
+              return{...item};
             }
             
           } catch (err) {
@@ -78,7 +81,9 @@ const ChatList = () => {
           }
         });
 
-        await Promise.all(promises);
+        const chatData = await Promise.all(promises);
+        /* sort list by updated status*/
+        setChats(chatData.sort((a, b) => b.updatedAt - a.updatedAt));
         
       }
     );
@@ -99,10 +104,23 @@ const ChatList = () => {
       const chatIndex = userChatsData.chats.findIndex(
         (c) => c.chatId === chat.chatId
       );
-      userChatsData.chats[chatIndex].isSeen = true;
+      console.log("chatIndex:", chatIndex);
+      //exit if no index found.
+      if (chatIndex == null){
+        console.log("selected chat no longer exists")
+        alert("The chat no longer exists.");
+        return;
+      }
+      else{
+        userChatsData.chats[chatIndex].isSeen = true;
       await updateDoc(userChatsRef, {
         chats: userChatsData.chats,
       });
+      }
+      
+    }
+    else{
+      alert("no chat found for the user");
     }
 
     //change chatId
