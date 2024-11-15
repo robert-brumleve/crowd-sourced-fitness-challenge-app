@@ -14,11 +14,15 @@ import {
 import { db } from "./lib/firebase";
 import { useChatStore } from "./lib/ChatStore";
 import { useUserStore } from "./lib/UserStore";
-//import upload from "./component/Upload";
+import upload from "./component/Upload";
 
 const ChatBox = () => {
   const [text, setText] = useState("");
   const [chat, setChat] = useState();
+  const [imgMsg, setImgMsg] = useState({
+    file: null,
+    url:"",
+  });
   
   const { currentChatId, fetchChatInfo, currentChat, participants } = useChatStore();
   const { currentUser } = useUserStore();
@@ -63,17 +67,37 @@ const ChatBox = () => {
     };
   }, [currentChatId]);
 
-  /*TODO: handle image upload*/
+  //TODO: handle image upload
+  const handleImg = (e) =>{
+    console.log("in handleimg",e.target.files[0]);
+    if (e.target.files[0]){
+      setImgMsg({file: e.target.files[0],
+        url: URL.createObjectURL(e.target.files[0]),
+      });
+    };
+  };
 
+  
+
+  //Handle when sending a message
   const handleSend = async () => {
-    if (text === "") return;
+    if (text === "" && imgMsg.file == null) return;
+
+    let imgURL = null
 
     try {
+
+      if(imgMsg.file){
+        imgURL = await upload(imgMsg.file);
+        console.log("img:", imgURL);
+      }
+
       await updateDoc(doc(db, "chats", currentChatId), {
         messages: arrayUnion({
           senderId: currentUser.uid,
           text,
           createdAt: new Date(),
+          ...(imgURL && {imgUrl: imgURL}),
         }),
       });
 
@@ -110,6 +134,7 @@ const ChatBox = () => {
 
     //update text input
     setText("");
+    //reset img for msg
   };
 
 
@@ -155,10 +180,13 @@ const ChatBox = () => {
               {message.senderId !== currentUser.uid && (
                 <span className="names">{message.sender.displayName}</span>
               )}
-              {message.img && (
-                <img className="msg-img" src={message.img} alt="" />
+              {message.imgUrl && (
+                <img className="msg-img" src={message.imgUrl} alt="" />
               )}
+              {message.text !== "" &&
               <p>{message.text}</p>
+              }
+              
               <span>
                 {message.createdAt.toDate().toLocaleDateString() +
                   " @ " +
@@ -169,16 +197,14 @@ const ChatBox = () => {
         ))}
       </div>
 
-      {/* auto scroll to bottom */}
-      {/*<div ref={lastMessageRef} />*/}
-
       {/* TEXT INPUT - TODO: make enter key handle event as well. */}
       <div className="bottom">
         <div className="icons">
           <label htmlFor="file">
             <i className="bx bx-image-add bx-sm"></i>
           </label>
-          <input type="file" id="file" style={{ display: "none" }} />
+          <input type="file" id="file" accept="image/*" style={{ display: "none" }} 
+          onChange={handleImg}/>
         </div>
         <input
           type="text"

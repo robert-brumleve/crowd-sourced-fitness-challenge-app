@@ -53,7 +53,6 @@ const ChatLogin = () => {
         displayName: user.displayName,
         email: user.email,
         photoURL: user.photoURL,
-        challengelist: [],
         };
         //userdata
         await setDoc(userRef, userData);
