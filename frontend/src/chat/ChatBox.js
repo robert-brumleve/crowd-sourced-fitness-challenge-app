@@ -69,7 +69,7 @@ const ChatBox = () => {
     };
   }, [currentChatId]);
 
-  //TODO: handle image upload
+  // handle image upload
   const handleImg = (e) => {
     console.log("in handle img", e.target.files[0]);
     if (e.target.files[0]) {
@@ -119,11 +119,12 @@ const ChatBox = () => {
           //if only photo, set custom text
           if (text === "" && imgURL) {
             //console.log("text null and image exist");
-            userChatsData.chats[chatIndex].lastMessage = "image";
+            userChatsData.chats[chatIndex].type = "image";
           } else {
-            userChatsData.chats[chatIndex].lastMessage = text;
+            
+            userChatsData.chats[chatIndex].type = "text";
           }
-
+          userChatsData.chats[chatIndex].lastMessage = text;
           userChatsData.chats[chatIndex].isSeen =
             userchatsId === currentUser.uid ? true : false;
           userChatsData.chats[chatIndex].updatedAt = Date.now();

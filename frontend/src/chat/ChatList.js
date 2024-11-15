@@ -65,21 +65,21 @@ const ChatList = () => {
 
           try {
             const chatDocSnap = await getDoc(chatDocRef);
-            //remove if chat does not exist anymore
+            //add to the list if the chat does not exist
             if (!chatDocSnap.exists()) {
-              //console.log("chatid ", item.chatId," does not exist anymore. removing.");
               chatIdToRemove.push(item);
-
-              await updateDoc(doc(db, "userchats", currentUser.uid), {
+              updateDoc(doc(db, "userchats", currentUser.uid), {
                 chats: arrayRemove(item),
               });
             }
+            
           } catch (err) {
             console.log(err);
           }
         });
 
         await Promise.all(promises);
+        
       }
     );
 
@@ -159,7 +159,11 @@ const ChatList = () => {
               <div className="texts">
                 {/*TODO: change to challenge name */}
                 <span>{chat.chatId}</span>
-                <p className="lastMessage">{chat.lastMessage}</p>
+                <p className="lastMessage">
+                  {chat.type === "text" ? chat.lastMessage 
+                  : chat.type === "image"? (<i className="bx bx-image">image</i>)
+                  : ""}
+                </p>
               </div>
               {/* show icon if there is unread msg */}
               {chat.lastMessage === "" || chat.isSeen === true ? (
