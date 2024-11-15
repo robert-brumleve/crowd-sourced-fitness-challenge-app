@@ -19,51 +19,50 @@ import { useUserStore } from "./lib/UserStore";
 const ChatBox = () => {
   const [text, setText] = useState("");
   const [chat, setChat] = useState();
-  
+
   const { currentChatId, fetchChatInfo, currentChat } = useChatStore();
   const { currentUser } = useUserStore();
   const lastMessageRef = useRef(null);
 
-  /* TODO fix auto scroll not working atm*/
+  /* auto scroll to last message*/
   useEffect(() => {
+    console.log("lastmessage:", lastMessageRef.current);
     if (lastMessageRef.current) {
-      lastMessageRef.current.scrollTop =
-      lastMessageRef.current.scrollHeight; //({ behavior: "smooth" });
+      lastMessageRef.current.scrollIntoView({ behavior: "smooth" }); 
     }
   }, [chat]);
 
+  //listen for chat
+  useEffect(() => {
+    const unsub = fetchChatInfo(currentChatId);
 
-//listen for chat
-useEffect(() => {
-  const unsub = fetchChatInfo(currentChatId);
-    
-  return () => {
-    if (typeof unsub === "function") {
-      unsub();
-    }
-  };
-}, [currentChatId, fetchChatInfo]);
+    return () => {
+      if (typeof unsub === "function") {
+        
+        unsub();
+      }
+    };
+  }, [currentChatId, fetchChatInfo]);
 
- //listens for each messages 
-useEffect(() => {
-  const unsub = onSnapshot(doc(db, "chats", currentChatId), async(res) => {
-    const items = res.data().messages;
-
-    const promises = items.map(async(item)=>{
-      const senderDocRef = doc(db, "users", item.senderId);
-      const senderDocSnap = await getDoc(senderDocRef);
-      const sender = senderDocSnap.data();
-      return{...item, sender};
+  //listens for each messages
+  useEffect(() => {
+    const unsub = onSnapshot(doc(db, "chats", currentChatId), async (res) => {
+      const items = res.data().messages;
+      //retrieve sender info from each message for display
+      const promises = items.map(async (item) => {
+        const senderDocRef = doc(db, "users", item.senderId);
+        const senderDocSnap = await getDoc(senderDocRef);
+        const sender = senderDocSnap.data();
+        return { ...item, sender };
+      });
+      const senderData = await Promise.all(promises);
+      setChat(senderData);
     });
-    const senderData = await Promise.all(promises);
-    setChat(senderData);
-  });
 
-  return () => {
-    unsub();
-  };
-}, [currentChatId]);
-  /*TODO:fetch other user info from messager senderid*/
+    return () => {
+      unsub();
+    };
+  }, [currentChatId]);
 
   /*TODO: handle image upload*/
 
@@ -114,7 +113,6 @@ useEffect(() => {
     setText("");
   };
 
-  
 
   return (
     <div className="chatbox">
@@ -122,6 +120,8 @@ useEffect(() => {
         <div className="challenge">
           {/*TODO: change to challenge name later */}
           {currentChatId}
+          {/*TODO: get number of participants */}
+          <span>(# members)</span>
         </div>
         <div className="homeicon">
           {/*TODO: link to the challenge page*/}
@@ -130,39 +130,51 @@ useEffect(() => {
       </div>
 
       {/* Message Section */}
-      <div className="center" ref={lastMessageRef}>
+      <div className="center" >
         {chat?.map((message) => (
+          
           <div
             className={
               message.senderId === currentUser.uid ? "message mine" : "message"
             }
             key={message.createdAt}
+            ref={lastMessageRef}
           >
             {/* show image and name if message is not current user's */}
-            {message.senderId !== currentUser.uid && 
-            <img src={ message.sender.photoURL || "/img/chat/avatar.png" } alt="." />}
+            {message.senderId !== currentUser.uid && (
+              <img
+                className="user-pic"
+                src={message.sender.photoURL || "/img/chat/avatar.png"}
+                alt="."
+              />
+            )}
 
             <div className="texts">
               {message.senderId !== currentUser.uid && (
                 <span className="names">{message.sender.displayName}</span>
               )}
-              {message.img && <img src={message.img} alt="" />}
+              {message.img && (
+                <img className="msg-img" src={message.img} alt="" />
+              )}
               <p>{message.text}</p>
-              <span>{message.createdAt.toDate().toLocaleDateString() + " @ "+
-              message.createdAt.toDate().toLocaleTimeString()}</span>
+              <span>
+                {message.createdAt.toDate().toLocaleDateString() +
+                  " @ " +
+                  message.createdAt.toDate().toLocaleTimeString()}
+              </span>
             </div>
           </div>
         ))}
       </div>
 
       {/* auto scroll to bottom */}
-      <div ref={lastMessageRef} />
+      {/*<div ref={lastMessageRef} />*/}
 
       {/* TEXT INPUT - TODO: make enter key handle event as well. */}
       <div className="bottom">
         <div className="icons">
           <label htmlFor="file">
-            <i className="bx bx-image-add bx-sm" ></i>
+            <i className="bx bx-image-add bx-sm"></i>
           </label>
           <input type="file" id="file" style={{ display: "none" }} />
         </div>
