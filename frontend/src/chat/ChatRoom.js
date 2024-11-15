@@ -16,7 +16,7 @@ function ChatRoom() {
   const { currentUser, fetchUserInfo } = useUserStore();
   const { currentChatId } = useChatStore();
   const [isMobileView, setIsMobileView] = useState(false);
-  const [activeListView, setActiveListView] = useState(true);
+  const [activeTab, setActiveTab] = useState('chatlist');
 
   //listen for user
   useEffect(() => {
@@ -43,9 +43,9 @@ function ChatRoom() {
   //listen for chatId switching and open chat
   useEffect(() => {
     if (!currentChatId) {
-      setActiveListView(true);
+      setActiveTab('chatlist');
     } else {
-      setActiveListView(false);
+      setActiveTab('chatbox');
     }
   }, [currentChatId]);
 
@@ -60,33 +60,33 @@ function ChatRoom() {
           </>
         ) : (
           <>
-            {activeListView ? <ChatList /> : <ChatBox />}
+            {activeTab ? <ChatList /> : <ChatBox />}
             <nav className="nav_menu">
               <ul className="nav_list">
                 {/*<li 
               >
-                <button  className={activeListView ? "active" : ""}
-                onClick={()=>setActiveListView(prevState => !prevState)}>
-                <i class={activeListView ? 'bx bx-chat bx-sm':'bx bx-list-ul bx-sm'}></i>
+                <button  className={activeTab ? "active" : ""}
+                onClick={()=>setActiveTab(prevState => !prevState)}>
+                <i class={activeTab ? 'bx bx-chat bx-sm':'bx bx-list-ul bx-sm'}></i>
                 </button>
                 
               </li>*/}
 
                 <li>
                   <button
-                    className={activeListView ? "active" : ""}
-                    onClick={() => setActiveListView(true)}
+                    className={activeTab ? "active" : ""}
+                    onClick={() => setActiveTab('chatlist')}
                   >
                     <i className="bx bx-list-ul"></i>
                   </button>
                 </li>
                 <li>
                   <button
-                    className={!activeListView ? "active" : ""}
+                    className={!activeTab ? "active" : ""}
                     onClick={() =>
                       currentChatId
-                        ? setActiveListView(false)
-                        : setActiveListView(true)
+                        ? setActiveTab('chatbox')
+                        : setActiveTab('chatlist')
                     }
                   >
                     <i className="bx bx-conversation"></i>
