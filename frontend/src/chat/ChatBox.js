@@ -135,11 +135,13 @@ const ChatBox = () => {
     //update text input
     setText("");
     //reset img for msg
+    setImgMsg({file: null, url:"",})
   };
 
 
   return (
     <div className="chatbox">
+      {/*--- CHAT TITLE  ---- */}
       <div className="top">
         <div className="challenge">
           {/*TODO: change to challenge name later */}
@@ -156,7 +158,7 @@ const ChatBox = () => {
         </div>
       </div>
 
-      {/* Message Section */}
+      {/* ---- MESSAGES ----*/}
       <div className="center" >
         {chat?.map((message) => (
           
@@ -196,8 +198,20 @@ const ChatBox = () => {
           </div>
         ))}
       </div>
+      
+      {/* --- IMAGE UPLOAD PREVIEW ---*/}
+      {imgMsg.url && (
+        
+          <fieldset className="image-preview">
+          <legend>preview</legend>
+          <img src={imgMsg.url} alt="image preview"/>
+        </fieldset>
+        
+        
+    
+      )}
 
-      {/* TEXT INPUT - TODO: make enter key handle event as well. */}
+      {/* --- TEXT INPUT - TODO: make enter key handle event as well. */}
       <div className="bottom">
         <div className="icons">
           <label htmlFor="file">
