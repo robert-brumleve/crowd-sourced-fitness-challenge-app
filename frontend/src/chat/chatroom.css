@@ -343,7 +343,7 @@
         }
         img{
             max-width: 300px;
-           margin:-10px;
+            margin:-10px;
             border-radius:5px;
             object-fit: cover;
         }

@@ -25,16 +25,16 @@ const ChatBox = () => {
     url:"",
   });*/
 
-  
-  const {text, setText,resetInput,imgInput, setImgInput} = useInputStore();
-  const { currentChatId, fetchChatInfo, currentChat, participants } = useChatStore();
+  const { text, setText, resetInput, imgInput, setImgInput } = useInputStore();
+  const { currentChatId, fetchChatInfo, currentChat, participants } =
+    useChatStore();
   const { currentUser } = useUserStore();
   const lastMessageRef = useRef(null);
 
   /* auto scroll to last message*/
   useEffect(() => {
     if (lastMessageRef.current) {
-      lastMessageRef.current.scrollIntoView({ behavior: "smooth" }); 
+      lastMessageRef.current.scrollIntoView({ behavior: "smooth" });
     }
   }, [chat]);
 
@@ -44,7 +44,6 @@ const ChatBox = () => {
 
     return () => {
       if (typeof unsub === "function") {
-        
         unsub();
       }
     };
@@ -71,25 +70,21 @@ const ChatBox = () => {
   }, [currentChatId]);
 
   //TODO: handle image upload
-  const handleImg = (e) =>{
-    console.log("in handle img",e.target.files[0]);
-    if (e.target.files[0]){
+  const handleImg = (e) => {
+    console.log("in handle img", e.target.files[0]);
+    if (e.target.files[0]) {
       setImgInput(e.target.files[0]);
-    };
-    
+    }
   };
-
-  
 
   //Handle when sending a message
   const handleSend = async () => {
     if (text === "" && imgInput.file == null) return;
     //console.log("img", imgInput);
-    let imgURL = null
+    let imgURL = null;
 
     try {
-
-      if(imgInput.file){
+      if (imgInput.file) {
         imgURL = await upload(imgInput.file);
         //console.log("img:", imgURL);
       }
@@ -99,7 +94,7 @@ const ChatBox = () => {
           senderId: currentUser.uid,
           text,
           createdAt: new Date(),
-          ...(imgURL && {imgUrl: imgURL}),
+          ...(imgURL && { imgUrl: imgURL }),
         }),
       });
 
@@ -107,7 +102,6 @@ const ChatBox = () => {
       //console.log("participants",currentChat.participantId);
       //console.log("other id: ",user);
       const userIds = currentChat.participantId;
-      
 
       //update status of last message seen for each users.
 
@@ -123,11 +117,10 @@ const ChatBox = () => {
             (c) => c.chatId === currentChatId
           );
           //if only photo, set custom text
-          if (text === "" && imgURL){
+          if (text === "" && imgURL) {
             //console.log("text null and image exist");
             userChatsData.chats[chatIndex].lastMessage = "image";
-          }
-          else{
+          } else {
             userChatsData.chats[chatIndex].lastMessage = text;
           }
 
@@ -148,21 +141,17 @@ const ChatBox = () => {
     resetInput();
   };
 
-  
-
   return (
     <div className="chatbox">
       {/*--- CHAT TITLE  ---- */}
       <div className="top">
         <div className="challenge">
           {/*TODO: change to challenge name later */}
-          <span className="name">
-            {currentChatId}
-          </span>
+          <span className="name">{currentChatId}</span>
           {/* get number of participants */}
           <span className="usernum">( {participants.length} members )</span>
         </div>
-        
+
         <div className="homeicon">
           {/*TODO: link to the challenge page*/}
           <i className="bx bx-home bx-sm"></i>
@@ -170,9 +159,8 @@ const ChatBox = () => {
       </div>
 
       {/* ---- MESSAGES ----*/}
-      <div className="center" >
+      <div className="center">
         {chat?.map((message) => (
-          
           <div
             className={
               message.senderId === currentUser.uid ? "message mine" : "message"
@@ -196,10 +184,8 @@ const ChatBox = () => {
               {message.imgUrl && (
                 <img className="msg-img" src={message.imgUrl} alt="" />
               )}
-              {message.text !== "" &&
-              <p>{message.text}</p>
-              }
-              
+              {message.text !== "" && <p>{message.text}</p>}
+
               <span>
                 {message.createdAt.toDate().toLocaleDateString() +
                   " @ " +
@@ -209,17 +195,13 @@ const ChatBox = () => {
           </div>
         ))}
       </div>
-      
+
       {/* --- IMAGE UPLOAD PREVIEW ---*/}
       {imgInput.url && (
-        
-          <fieldset className="image-preview">
+        <fieldset className="image-preview">
           <legend>preview</legend>
-          <img src={imgInput.url} alt=""/>
+          <img src={imgInput.url} alt="" />
         </fieldset>
-        
-        
-    
       )}
 
       {/* --- TEXT INPUT - TODO: make enter key handle event as well. */}
@@ -228,8 +210,13 @@ const ChatBox = () => {
           <label htmlFor="file">
             <i className="bx bx-image-add bx-sm"></i>
           </label>
-          <input type="file" id="file" accept="image/*" style={{ display: "none" }} 
-          onChange={handleImg}/>
+          <input
+            type="file"
+            id="file"
+            accept="image/*"
+            style={{ display: "none" }}
+            onChange={handleImg}
+          />
         </div>
         <input
           type="text"

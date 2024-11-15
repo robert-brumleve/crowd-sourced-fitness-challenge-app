@@ -7,7 +7,13 @@ import "./chatroom.css";
 
 import "boxicons/css/boxicons.min.css";
 import { useUserStore } from "./lib/UserStore";
-import { arrayRemove, doc, getDoc, onSnapshot, updateDoc } from "firebase/firestore";
+import {
+  arrayRemove,
+  doc,
+  getDoc,
+  onSnapshot,
+  updateDoc,
+} from "firebase/firestore";
 import { db } from "./lib/firebase";
 import AddUser from "./component/AddUser";
 import { useChatStore } from "./lib/ChatStore";
@@ -18,7 +24,7 @@ const ChatList = () => {
   const { changeChat, currentChatId } = useChatStore();
   const [chats, setChats] = useState([]);
   const [addMode, setAddMode] = useState(false);
-  const { resetInput} = useInputStore();
+  const { resetInput } = useInputStore();
 
   /*TODO: change to challenge when database is connected*/
   useEffect(() => {
@@ -51,33 +57,29 @@ const ChatList = () => {
       doc(db, "userchats", currentUser.uid),
       async (res) => {
         const items = res.data().chats;
-        
+
         const chatIdToRemove = [];
 
         const promises = items.map(async (item) => {
           const chatDocRef = doc(db, "chats", item.chatId);
-          
-          try{
+
+          try {
             const chatDocSnap = await getDoc(chatDocRef);
             //remove if chat does not exist anymore
-            if(!chatDocSnap.exists()){
+            if (!chatDocSnap.exists()) {
               //console.log("chatid ", item.chatId," does not exist anymore. removing.");
               chatIdToRemove.push(item);
-              
-              await  updateDoc(doc(db, "userchats",currentUser.uid),{
+
+              await updateDoc(doc(db, "userchats", currentUser.uid), {
                 chats: arrayRemove(item),
               });
-
             }
-          }
-          catch (err){
+          } catch (err) {
             console.log(err);
-          }  
-
+          }
         });
-        
-        await Promise.all(promises);
 
+        await Promise.all(promises);
       }
     );
 
@@ -85,7 +87,6 @@ const ChatList = () => {
       unsub();
     };
   }, [currentUser.uid]);
-
 
   // handle when chat from the list is selected
   const handleSelect = async (chat) => {
@@ -154,7 +155,7 @@ const ChatList = () => {
             <i className="bx bx-run chal-img"></i>
             }
             */}
-              <img className="chal-img" src="img/chat/fitness.png" alt=""/>
+              <img className="chal-img" src="img/chat/fitness.png" alt="" />
               <div className="texts">
                 {/*TODO: change to challenge name */}
                 <span>{chat.chatId}</span>
@@ -165,7 +166,7 @@ const ChatList = () => {
                 <> </>
               ) : (
                 <div className="unread-icon">
-                <i className="bx bx-message-rounded-detail"></i>
+                  <i className="bx bx-message-rounded-detail"></i>
                 </div>
               )}
             </div>
@@ -174,7 +175,6 @@ const ChatList = () => {
           <>
             {/*if no chat list from the data*/}
             <div className="item">
-              
               <img src="img/chat/fitness.png" alt="" />
               <div className="texts">
                 <span>No challenges joined yet</span>

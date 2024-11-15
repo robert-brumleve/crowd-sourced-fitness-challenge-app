@@ -12,7 +12,7 @@ import { useChatStore } from "../lib/ChatStore";
 const ChatLogin = () => {
   const provider = new GoogleAuthProvider();
   const [user, setUser] = useState(null);
-  const {resetChat} = useChatStore();
+  const { resetChat } = useChatStore();
 
   //console.log("UserProvider:", user);
 
@@ -26,7 +26,6 @@ const ChatLogin = () => {
       .catch((error) => {
         console.log(error.message);
       });
-
   };
   const googleSignOut = () => {
     auth
@@ -35,7 +34,6 @@ const ChatLogin = () => {
         console.log("signout success");
         setUser(null);
         resetChat();
-        
       })
       .catch((error) => {
         console.log(error.message);
@@ -47,12 +45,12 @@ const ChatLogin = () => {
       const userSnap = await getDoc(userRef);
 
       //check user existence in database
-      if (!userSnap.exists()){
+      if (!userSnap.exists()) {
         const userData = {
-        uid: user.uid,
-        displayName: user.displayName,
-        email: user.email,
-        photoURL: user.photoURL,
+          uid: user.uid,
+          displayName: user.displayName,
+          email: user.email,
+          photoURL: user.photoURL,
         };
         //userdata
         await setDoc(userRef, userData);
@@ -61,10 +59,9 @@ const ChatLogin = () => {
           chats: [],
         });
         console.log("new user registered: ", user.displayName);
-      }else{
+      } else {
         console.log("user already exists");
       }
-      
     } catch (error) {
       console.error("error registering", error);
     }

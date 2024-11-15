@@ -9,25 +9,28 @@ import { db } from "./firebase";
 export const useChatStore = create((set) => ({
   currentChat: null,
   currentChatId: null,
-  participants:[],
-  changeChat:(selectedChatId)=>{return set({currentChatId: selectedChatId});
+  participants: [],
+  changeChat: (selectedChatId) => {
+    return set({ currentChatId: selectedChatId });
   },
-  resetChat: ()=> {return set({currentChat: null, currentChatId: null, participants:[]})},
+  resetChat: () => {
+    return set({ currentChat: null, currentChatId: null, participants: [] });
+  },
   fetchChatInfo: async (chatId) => {
     if (!chatId) return set({ chatId: null });
     try {
       const docRef = doc(db, "chats", chatId);
       const docSnap = await getDoc(docRef);
       if (docSnap.exists()) {
-        set({ currentChat: docSnap.data(),
-          participants:docSnap.data().participantId,
+        set({
+          currentChat: docSnap.data(),
+          participants: docSnap.data().participantId,
         });
       } else {
         set({ currentChat: null });
       }
     } catch (err) {
-      return set({ currentChat: null});
+      return set({ currentChat: null });
     }
   },
-
 }));
