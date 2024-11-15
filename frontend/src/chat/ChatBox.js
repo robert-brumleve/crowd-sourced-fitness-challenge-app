@@ -105,7 +105,10 @@ const ChatBox = () => {
       //console.log("participants",currentChat.participantId);
       //console.log("other id: ",user);
       const userIds = currentChat.participantId;
+      
+
       //update status of last message seen for each users.
+
       userIds.forEach(async (userchatsId) => {
         const userChatsRef = doc(db, "userchats", userchatsId);
         const userChatsSnapshot = await getDoc(userChatsRef);
@@ -117,8 +120,15 @@ const ChatBox = () => {
           const chatIndex = userChatsData.chats.findIndex(
             (c) => c.chatId === currentChatId
           );
+          //if only photo, set custom text
+          if (text === "" && imgURL){
+            console.log("text null and image exist");
+            userChatsData.chats[chatIndex].lastMessage = "image";
+          }
+          else{
+            userChatsData.chats[chatIndex].lastMessage = text;
+          }
 
-          userChatsData.chats[chatIndex].lastMessage = text;
           userChatsData.chats[chatIndex].isSeen =
             userchatsId === currentUser.uid ? true : false;
           userChatsData.chats[chatIndex].updatedAt = Date.now();
