@@ -9,7 +9,6 @@ import { db } from "./firebase";
 export const useChatStore = create((set) => ({
   currentChat: null,
   currentChatId: null,
-  participant:[],
   changeChat:(selectedChatId)=>{return set({currentChatId: selectedChatId});
   },
   resetChat: ()=> {return set({currentChat: null, currentChatId: null})},

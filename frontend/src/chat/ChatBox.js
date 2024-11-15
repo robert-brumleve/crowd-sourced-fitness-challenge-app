@@ -19,7 +19,7 @@ import { useUserStore } from "./lib/UserStore";
 const ChatBox = () => {
   const [text, setText] = useState("");
   const [chat, setChat] = useState();
-
+  
   const { currentChatId, fetchChatInfo, currentChat } = useChatStore();
   const { currentUser } = useUserStore();
   const lastMessageRef = useRef(null);
@@ -113,6 +113,9 @@ const ChatBox = () => {
     setText("");
   };
 
+  const getParticipantNum = () =>{
+    console.log("part",currentChat);
+  };
 
   return (
     <div className="chatbox">
@@ -120,8 +123,8 @@ const ChatBox = () => {
         <div className="challenge">
           {/*TODO: change to challenge name later */}
           {currentChatId}
-          {/*TODO: get number of participants */}
-          <span>(# members)</span>
+          {/* get number of participants */}
+          <span>( {currentChat.participantId.length} members )</span>
         </div>
         <div className="homeicon">
           {/*TODO: link to the challenge page*/}
