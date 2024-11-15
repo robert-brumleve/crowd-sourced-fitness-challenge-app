@@ -180,11 +180,15 @@
         border-bottom: 1px solid #dddddd;
         
         .challenge{
-            font-size: 18px;
-            font-weight:bold;
-            text-overflow:ellipsis;
             
-            span{
+            
+            .name{    
+              font-size: 18px;
+            font-weight:bold;
+            max-width: 70%;
+            text-overflow:ellipsis;  
+            }
+            .usernum{
                 padding-left:10px;
                 padding-right:10px;
                 font-size: 10px;

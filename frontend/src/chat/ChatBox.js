@@ -20,13 +20,12 @@ const ChatBox = () => {
   const [text, setText] = useState("");
   const [chat, setChat] = useState();
   
-  const { currentChatId, fetchChatInfo, currentChat } = useChatStore();
+  const { currentChatId, fetchChatInfo, currentChat, participants } = useChatStore();
   const { currentUser } = useUserStore();
   const lastMessageRef = useRef(null);
 
   /* auto scroll to last message*/
   useEffect(() => {
-    console.log("lastmessage:", lastMessageRef.current);
     if (lastMessageRef.current) {
       lastMessageRef.current.scrollIntoView({ behavior: "smooth" }); 
     }
@@ -113,19 +112,19 @@ const ChatBox = () => {
     setText("");
   };
 
-  const getParticipantNum = () =>{
-    console.log("part",currentChat);
-  };
 
   return (
     <div className="chatbox">
       <div className="top">
         <div className="challenge">
           {/*TODO: change to challenge name later */}
-          {currentChatId}
+          <span className="name">
+            {currentChatId}
+          </span>
           {/* get number of participants */}
-          <span>( {currentChat.participantId.length} members )</span>
+          <span className="usernum">( {participants.length} members )</span>
         </div>
+        
         <div className="homeicon">
           {/*TODO: link to the challenge page*/}
           <i className="bx bx-home bx-sm"></i>
