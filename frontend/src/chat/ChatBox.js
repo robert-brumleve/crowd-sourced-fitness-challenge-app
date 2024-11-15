@@ -54,8 +54,8 @@ const ChatBox = () => {
     const unsub = onSnapshot(doc(db, "chats", currentChatId), async (res) => {
       //exit if no chat found.
       if (res.data() == null){
-        console.log("selected chat no longer exists")
-        alert("The chat no longer exists.");
+        console.log("cannot open chatbox. selected chat no longer exists")
+        alert("Cannot retreive message as the chat no longer exists.");
         return;
       }
       

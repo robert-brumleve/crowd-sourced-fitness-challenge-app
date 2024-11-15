@@ -22,37 +22,14 @@ import { useInputStore } from "./lib/InputStore";
 const ChatList = () => {
   const { currentUser } = useUserStore();
   const { changeChat, currentChatId } = useChatStore();
+  const { resetInput } = useInputStore();
   const [chats, setChats] = useState([]);
   const [addMode, setAddMode] = useState(false);
-  const { resetInput } = useInputStore();
+  const [refresh, setRefresh] = useState(false);
 
-  /*TODO: change to challenge when database is connected*/
-  /*
-  useEffect(() => {
-    const unsub = onSnapshot(
-      doc(db, "userchats", currentUser.uid),
-      async (res) => {
-        const items = res.data().chats;
+  const filteredChats = chats.filter((chatId) => chatId !== undefined);
 
-        const promises = items.map(async (item) => {
-          //TODO: remove receieverId for group chat
-          const userDocRef = doc(db, "users", item.receiverId);
-          const userDocSnap = await getDoc(userDocRef);
-
-          const user = userDocSnap.data();
-          return { ...item, user };
-        });
-        const chatData = await Promise.all(promises);
-        // sort list by updated status
-        setChats(chatData.sort((a, b) => b.updatedAt - a.updatedAt));
-      }
-    );
-
-    return () => {
-      unsub();
-    };
-  }, [currentUser.uid]);
-*/
+  //TODO: change to challenge when database is connected
   // Handle when a chat is deleted, remove the chat from the userchat
   useEffect(() => {
     const unsub = onSnapshot(
@@ -70,69 +47,66 @@ const ChatList = () => {
               updateDoc(doc(db, "userchats", currentUser.uid), {
                 chats: arrayRemove(item),
               });
-              console.log("removing deleted chat:",item.chatId);
-            }else{
-              
-              return{...item};
+              console.log("removing deleted chat:", item.chatId);
+            } else {
+              return { ...item };
             }
-            
           } catch (err) {
             console.log(err);
           }
         });
-
         const chatData = await Promise.all(promises);
         /* sort list by updated status*/
         setChats(chatData.sort((a, b) => b.updatedAt - a.updatedAt));
-        
       }
     );
 
     return () => {
       unsub();
     };
-  }, [currentUser.uid]);
+  }, [currentUser.uid, refresh]);
 
   // handle when chat from the list is selected
   const handleSelect = async (chat) => {
-    //update isSeen status
     const userChatsRef = doc(db, "userchats", currentUser.uid);
     const userChatsSnapshot = await getDoc(userChatsRef);
-    if (userChatsSnapshot.exists()) {
+
+    const chatDocRef = doc(db, "chats", chat.chatId);
+    const chatDocSnap = await getDoc(chatDocRef);
+
+    //continue if chat exists and user has chats
+    if (userChatsSnapshot.exists() && chatDocSnap.exists()) {
       const userChatsData = userChatsSnapshot.data();
       //find index of the matching chat
       const chatIndex = userChatsData.chats.findIndex(
         (c) => c.chatId === chat.chatId
       );
-      console.log("chatIndex:", chatIndex);
+      //console.log("chatIndex:", chatIndex);
       //exit if no index found.
-      if (chatIndex == null){
-        console.log("selected chat no longer exists")
+      if (chatIndex == null) {
+        console.log("selected chat no longer exists", chatIndex);
         alert("The chat no longer exists.");
         return;
-      }
-      else{
+      } else {
         userChatsData.chats[chatIndex].isSeen = true;
-      await updateDoc(userChatsRef, {
-        chats: userChatsData.chats,
-      });
+        await updateDoc(userChatsRef, {
+          chats: userChatsData.chats,
+        });
       }
-      
+      //change chatId
+      changeChat(chat.chatId);
+    } else {
+      alert("Chat does not exist.");
     }
-    else{
-      alert("no chat found for the user");
-    }
-
-    //change chatId
-    changeChat(chat.chatId);
     //reset input field when different chat is selected
     resetInput();
+    //refresh chatlist whenever selecting chat
+    setRefresh((prev) => !prev);
   };
 
   return (
     <div className="chatlist">
       {/* USER INFO */}
-
       <div className="userinfo">
         <div className="user">
           {currentUser.photoURL ? (
@@ -142,24 +116,20 @@ const ChatList = () => {
           )}
           <span>{currentUser.displayName}</span>
         </div>
-
         {/*user information - to add later*/}
         <div className="icons"></div>
       </div>
-
       {/* Add User/challenge REMOVE LATER */}
       <div className="addChat">
         <button onClick={() => setAddMode((prev) => !prev)}>
           {addMode ? "minimize" : "add chat"}
         </button>
       </div>
-
       {/* USER'S CHALLENGE LIST' */}
-
       <div className="challengelist">
         {/*if chat list exists and at least one chat*/}
         {chats && chats.length > 0 ? (
-          chats.map((chat) => (
+          filteredChats.map((chat) => (
             <div
               className={chat.chatId === currentChatId ? "item active" : "item"}
               key={chat.chatId}
@@ -175,12 +145,16 @@ const ChatList = () => {
             */}
               <img className="chal-img" src="img/chat/fitness.png" alt="" />
               <div className="texts">
-                {/*TODO: change to challenge name */}
+                {/*//TODO: change to challenge name */}
                 <span>{chat.chatId}</span>
                 <p className="lastMessage">
-                  {chat.type === "text" ? chat.lastMessage 
-                  : chat.type === "image"? (<i className="bx bx-image">image</i>)
-                  : ""}
+                  {chat.type === "text" ? (
+                    chat.lastMessage
+                  ) : chat.type === "image" ? (
+                    <i className="bx bx-image">image</i>
+                  ) : (
+                    ""
+                  )}
                 </p>
               </div>
               {/* show icon if there is unread msg */}
