@@ -15,15 +15,18 @@ import { db } from "./lib/firebase";
 import { useChatStore } from "./lib/ChatStore";
 import { useUserStore } from "./lib/UserStore";
 import upload from "./component/Upload";
+import { useInputStore } from "./lib/InputStore";
 
 const ChatBox = () => {
-  const [text, setText] = useState("");
+  //const [text, setText] = useState("");
   const [chat, setChat] = useState();
-  const [imgMsg, setImgMsg] = useState({
+  /*const [imgInput, setimgInput] = useState({
     file: null,
     url:"",
-  });
+  });*/
+
   
+  const {text, setText,resetInput,imgInput, setImgInput} = useInputStore();
   const { currentChatId, fetchChatInfo, currentChat, participants } = useChatStore();
   const { currentUser } = useUserStore();
   const lastMessageRef = useRef(null);
@@ -69,27 +72,26 @@ const ChatBox = () => {
 
   //TODO: handle image upload
   const handleImg = (e) =>{
-    console.log("in handleimg",e.target.files[0]);
+    console.log("in handle img",e.target.files[0]);
     if (e.target.files[0]){
-      setImgMsg({file: e.target.files[0],
-        url: URL.createObjectURL(e.target.files[0]),
-      });
+      setImgInput(e.target.files[0]);
     };
+    
   };
 
   
 
   //Handle when sending a message
   const handleSend = async () => {
-    if (text === "" && imgMsg.file == null) return;
-
+    if (text === "" && imgInput.file == null) return;
+    //console.log("img", imgInput);
     let imgURL = null
 
     try {
 
-      if(imgMsg.file){
-        imgURL = await upload(imgMsg.file);
-        console.log("img:", imgURL);
+      if(imgInput.file){
+        imgURL = await upload(imgInput.file);
+        //console.log("img:", imgURL);
       }
 
       await updateDoc(doc(db, "chats", currentChatId), {
@@ -122,7 +124,7 @@ const ChatBox = () => {
           );
           //if only photo, set custom text
           if (text === "" && imgURL){
-            console.log("text null and image exist");
+            //console.log("text null and image exist");
             userChatsData.chats[chatIndex].lastMessage = "image";
           }
           else{
@@ -143,11 +145,10 @@ const ChatBox = () => {
     }
 
     //update text input
-    setText("");
-    //reset img for msg
-    setImgMsg({file: null, url:"",})
+    resetInput();
   };
 
+  
 
   return (
     <div className="chatbox">
@@ -210,11 +211,11 @@ const ChatBox = () => {
       </div>
       
       {/* --- IMAGE UPLOAD PREVIEW ---*/}
-      {imgMsg.url && (
+      {imgInput.url && (
         
           <fieldset className="image-preview">
           <legend>preview</legend>
-          <img src={imgMsg.url} alt="image preview"/>
+          <img src={imgInput.url} alt=""/>
         </fieldset>
         
         

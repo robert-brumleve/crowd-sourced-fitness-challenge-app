@@ -11,12 +11,14 @@ import { arrayRemove, doc, getDoc, onSnapshot, updateDoc } from "firebase/firest
 import { db } from "./lib/firebase";
 import AddUser from "./component/AddUser";
 import { useChatStore } from "./lib/ChatStore";
+import { useInputStore } from "./lib/InputStore";
 
 const ChatList = () => {
   const { currentUser } = useUserStore();
   const { changeChat, currentChatId } = useChatStore();
   const [chats, setChats] = useState([]);
   const [addMode, setAddMode] = useState(false);
+  const { resetInput} = useInputStore();
 
   /*TODO: change to challenge when database is connected*/
   useEffect(() => {
@@ -104,6 +106,8 @@ const ChatList = () => {
 
     //change chatId
     changeChat(chat.chatId);
+    //reset input field when different chat is selected
+    resetInput();
   };
 
   return (
