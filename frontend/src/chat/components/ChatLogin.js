@@ -1,5 +1,5 @@
 import { React, useEffect, useState } from "react";
-import "../chatroom.css";
+import "../lib/chatroom.css";
 import { auth, db } from "../lib/firebase";
 import {
   GoogleAuthProvider,
@@ -7,27 +7,27 @@ import {
   onAuthStateChanged,
 } from "firebase/auth";
 import { setDoc, doc, getDoc } from "firebase/firestore";
-import { useChatStore } from "../lib/ChatStore";
+import { useChatStore } from "../stores/ChatStore";
 
 const ChatLogin = () => {
   const provider = new GoogleAuthProvider();
   const [user, setUser] = useState(null);
-  const {resetChat} = useChatStore();
+  const { resetChat } = useChatStore();
 
-  //console.log("UserProvider:", user);
-
+  //Google Log IN
+  //TODO: Switch to retreiving user data from Mysql login
   const googleSignIn = () => {
     signInWithPopup(auth, provider)
       .then(async (result) => {
         setUser(result.user);
-        //console.log(result.user);
         await registerUserIfNotExists(result.user);
       })
       .catch((error) => {
         console.log(error.message);
       });
-
   };
+
+  //Google Log out
   const googleSignOut = () => {
     auth
       .signOut()
@@ -35,25 +35,25 @@ const ChatLogin = () => {
         console.log("signout success");
         setUser(null);
         resetChat();
-        
       })
       .catch((error) => {
         console.log(error.message);
       });
   };
+
+  //Create user data to firebase if new
   const registerUserIfNotExists = async (user) => {
     try {
       const userRef = doc(db, "users", user.uid);
       const userSnap = await getDoc(userRef);
 
       //check user existence in database
-      if (!userSnap.exists()){
+      if (!userSnap.exists()) {
         const userData = {
-        uid: user.uid,
-        displayName: user.displayName,
-        email: user.email,
-        photoURL: user.photoURL,
-        challengelist: [],
+          uid: user.uid,
+          displayName: user.displayName,
+          email: user.email,
+          photoURL: user.photoURL,
         };
         //userdata
         await setDoc(userRef, userData);
@@ -62,16 +62,16 @@ const ChatLogin = () => {
           chats: [],
         });
         console.log("new user registered: ", user.displayName);
-      }else{
+      } else {
         console.log("user already exists");
       }
-      
     } catch (error) {
       console.error("error registering", error);
     }
   };
 
   //listen for auth state changes
+  //TODO: modify when Mysql user data is implemented
   useEffect(() => {
     const unSub = onAuthStateChanged(auth, (currentUser) => {
       setUser(currentUser);

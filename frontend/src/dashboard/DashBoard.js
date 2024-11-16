@@ -10,24 +10,6 @@ const DashBoard = () => {
     .catch(err => console.log(err));
   }, [])
 
-// const DashBoard = () => {
-//   const [challenges, setChallenges] = useState([]);
-//   const {id} = useParams();
-
-//   useEffect (() =>{
-//     // fetch(`http://localhost:5000/challenges/view/${id}`)
-//     fetch('http://localhost:5000/challenges')
-//     // .then((res) => {
-//       // console.log(res);
-//       // setChallenge(res.data[0]);
-//     .then(res => res.json())
-//     .then((res) => setChallenges(res.data))
-//     // .then((res) => setChallenge(res.data))
-//     // })
-//     .catch(err => console.log(err));
-//   }, [])
-
-
   return (
   <div>
   {/* Reference: https://getbootstrap.com/docs/5.1/examples/
@@ -45,6 +27,7 @@ const DashBoard = () => {
       </div>
       </section>
 
+    {/* This section adds user's challenges' data into card */}
       <div>
       {data.map((d, i) => {
           return (
@@ -61,18 +44,21 @@ const DashBoard = () => {
                 <p class="card-text">{d.name}</p>
                 <div class="d-flex justify-content-between align-items-center">
                   <div class="btn-group">
+                    {/* Button to view challenge */}
                     <button type="button" class="btn btn-sm btn-outline-secondary">
                       <Link to={`/challenges/view/${d.challengeID}`}
                       className="btn btn-info btn-sm">View </Link>
                       </button>
 
+                    {/* Button to edit challenge */}
                     <button type="button" class="btn btn-sm btn-outline-secondary">
                     <Link
                       to={`/challenges/update/${d.challengeID}`}
                       className="btn btn-sm btn-primary mx-2"> Edit </Link>
                       </button>
                   </div>
-                  <small class="text-muted">9 mins</small>
+                  {/* List the amount of days on challenges, need to connect with data */}
+                  <small class="text-muted">30 days</small>
                 </div>
               </div>
 

@@ -4,7 +4,7 @@
 
 import { doc, getDoc } from "firebase/firestore";
 import { create } from "zustand";
-import { db } from "./firebase";
+import { db } from "../lib/firebase";
 
 export const useUserStore = create((set) => ({
   currentUser: null,
@@ -23,7 +23,4 @@ export const useUserStore = create((set) => ({
       return set({ currentUser: null, isloading: false });
     }
   },
-
 }));
-
-
