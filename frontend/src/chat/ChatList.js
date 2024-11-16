@@ -18,11 +18,13 @@ import { db } from "./lib/firebase";
 import AddUser from "./components/AddUser";
 import { useChatStore } from "./stores/ChatStore";
 import { useInputStore } from "./stores/InputStore";
+import { useActiveTabStore } from "./stores/ActiveTabStore";
 
 const ChatList = () => {
   const { currentUser } = useUserStore();
   const { changeChat, currentChatId } = useChatStore();
   const { resetInput } = useInputStore();
+  const { setActiveTab } = useActiveTabStore();
   const [chats, setChats] = useState([]);
   const [addMode, setAddMode] = useState(false);
   const [refresh, setRefresh] = useState(false);
@@ -93,6 +95,8 @@ const ChatList = () => {
       }
       //change chatId
       changeChat(chat.chatId);
+      //change to chat
+      setActiveTab("chatbox");
     } else {
       alert("Chat does not exist.");
     }

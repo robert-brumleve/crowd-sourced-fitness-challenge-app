@@ -8,12 +8,14 @@ import "./lib/chatroom.css";
 import "boxicons/css/boxicons.min.css";
 import { useUserStore } from "./stores/UserStore";
 import { useChatStore } from "./stores/ChatStore";
+import { useActiveTabStore } from "./stores/ActiveTabStore";
 
 function ChatRoom() {
   const { currentUser, fetchUserInfo } = useUserStore();
   const { currentChatId } = useChatStore();
+  const {activeTab, setActiveTab} = useActiveTabStore();
   const [isMobileView, setIsMobileView] = useState(false);
-  const [activeTab, setActiveTab] = useState("chatlist");
+  
 
   //listen for user
   //TODO: Change to SQL user data
@@ -47,6 +49,17 @@ function ChatRoom() {
     }
   }, [currentChatId]);
 
+  //Checks if chat is selected to switch to chatbox in mobileview
+  const isChatSelected = () =>{
+    if (currentChatId){
+      setActiveTab("chatbox");
+    }
+    else{
+      setActiveTab("chatlist");
+      alert("Please select a chat first");
+    }
+  };
+
   return (
     <div className="chatContainer">
       {currentUser ? (
@@ -58,12 +71,12 @@ function ChatRoom() {
           </>
         ) : (
           <>
-            {activeTab ? <ChatList /> : <ChatBox />}
+            {activeTab === "chatlist" ? <ChatList /> : <ChatBox />}
             <nav className="nav_menu">
               <ul className="nav_list">
                 <li>
                   <button
-                    className={activeTab ? "active" : ""}
+                    className={activeTab === "chatlist"? "active" : ""}
                     onClick={() => setActiveTab("chatlist")}
                   >
                     <i className="bx bx-list-ul"></i>
@@ -71,12 +84,8 @@ function ChatRoom() {
                 </li>
                 <li>
                   <button
-                    className={!activeTab ? "active" : ""}
-                    onClick={() =>
-                      currentChatId
-                        ? setActiveTab("chatbox")
-                        : setActiveTab("chatlist")
-                    }
+                    className={activeTab === "chatbox" ? "active" : ""}
+                    onClick={isChatSelected}
                   >
                     <i className="bx bx-conversation"></i>
                   </button>
