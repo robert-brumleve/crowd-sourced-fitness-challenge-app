@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from "react";
 import ChatList from "./ChatList";
 import ChatBox from "./ChatBox";
-import ChatLogin from "./component/ChatLogin";
+import ChatLogin from "./components/ChatLogin";
 import { auth } from "./lib/firebase";
 import { onAuthStateChanged } from "firebase/auth";
-import "./chatroom.css";
+import "./lib/chatroom.css";
 import "boxicons/css/boxicons.min.css";
-import { useUserStore } from "./lib/UserStore";
-import { useChatStore } from "./lib/ChatStore";
+import { useUserStore } from "./stores/UserStore";
+import { useChatStore } from "./stores/ChatStore";
 
 function ChatRoom() {
   const { currentUser, fetchUserInfo } = useUserStore();

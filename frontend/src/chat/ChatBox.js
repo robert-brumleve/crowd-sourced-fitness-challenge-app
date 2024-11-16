@@ -2,7 +2,7 @@
 // https://firebase.google.com/docs/firestore/manage-data/add-data
 
 import React, { useRef, useState, useEffect } from "react";
-import "./chatroom.css";
+import "./lib/chatroom.css";
 import "boxicons/css/boxicons.min.css";
 import {
   arrayUnion,
@@ -12,15 +12,16 @@ import {
   updateDoc,
 } from "firebase/firestore";
 import { db } from "./lib/firebase";
-import { useChatStore } from "./lib/ChatStore";
-import { useUserStore } from "./lib/UserStore";
-import upload from "./component/Upload";
-import { useInputStore } from "./lib/InputStore";
+import { useChatStore } from "./stores/ChatStore";
+import { useUserStore } from "./stores/UserStore";
+import upload from "./components/Upload";
+import { useInputStore } from "./stores/InputStore";
 
 const ChatBox = () => {
   const [chat, setChat] = useState();
   const { text, setText, resetInput, imgInput, setImgInput } = useInputStore();
-  const { currentChatId, fetchChatInfo, currentChat, participants } = useChatStore();
+  const { currentChatId, fetchChatInfo, currentChat, participants } =
+    useChatStore();
   const { currentUser } = useUserStore();
   const lastMessageRef = useRef(null);
 

@@ -3,7 +3,7 @@
 // https://firebase.google.com/docs/firestore/manage-data/add-data
 
 import React, { useState } from "react";
-import "../chatroom.css";
+import "../lib/chatroom.css";
 import {
   arrayUnion,
   collection,
@@ -16,7 +16,7 @@ import {
   where,
 } from "firebase/firestore";
 import { db } from "../lib/firebase";
-import { useUserStore } from "../lib/UserStore";
+import { useUserStore } from "../stores/UserStore";
 
 const AddUser = () => {
   const [user, setUser] = useState(null);

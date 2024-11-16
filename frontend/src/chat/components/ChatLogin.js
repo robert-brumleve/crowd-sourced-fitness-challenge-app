@@ -1,5 +1,5 @@
 import { React, useEffect, useState } from "react";
-import "../chatroom.css";
+import "../lib/chatroom.css";
 import { auth, db } from "../lib/firebase";
 import {
   GoogleAuthProvider,
@@ -7,7 +7,7 @@ import {
   onAuthStateChanged,
 } from "firebase/auth";
 import { setDoc, doc, getDoc } from "firebase/firestore";
-import { useChatStore } from "../lib/ChatStore";
+import { useChatStore } from "../stores/ChatStore";
 
 const ChatLogin = () => {
   const provider = new GoogleAuthProvider();

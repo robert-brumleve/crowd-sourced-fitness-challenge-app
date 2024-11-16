@@ -3,10 +3,10 @@
 // https://firebase.google.com/docs/firestore/query-data/get-data
 
 import React, { useEffect, useState } from "react";
-import "./chatroom.css";
+import "./lib/chatroom.css";
 
 import "boxicons/css/boxicons.min.css";
-import { useUserStore } from "./lib/UserStore";
+import { useUserStore } from "./stores/UserStore";
 import {
   arrayRemove,
   doc,
@@ -15,9 +15,9 @@ import {
   updateDoc,
 } from "firebase/firestore";
 import { db } from "./lib/firebase";
-import AddUser from "./component/AddUser";
-import { useChatStore } from "./lib/ChatStore";
-import { useInputStore } from "./lib/InputStore";
+import AddUser from "./components/AddUser";
+import { useChatStore } from "./stores/ChatStore";
+import { useInputStore } from "./stores/InputStore";
 
 const ChatList = () => {
   const { currentUser } = useUserStore();
@@ -117,7 +117,7 @@ const ChatList = () => {
         {/*user information - to add later*/}
         <div className="icons"></div>
       </div>
-      {/* Add User/challenge REMOVE LATER */}
+      {/* //TODO: Add User/challenge REMOVE LATER */}
       <div className="addChat">
         <button onClick={() => setAddMode((prev) => !prev)}>
           {addMode ? "minimize" : "add chat"}
@@ -171,7 +171,7 @@ const ChatList = () => {
           </>
         )}
       </div>
-      {/* search popup, delete later */}
+      {/* //TODO: search popup, delete later */}
       {addMode && <AddUser />}
     </div>
   );
