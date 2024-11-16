@@ -2,13 +2,12 @@ import { create } from "zustand";
 
 export const useInputStore = create((set) => ({
   text: "",
-
-  setText: (newText) => set({ text: newText }),
-
   imgInput: {
     file: null,
     url: null,
   },
+
+  setText: (newText) => set({ text: newText }),
 
   setImgInput: (newFile) =>
     set({

@@ -29,7 +29,7 @@ const ChatList = () => {
 
   const filteredChats = chats.filter((chatId) => chatId !== undefined);
 
-  //TODO: change to challenge when database is connected
+  //TODO: change to challenge when mysql userhaschallenges is complete
   // Handle when a chat is deleted, remove the chat from the userchat
   useEffect(() => {
     const unsub = onSnapshot(
@@ -39,7 +39,6 @@ const ChatList = () => {
 
         const promises = items.map(async (item) => {
           const chatDocRef = doc(db, "chats", item.chatId);
-
           try {
             const chatDocSnap = await getDoc(chatDocRef);
             //add to the list if the chat does not exist
@@ -70,7 +69,6 @@ const ChatList = () => {
   const handleSelect = async (chat) => {
     const userChatsRef = doc(db, "userchats", currentUser.uid);
     const userChatsSnapshot = await getDoc(userChatsRef);
-
     const chatDocRef = doc(db, "chats", chat.chatId);
     const chatDocSnap = await getDoc(chatDocRef);
 
@@ -136,13 +134,7 @@ const ChatList = () => {
               onClick={() => handleSelect(chat)}
             >
               {/* Challenge photo */}
-              {/*
-              {currentUser.photoURL? 
-              <img className="chal-img" src={:challenge_phto}/>
-              :
-            <i className="bx bx-run chal-img"></i>
-            }
-            */}
+              {/* //TODO: change to challenge picture if mysql is made*/}
               <img className="chal-img" src="img/chat/fitness.png" alt="" />
               <div className="texts">
                 {/*//TODO: change to challenge name */}

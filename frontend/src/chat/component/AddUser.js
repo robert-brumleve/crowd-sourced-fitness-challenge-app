@@ -22,19 +22,17 @@ const AddUser = () => {
   const [user, setUser] = useState(null);
   const { currentUser } = useUserStore();
 
+  //Handles search of users
+  // TODO: remove this feature when mysql is implemented
   const handleSearch = async (e) => {
-    //console.log("in handlesearch");
     e.preventDefault();
     const formData = new FormData(e.target);
     const displayName = formData.get("displayName");
-    //console.log(displayName);
     try {
       // Create a reference to the collection
       const userRef = collection(db, "users");
-      console.log(userRef);
       // Create a query against the collection.
       const q = query(userRef, where("displayName", "==", displayName));
-
       const querySnapShot = await getDocs(q);
 
       if (!querySnapShot.empty) {
@@ -45,7 +43,8 @@ const AddUser = () => {
     }
   };
 
-  /* Adds new chat */
+  // Adds new chat
+  //TODO : modify this feature when mysql is implemented
   const handleAdd = async () => {
     const chatRef = collection(db, "chats");
     const userChatRef = collection(db, "userchats");
@@ -68,7 +67,7 @@ const AddUser = () => {
         chats: arrayUnion({
           chatId: newChatRef.id,
           lastMessage: "",
-          type:"",
+          type: "",
           receiverId: currentUser.uid,
           updatedAt: Date.now(),
         }),
@@ -79,7 +78,7 @@ const AddUser = () => {
         chats: arrayUnion({
           chatId: newChatRef.id,
           lastMessage: "",
-          type:"",
+          type: "",
           receiverId: user.uid,
           updatedAt: Date.now(),
         }),

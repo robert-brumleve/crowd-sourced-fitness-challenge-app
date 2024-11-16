@@ -18,16 +18,9 @@ import upload from "./component/Upload";
 import { useInputStore } from "./lib/InputStore";
 
 const ChatBox = () => {
-  //const [text, setText] = useState("");
   const [chat, setChat] = useState();
-  /*const [imgInput, setimgInput] = useState({
-    file: null,
-    url:"",
-  });*/
-
   const { text, setText, resetInput, imgInput, setImgInput } = useInputStore();
-  const { currentChatId, fetchChatInfo, currentChat, participants } =
-    useChatStore();
+  const { currentChatId, fetchChatInfo, currentChat, participants } = useChatStore();
   const { currentUser } = useUserStore();
   const lastMessageRef = useRef(null);
 
@@ -49,16 +42,16 @@ const ChatBox = () => {
     };
   }, [currentChatId, fetchChatInfo]);
 
-  //listens for each messages
+  //listens for each messages and get msg sender info
   useEffect(() => {
     const unsub = onSnapshot(doc(db, "chats", currentChatId), async (res) => {
       //exit if no chat found.
-      if (res.data() == null){
-        console.log("cannot open chatbox. selected chat no longer exists")
+      if (res.data() == null) {
+        console.log("cannot open chatbox. selected chat no longer exists");
         alert("Cannot retreive message as the chat no longer exists.");
         return;
       }
-      
+
       const items = res.data().messages;
       //retrieve sender info from each message for display
       const promises = items.map(async (item) => {
@@ -87,7 +80,6 @@ const ChatBox = () => {
   //Handle when sending a message
   const handleSend = async () => {
     if (text === "" && imgInput.file == null) return;
-    //console.log("img", imgInput);
     let imgURL = null;
 
     try {
@@ -105,13 +97,9 @@ const ChatBox = () => {
         }),
       });
 
-      //console.log("userid: ",currentUser.uid);
-      //console.log("participants",currentChat.participantId);
-      //console.log("other id: ",user);
       const userIds = currentChat.participantId;
 
       //update status of last message seen for each users.
-
       userIds.forEach(async (userchatsId) => {
         const userChatsRef = doc(db, "userchats", userchatsId);
         const userChatsSnapshot = await getDoc(userChatsRef);
@@ -128,7 +116,6 @@ const ChatBox = () => {
             //console.log("text null and image exist");
             userChatsData.chats[chatIndex].type = "image";
           } else {
-            
             userChatsData.chats[chatIndex].type = "text";
           }
           userChatsData.chats[chatIndex].lastMessage = text;
@@ -144,7 +131,6 @@ const ChatBox = () => {
     } catch (err) {
       console.log(err);
     }
-
     //update text input
     resetInput();
   };
@@ -212,7 +198,8 @@ const ChatBox = () => {
         </fieldset>
       )}
 
-      {/* --- TEXT INPUT - TODO: make enter key handle event as well. */}
+      {/* --- TEXT INPUT --- */}
+      {/*//TODO: goal-make enter key handle event as well. */}
       <div className="bottom">
         <div className="icons">
           <label htmlFor="file">

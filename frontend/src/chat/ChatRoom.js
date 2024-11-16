@@ -3,12 +3,9 @@ import ChatList from "./ChatList";
 import ChatBox from "./ChatBox";
 import ChatLogin from "./component/ChatLogin";
 import { auth } from "./lib/firebase";
-//import {getAuth} from 'firebase/auth'
-//import {UserProvider, UserContext} from './UserContext'
-
+import { onAuthStateChanged } from "firebase/auth";
 import "./chatroom.css";
 import "boxicons/css/boxicons.min.css";
-import { onAuthStateChanged } from "firebase/auth";
 import { useUserStore } from "./lib/UserStore";
 import { useChatStore } from "./lib/ChatStore";
 
@@ -16,9 +13,10 @@ function ChatRoom() {
   const { currentUser, fetchUserInfo } = useUserStore();
   const { currentChatId } = useChatStore();
   const [isMobileView, setIsMobileView] = useState(false);
-  const [activeTab, setActiveTab] = useState('chatlist');
+  const [activeTab, setActiveTab] = useState("chatlist");
 
   //listen for user
+  //TODO: Change to SQL user data
   useEffect(() => {
     const unsub = onAuthStateChanged(auth, (user) => {
       fetchUserInfo(user?.uid);
@@ -43,9 +41,9 @@ function ChatRoom() {
   //listen for chatId switching and open chat
   useEffect(() => {
     if (!currentChatId) {
-      setActiveTab('chatlist');
+      setActiveTab("chatlist");
     } else {
-      setActiveTab('chatbox');
+      setActiveTab("chatbox");
     }
   }, [currentChatId]);
 
@@ -63,19 +61,10 @@ function ChatRoom() {
             {activeTab ? <ChatList /> : <ChatBox />}
             <nav className="nav_menu">
               <ul className="nav_list">
-                {/*<li 
-              >
-                <button  className={activeTab ? "active" : ""}
-                onClick={()=>setActiveTab(prevState => !prevState)}>
-                <i class={activeTab ? 'bx bx-chat bx-sm':'bx bx-list-ul bx-sm'}></i>
-                </button>
-                
-              </li>*/}
-
                 <li>
                   <button
                     className={activeTab ? "active" : ""}
-                    onClick={() => setActiveTab('chatlist')}
+                    onClick={() => setActiveTab("chatlist")}
                   >
                     <i className="bx bx-list-ul"></i>
                   </button>
@@ -85,8 +74,8 @@ function ChatRoom() {
                     className={!activeTab ? "active" : ""}
                     onClick={() =>
                       currentChatId
-                        ? setActiveTab('chatbox')
-                        : setActiveTab('chatlist')
+                        ? setActiveTab("chatbox")
+                        : setActiveTab("chatlist")
                     }
                   >
                     <i className="bx bx-conversation"></i>

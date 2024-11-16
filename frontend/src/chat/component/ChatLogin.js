@@ -14,19 +14,20 @@ const ChatLogin = () => {
   const [user, setUser] = useState(null);
   const { resetChat } = useChatStore();
 
-  //console.log("UserProvider:", user);
-
+  //Google Log IN
+  //TODO: Switch to retreiving user data from Mysql login
   const googleSignIn = () => {
     signInWithPopup(auth, provider)
       .then(async (result) => {
         setUser(result.user);
-        //console.log(result.user);
         await registerUserIfNotExists(result.user);
       })
       .catch((error) => {
         console.log(error.message);
       });
   };
+
+  //Google Log out
   const googleSignOut = () => {
     auth
       .signOut()
@@ -39,6 +40,8 @@ const ChatLogin = () => {
         console.log(error.message);
       });
   };
+
+  //Create user data to firebase if new
   const registerUserIfNotExists = async (user) => {
     try {
       const userRef = doc(db, "users", user.uid);
@@ -68,6 +71,7 @@ const ChatLogin = () => {
   };
 
   //listen for auth state changes
+  //TODO: modify when Mysql user data is implemented
   useEffect(() => {
     const unSub = onAuthStateChanged(auth, (currentUser) => {
       setUser(currentUser);

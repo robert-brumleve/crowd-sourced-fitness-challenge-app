@@ -3,7 +3,6 @@ import { getAuth } from "firebase/auth";
 //remove getAuth when separate signin function is working
 import { getFirestore } from "firebase/firestore";
 import { getStorage } from "firebase/storage";
-//import { addDoc, collection, onSnapshot, doc, getDocs, query, where} from "firebase/firestore";
 
 // Your web app's Firebase configuration
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
