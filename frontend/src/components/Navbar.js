@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import personArmsUp from "../data/images/person-arms-up.svg";
+import { MagnifyingGlassIcon } from "./Icons";
 
 const Navbar = (props) => {
   const [keywords, setKeywords] = useState("");
@@ -13,7 +14,11 @@ const Navbar = (props) => {
   const OnSearch = (event) => {
     event.preventDefault();
     console.log("Key words: ", keywords);
-    navigate(`/challenges/search/${keywords}`);
+    if (keywords.trim() === "") {
+      navigate("/challenges");
+    } else {
+      navigate(`/challenges/search/${keywords}`);
+    }
   };
   return (
     <nav className="navbar navbar-expand-lg bg-body-tertiary">
@@ -81,9 +86,9 @@ const Navbar = (props) => {
               aria-label="Search"
               value={keywords}
               onChange={handleChange}
-            />            
+            />
             <button className="btn btn-outline-success" type="submit">
-              Search
+              {MagnifyingGlassIcon}
             </button>
           </form>
         </div>

@@ -1,12 +1,14 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { Link, useParams } from "react-router-dom";
+import { Link, useParams, useNavigate } from "react-router-dom";
 import Header from "../components/Header";
 import ChallengeList from "../components/ChallengesList";
 import TableHeader from "../components/TableHeader";
 import challengeURL from "../data/challengeURL";
+import { CloseIcon, PlusIcon } from "../components/Icons";
 
 const Search = () => {
+  const navigate = useNavigate();
   const { keywords } = useParams();
   const [challenges, setChallenges] = useState([]);
   useEffect(() => {
@@ -35,10 +37,10 @@ const Search = () => {
       <Header header="SEARCH RESULTS" />
       <div className="d-flex justify-content-end">
         <Link to="/challenges/create" className="btn btn-outline-success">
-          Create
+          {PlusIcon}
         </Link>
         <Link to="/challenges" className="btn btn-outline-dark">
-          Close
+          {CloseIcon}
         </Link>
       </div>
 
