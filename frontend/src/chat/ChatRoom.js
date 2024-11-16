@@ -40,15 +40,6 @@ function ChatRoom() {
     };
   }, []);
 
-  //listen for chatId switching and open chat
-  useEffect(() => {
-    if (!currentChatId) {
-      setActiveTab("chatlist");
-    } else {
-      setActiveTab("chatbox");
-    }
-  }, [currentChatId]);
-
   //Checks if chat is selected to switch to chatbox in mobileview
   const isChatSelected = () =>{
     if (currentChatId){
