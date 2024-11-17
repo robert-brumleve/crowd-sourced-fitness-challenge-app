@@ -20,13 +20,6 @@ const CreateChallenge = (props) => {
     tags: "yoga, wellness",
   };
 
-  const {values, handleBur, handleChange, handleSubmit, errors} = useFormik({
-    initialValues: initialValues,
-    validationSchema: challengeFormValidation,
-    onSubmit: (values) => {
-      console.log(values);
-    },
-  })
   const [challenge, setChallenge] = useState(initialValues);
 
   const navigate = useNavigate();
