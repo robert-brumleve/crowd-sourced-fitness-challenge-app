@@ -5,18 +5,9 @@ import Header from "../components/Header";
 import ChallengeList from "../components/ChallengesList";
 import TableHeader from "../components/TableHeader";
 import challengeURL from "../data/challengeURL";
+import { PlusIcon } from "../components/Icons";
 
 const AllChallenges = () => {
-  // const calculateDaysLeft = (created_at, duration) => {
-  //   const createdDate = new Date(created_at);
-  //   const endDate = new Date(createdDate);
-  //   endDate.setDate(createdDate.getDate() + duration);
-
-  //   const currentDate = new Date();
-  //   const timeDifference = endDate - currentDate;
-  //   return Math.ceil(timeDifference / (1000 * 3600 * 24));
-  // };
-
   const [challenges, setChallenges] = useState([]);
 
   useEffect(() => {
@@ -41,8 +32,8 @@ const AllChallenges = () => {
     <div className="border p-3">
       <Header header="COMMUNITY CHALLENGES" />
       <div className="d-flex justify-content-end">
-        <Link to="/challenges/create" className="btn btn-outline-success">
-          Create
+      <Link to="/challenges/create" className="btn btn-outline-success">
+          {PlusIcon}
         </Link>
       </div>
 

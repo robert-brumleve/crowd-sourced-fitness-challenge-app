@@ -4,17 +4,16 @@ const TableHeader = () => {
   return (
     <thead>
       <tr>
-        <th scope="col" className="text-center col-sm-1">
+        <th scope="col" className="text-center">
           Name
         </th>
-        <th scope="col" className="text-center col-sm-1">
+        <th scope="col" className="text-center">
           Type
         </th>
-        <th scope="col" className="text-center col-sm-1">
+        <th scope="col" className="text-center">
           Difficulty
         </th>        
-        <th scope="col" className="text-center col-sm-1">
-          Action
+        <th scope="col" className="text-center">          
         </th>
       </tr>
     </thead>
