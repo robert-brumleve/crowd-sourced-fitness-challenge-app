@@ -21,10 +21,11 @@ const createChallenge = async (req, res, next) => {
     if (checkErr) {
       return next(new Error("Database error during checking for duplicates"));
     }
+    console.log("check Result", checkResult);
     if (checkResult.length > 0) {
       return next(
         new Error(
-          "Challenge name already exists. Please choose a different name."
+          "Challenge name already exists"
         )
       );
     }
@@ -41,9 +42,9 @@ const createChallenge = async (req, res, next) => {
       imageURL,
       tags,
     ];
-    connection.query(sql, values, (err, result) => {
-      if (err) {
-        console.error("Error inserting challenge:", err);
+    connection.query(sql, values, (insertError, result) => {
+      if (insertError) {
+        console.error("Error inserting challenge:", insertError);
         return next(new Error("Database error"));
       }
       res.status(201).json({
