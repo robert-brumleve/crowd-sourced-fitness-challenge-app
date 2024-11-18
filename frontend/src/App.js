@@ -1,10 +1,6 @@
 import React from "react";
-<<<<<<< HEAD
 import { BrowserRouter, Route, Navigate, Routes } from "react-router-dom";
 import { AuthProvider } from "./context/AuthContext"; // Import AuthProvider
-=======
-import { BrowserRouter, Route, Routes } from "react-router-dom";
->>>>>>> 24766da (fix eslint)
 
 import Navbar from "./components/Navbar";
 import DashBoard from "./dashboard/DashBoard";

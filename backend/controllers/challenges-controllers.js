@@ -11,7 +11,7 @@ const getChallenges = async (req, res, next) => {
 };
 
 const createChallenge = async (req, res, next) => {
-  console.log("Request Body:", req.body);
+  // console.log("Request Body:", req.body);
   const { name, type, description, difficulty, creatorID, imageURL, tags } =
     req.body;
 
@@ -25,28 +25,28 @@ const createChallenge = async (req, res, next) => {
     if (checkResult.length > 0) {
       return next(new Error("Challenge name already exists"));
     }
+  });
 
-    // add new challenge if name is unique
-    const sql = `INSERT INTO challenges (name, type, description, difficulty, creatorID, created_at, imageURL, tags)
+  // add new challenge if name is unique
+  const sql = `INSERT INTO challenges (name, type, description, difficulty, creatorID, created_at, imageURL, tags)
      VALUES (?, ?, ?, ?, ?, NOW(), ?, ?)`;
-    const values = [
-      name,
-      type,
-      description,
-      difficulty,
-      creatorID,
-      imageURL,
-      tags,
-    ];
-    connection.query(sql, values, (insertError, result) => {
-      if (insertError) {
-        console.error("Error inserting challenge:", insertError);
-        return next(new Error("Database error"));
-      }
-      res.status(201).json({
-        message: "Challenge created successfully!",
-        challengeID: result.insertId,
-      });
+  const values = [
+    name,
+    type,
+    description,
+    difficulty,
+    creatorID,
+    imageURL,
+    tags,
+  ];
+  connection.query(sql, values, (insertError, result) => {
+    if (insertError) {
+      console.error("Error inserting challenge:", insertError);
+      return next(new Error("Database error"));
+    }
+    res.status(201).json({
+      message: "Challenge created successfully!",
+      challengeID: result.insertId,
     });
   });
 };
@@ -57,9 +57,10 @@ const getChallengeById = async (req, res, next) => {
   console.log("challengeId " + id);
 
   const sql = `SELECT challenges.*, users.username 
-  FROM challenges
+  FROM challenges 
   JOIN users ON users.userID = challenges.creatorID
-  WHERE challengeID = ?`;
+  WHERE challengeID = ?
+  `;
   connection.query(sql, [id], (err, result) => {
     if (result.length === 0) {
       return next(new Error("Challenge not found."));

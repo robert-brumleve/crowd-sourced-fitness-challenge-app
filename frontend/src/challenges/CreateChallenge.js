@@ -21,11 +21,7 @@ const CreateChallenge = () => {
       setRedirectMessage("You must log in to create a challenge.");
       setTimeout(() => navigate("/login"), 5000);
     }
-<<<<<<< HEAD
   }, [navigate, userInfo]);
-=======
-  }, [navigate]);
->>>>>>> 24766da (fix eslint)
 
   const challengeFormValidation = Yup.object({
     name: Yup.string().required("Challenge name is required"),
@@ -42,7 +38,7 @@ const CreateChallenge = () => {
       await axios.post(challengeURL, challengeData);
       navigate("/challenges");
     } catch (error) {
-      console.log("print error", error.response.data.message);
+      console.log(error);
       if (error.response?.data?.message === "Challenge name already exists") {
         setErrorMessage(
           "Challenge name already exists. Please choose a different name."
@@ -51,7 +47,6 @@ const CreateChallenge = () => {
         setErrorMessage("An error occurred. Please try again.");
       }
     }
-<<<<<<< HEAD
   };
 
   if (redirectMessage) {
@@ -65,14 +60,11 @@ const CreateChallenge = () => {
       </div>
     );
   }
-=======
-  }, [formik, userInfo.username, userInfo.userID]);
->>>>>>> 24766da (fix eslint)
 
   return (
     <div>
       <div className="row justify-content-center">
-      <Header header="ADD CHALLENGE" />
+        <Header header="CREATE CHALLENGE" />
         <div className="card" style={{ width: "50rem" }}>
           <Link
             type="button"
@@ -81,16 +73,17 @@ const CreateChallenge = () => {
             style={{ position: "absolute", top: "10px", right: "10px" }}
             to="/challenges"
           ></Link>
+          <div className="w-50 bg-white rounded p-3"></div>
           <ChallengeForm
             initialValues={{
               name: "Sample Challenge",
               type: "Yoga",
               description: "A sample description",
               difficulty: "Easy",
-              username: "",
-              userID: "",
-              imageURL: "http://example.com/image.png",
-              tags: "yoga, wellness",
+              username: userInfo.username,
+              userID: userInfo.userID,
+              imageURL: "image.com",
+              tags: "wellness",
             }}
             validationSchema={challengeFormValidation}
             onSubmit={formikSubmit}

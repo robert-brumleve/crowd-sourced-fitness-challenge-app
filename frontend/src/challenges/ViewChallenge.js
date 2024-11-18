@@ -56,23 +56,21 @@ const ViewChallenge = () => {
   return (
     <div>
       {challenge ? (
-        <div>
-          <Challenge
-            key={challenge.challengeID}
-            challengeID={challenge.challengeID}
-            name={challenge.name}
-            description={challenge.description}
-            type={challenge.type}
-            difficulty={challenge.difficulty}
-            creatorID={challenge.creatorID}
-            username={challenge.username}
-            imageURL={challenge.imageURL}
-            created_at={formattedDate}
-            tags={challenge.tags}
-            handleUpdateClick={handleUpdateClick}
-            errorMessage={errorMessage}
-          />
-        </div>
+        <Challenge
+          key={challenge.challengeID}
+          challengeID={challenge.challengeID}
+          name={challenge.name}
+          description={challenge.description}
+          type={challenge.type}
+          difficulty={challenge.difficulty}
+          creatorID={challenge.creatorID}
+          username={challenge.username}
+          imageURL={challenge.imageURL}
+          created_at={formattedDate}
+          tags={challenge.tags}
+          handleUpdateClick={handleUpdateClick}
+          errorMessage={errorMessage}
+        />
       ) : (
         <div>
           <p>No challenge available. Create a new one</p>
