@@ -6,7 +6,6 @@ import ChallengeList from "../components/ChallengesList";
 import TableHeader from "../components/TableHeader";
 import challengeURL from "../data/challengeURL";
 import { PlusIcon } from "../components/Icons";
-import Greeting from "../components/Greeting";
 
 const AllChallenges = () => {
   const [challenges, setChallenges] = useState([]);

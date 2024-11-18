@@ -28,7 +28,7 @@ const CreateChallenge = () => {
         navigate("/login"); // Redirect to login page after 5 seconds
       }, 5000); //
     }
-  }, []);
+  }, [navigate]);
 
   // Validation Schema
   const challengeFormValidation = Yup.object({
@@ -85,7 +85,7 @@ const CreateChallenge = () => {
         userID: userInfo.userID,
       }));
     }
-  }, [userInfo.username]);
+  }, [formik, userInfo.username, userInfo.userID]);
 
   return (
     <div>
