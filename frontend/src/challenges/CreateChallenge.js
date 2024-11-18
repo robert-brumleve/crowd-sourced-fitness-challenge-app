@@ -21,7 +21,11 @@ const CreateChallenge = () => {
       setRedirectMessage("You must log in to create a challenge.");
       setTimeout(() => navigate("/login"), 5000);
     }
+<<<<<<< HEAD
   }, [navigate, userInfo]);
+=======
+  }, [navigate]);
+>>>>>>> 24766da (fix eslint)
 
   const challengeFormValidation = Yup.object({
     name: Yup.string().required("Challenge name is required"),
@@ -47,6 +51,7 @@ const CreateChallenge = () => {
         setErrorMessage("An error occurred. Please try again.");
       }
     }
+<<<<<<< HEAD
   };
 
   if (redirectMessage) {
@@ -60,6 +65,9 @@ const CreateChallenge = () => {
       </div>
     );
   }
+=======
+  }, [formik, userInfo.username, userInfo.userID]);
+>>>>>>> 24766da (fix eslint)
 
   return (
     <div>
