@@ -6,6 +6,7 @@ import ChallengeList from "../components/ChallengesList";
 import TableHeader from "../components/TableHeader";
 import challengeURL from "../data/challengeURL";
 import { PlusIcon } from "../components/Icons";
+import Greeting from "../components/Greeting";
 
 const AllChallenges = () => {
   const [challenges, setChallenges] = useState([]);
@@ -30,9 +31,9 @@ const AllChallenges = () => {
 
   return (
     <div className="border p-3">
-      <Header header="COMMUNITY CHALLENGES" />
+      <Header header="COMMUNITY CHALLENGES"/>
       <div className="d-flex justify-content-end">
-      <Link to="/challenges/create" className="btn btn-outline-success">
+        <Link to="/challenges/create" className="btn btn-outline-success">
           {PlusIcon}
         </Link>
       </div>

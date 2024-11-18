@@ -3,21 +3,19 @@ require("dotenv").config();
 const port = process.env.PORT || 5000;
 
 const express = require("express");
+
 const cors = require("cors");
-//const bodyParser = require("body-parser");
+// const session = require("express-session");
 
 const challengesRoutes = require("./routes/challenges-routes");
-const accountRoutes = require('./routes/account-routes');  // Importing the new account routes
+const accountRoutes = require("./routes/account-routes"); // Importing the new account routes
 
 const app = express();
 app.use(express.json());
 app.use(cors());
 
-//app.use(bodyParser.json());
-
-app.use("/challenges", challengesRoutes); 
+app.use("/challenges", challengesRoutes);
 app.use("/", accountRoutes);
-
 
 app.use((req, res, next) => {
   const error = new Error("Could not find this route.");

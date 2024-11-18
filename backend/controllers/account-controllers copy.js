@@ -31,7 +31,7 @@ const registerUser = async (req, res) => {
 
     // Insert new user into the database
     const createdAt = new Date();
-    connection.query('INSERT INTO Users (username, email, pw, created_at) VALUES (?, ?, ?, ?)', 
+    connection.query('INSERT INTO Users (username, email, password, created_at) VALUES (?, ?, ?, ?)', 
       [username, email, hashedPassword, createdAt], (err, result) => {
         if (err) {
           console.error('Error inserting user: ', err);
