@@ -26,7 +26,7 @@ const App = () => {
         <Route path="/challenges/view/:id" element={<ViewChallenge />} />
         <Route path="/challenges/update/:id" element={<UpdateChallenge />} />
         <Route path="/challenges/search/:keywords" element={<SearchChallenge />} />
-        <Route path="*" element={<Navigate to="/" />} />
+        {/* <Route path="*" element={<Navigate to="/" />} /> */}
         <Route path="/chatroom" element={<ChatRoom />} />
       </Routes>
     </BrowserRouter>

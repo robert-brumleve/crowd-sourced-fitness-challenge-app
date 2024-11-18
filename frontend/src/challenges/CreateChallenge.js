@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 import Select from "react-dropdown-select";
@@ -11,42 +11,47 @@ import challengeURL from "../data/challengeURL";
 
 const CreateChallenge = () => {
   const navigate = useNavigate();
+  const [userInfo, setUserInfo] = useState({ userID: "", username: "" });
+  const [redirectMessage, setRedirectMessage] = useState("");
+
+  useEffect(() => {
+    console.log("localStorage", localStorage);
+    const storedUsername = localStorage.getItem("username");
+    const storedUserID = localStorage.getItem("userID");
+    console.log("Stored frontend Username:", storedUsername);
+    console.log("Stored frontend userID:", storedUserID);
+    if (storedUsername && storedUserID) {
+      setUserInfo({ userID: storedUserID, username: storedUsername });
+    } else {
+      setRedirectMessage("You must be logged in to create a challenge.");
+      setTimeout(() => {
+        navigate("/login"); // Redirect to login page after 5 seconds
+      }, 5000); //
+    }
+  }, []);
 
   // Validation Schema
   const challengeFormValidation = Yup.object({
     name: Yup.string().required("Challenge name is required"),
     type: Yup.string().required("Type is required"),
-    // description: Yup.string().required("Description is required"),
     difficulty: Yup.string().required("Difficulty is required"),
-    creatorID: Yup.number()
-      .required("Creator ID is required")
-      .positive("Creator ID must be a positive number"),
   });
 
   // Formik Hook
   const formik = useFormik({
-    // initialValues: {
-    //   name: "Sample Challenge",
-    //   type: "Yoga",
-    //   description: "A sample description",
-    //   difficulty: "Easy",
-    //   creatorID: "1",
-    //   imageURL: "http://example.com/image.png",
-    //   tags: "yoga, wellness",
-    // },
-
     initialValues: {
-      name: "",
-      type: "",
-      description: "",
-      difficulty: "",
-      creatorID: "",
-      imageURL: "",
-      tags: "",
+      name: "Sample Challenge",
+      type: "Yoga",
+      description: "A sample description",
+      difficulty: "Easy",
+      username: userInfo.username,
+      userID: userInfo.userID,
+      imageURL: "http://example.com/image.png",
+      tags: "yoga, wellness",
     },
+
     validationSchema: challengeFormValidation,
     onSubmit: (values) => {
-      // Make POST request
       axios
         .post(challengeURL, values)
         .then((response) => {
@@ -54,12 +59,6 @@ const CreateChallenge = () => {
           navigate("/challenges");
         })
         .catch((error) => {
-          console.error("Error adding challenge:", error);
-          console.error("Error response adding challenge:", error.response);
-          console.error(
-            "Error response.data adding challenge:",
-            error.response.data
-          );
           console.error(
             "Error response.data.message adding challenge:",
             error.response.data.message
@@ -78,149 +77,170 @@ const CreateChallenge = () => {
         });
     },
   });
+  useEffect(() => {
+    if (userInfo.username) {
+      formik.setValues((prevValues) => ({
+        ...prevValues,
+        username: userInfo.username, // Update in Formik values
+        userID: userInfo.userID,
+      }));
+    }
+  }, [userInfo.username]);
 
   return (
-    <div className="row justify-content-center">
-      <div className="card" style={{ width: "40rem" }}>
-        <form onSubmit={formik.handleSubmit}>
-          <h2>ADD CHALLENGE</h2>
-          <Link
-            type="button"
-            className="btn-close"
-            aria-label="Close"
-            style={{ position: "absolute", top: "10px", right: "10px" }}
-            to="/challenges"
-          ></Link>
+    <div>
+      {redirectMessage && (
+        <div className="text-center">
+          <h3>{redirectMessage}</h3>
+          <p>
+            Click <Link to="/login">here</Link> to log in or you will be
+            redirected to view all community challenges in 5 seconds.
+          </p>
+        </div>
+      )}
+      {userInfo.username && (
+        <div className="row justify-content-center">
+          <div className="card" style={{ width: "40rem" }}>
+            <form onSubmit={formik.handleSubmit}>
+              <h2>ADD CHALLENGE</h2>
+              <Link
+                type="button"
+                className="btn-close"
+                aria-label="Close"
+                style={{ position: "absolute", top: "10px", right: "10px" }}
+                to="/challenges"
+              ></Link>
 
-          {/* Name Field */}
-          <div className="mb-2">
-            <label htmlFor="name">Name</label>
-            <input
-              type="text"
-              placeholder="Add a new challenge name"
-              className="form-control"
-              name="name"
-              value={formik.values.name}
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-            />
-            {formik.touched.name && formik.errors.name && (
-              <div className="text-danger">{formik.errors.name}</div>
-            )}
+              {/* Name Field */}
+              <div className="mb-2">
+                <label htmlFor="name">Name</label>
+                <input
+                  type="text"
+                  placeholder="Add a new challenge name"
+                  className="form-control"
+                  name="name"
+                  value={formik.values.name}
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                />
+                {formik.touched.name && formik.errors.name && (
+                  <div className="text-danger">{formik.errors.name}</div>
+                )}
+              </div>
+
+              {/* Type Field */}
+              <div className="mb-2">
+                <label>Type</label>
+                <Select
+                  className="form-control"
+                  options={types}
+                  onChange={(selected) =>
+                    formik.setFieldValue("type", selected[0]?.label || "")
+                  }
+                  values={types.filter(
+                    (option) => option.label === formik.values.type
+                  )}
+                  name="type"
+                />
+                {formik.touched.type && formik.errors.type && (
+                  <div className="text-danger">{formik.errors.type}</div>
+                )}
+              </div>
+
+              {/* Description Field */}
+              <div className="mb-2">
+                <label htmlFor="description">Description</label>
+                <textarea
+                  rows="3"
+                  placeholder="Enter description"
+                  className="form-control"
+                  name="description"
+                  value={formik.values.description}
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                />
+                {formik.touched.description && formik.errors.description && (
+                  <div className="text-danger">{formik.errors.description}</div>
+                )}
+              </div>
+
+              {/* Difficulty Field */}
+              <div className="mb-2">
+                <label>Difficulty</label>
+                <Select
+                  className="form-control"
+                  options={difficulty_options}
+                  onChange={(selected) =>
+                    formik.setFieldValue("difficulty", selected[0]?.label || "")
+                  }
+                  values={difficulty_options.filter(
+                    (option) => option.label === formik.values.difficulty
+                  )}
+                  name="difficulty"
+                />
+                {formik.touched.difficulty && formik.errors.difficulty && (
+                  <div className="text-danger">{formik.errors.difficulty}</div>
+                )}
+              </div>
+
+              {/* Creator Name Field */}
+              <div className="mb-2">
+                <label htmlFor="username">Creator</label>
+                <input
+                  type="text"
+                  className="form-control"
+                  name="username"
+                  value={formik.values.username}
+                  onBlur={formik.handleBlur}
+                  disabled
+                />
+                {formik.touched.usernam && formik.errors.usernam && (
+                  <div className="text-danger">{formik.errors.usernam}</div>
+                )}
+              </div>
+
+              {/* Image URL Field */}
+              <div className="mb-2">
+                <label htmlFor="imageURL">Image URL</label>
+                <input
+                  type="text"
+                  placeholder="Enter image URL"
+                  className="form-control"
+                  name="imageURL"
+                  value={formik.values.imageURL}
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                />
+                {formik.touched.imageURL && formik.errors.imageURL && (
+                  <div className="text-danger">{formik.errors.imageURL}</div>
+                )}
+              </div>
+
+              {/* Tags Field */}
+              <div className="mb-2">
+                <label htmlFor="tags">Tags</label>
+                <input
+                  type="text"
+                  placeholder="Enter tags"
+                  className="form-control"
+                  name="tags"
+                  value={formik.values.tags}
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                />
+                {formik.touched.tags && formik.errors.tags && (
+                  <div className="text-danger">{formik.errors.tags}</div>
+                )}
+              </div>
+
+              {/* Submit Button */}
+              <button type="submit" className="btn btn-success">
+                Add
+              </button>
+            </form>
           </div>
-
-          {/* Type Field */}
-          <div className="mb-2">
-            <label>Type</label>
-            <Select
-              className="form-control"
-              options={types}
-              onChange={(selected) =>
-                formik.setFieldValue("type", selected[0]?.label || "")
-              }
-              values={types.filter(
-                (option) => option.label === formik.values.type
-              )}
-              name="type"
-            />
-            {formik.touched.type && formik.errors.type && (
-              <div className="text-danger">{formik.errors.type}</div>
-            )}
-          </div>
-
-          {/* Description Field */}
-          <div className="mb-2">
-            <label htmlFor="description">Description</label>
-            <textarea
-              rows="3"
-              placeholder="Enter description"
-              className="form-control"
-              name="description"
-              value={formik.values.description}
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-            />
-            {formik.touched.description && formik.errors.description && (
-              <div className="text-danger">{formik.errors.description}</div>
-            )}
-          </div>
-
-          {/* Difficulty Field */}
-          <div className="mb-2">
-            <label>Difficulty</label>
-            <Select
-              className="form-control"
-              options={difficulty_options}
-              onChange={(selected) =>
-                formik.setFieldValue("difficulty", selected[0]?.label || "")
-              }
-              values={difficulty_options.filter(
-                (option) => option.label === formik.values.difficulty
-              )}
-              name="difficulty"
-            />
-            {formik.touched.difficulty && formik.errors.difficulty && (
-              <div className="text-danger">{formik.errors.difficulty}</div>
-            )}
-          </div>
-
-          {/* Creator ID Field */}
-          <div className="mb-2">
-            <label htmlFor="creatorID">Creator</label>
-            <input
-              type="number"
-              placeholder="Enter creator ID"
-              className="form-control"
-              name="creatorID"
-              value={formik.values.creatorID}
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-            />
-            {formik.touched.creatorID && formik.errors.creatorID && (
-              <div className="text-danger">{formik.errors.creatorID}</div>
-            )}
-          </div>
-
-          {/* Image URL Field */}
-          <div className="mb-2">
-            <label htmlFor="imageURL">Image URL</label>
-            <input
-              type="text"
-              placeholder="Enter image URL"
-              className="form-control"
-              name="imageURL"
-              value={formik.values.imageURL}
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-            />
-            {formik.touched.imageURL && formik.errors.imageURL && (
-              <div className="text-danger">{formik.errors.imageURL}</div>
-            )}
-          </div>
-
-          {/* Tags Field */}
-          <div className="mb-2">
-            <label htmlFor="tags">Tags</label>
-            <input
-              type="text"
-              placeholder="Enter tags"
-              className="form-control"
-              name="tags"
-              value={formik.values.tags}
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-            />
-            {formik.touched.tags && formik.errors.tags && (
-              <div className="text-danger">{formik.errors.tags}</div>
-            )}
-          </div>
-
-          {/* Submit Button */}
-          <button type="submit" className="btn btn-success">
-            Add
-          </button>
-        </form>
-      </div>
+        </div>
+      )}
     </div>
   );
 };

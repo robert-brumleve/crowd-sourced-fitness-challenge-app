@@ -1,24 +1,33 @@
-import React, { useState } from 'react';
-import axios from 'axios';
+import React, { useState } from "react";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 const Login = () => {
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
-  const [message, setMessage] = useState('');
+  const navigate = useNavigate();
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-    setMessage('');
+    setMessage("");
 
     const loginData = { username, password };
 
     try {
-      const response = await axios.post('http://localhost:5000/login', loginData);
+      const response = await axios.post(
+        "http://localhost:5000/login",
+        loginData
+      );
+      console.log("Login response:", response.data);
       setMessage(response.data.message); // Success message from backend
+      localStorage.setItem("username", response.data.username);
+      localStorage.setItem("userID", response.data.userID);
+      navigate("/");
     } catch (error) {
-      setMessage(error.response?.data?.message || 'Error logging in');
+      setMessage(error.response?.data?.message || "Error logging in");
     } finally {
       setLoading(false);
     }
@@ -30,24 +39,24 @@ const Login = () => {
       <form onSubmit={handleSubmit}>
         <div>
           <label>Username</label>
-          <input 
-            type="text" 
-            value={username} 
-            onChange={(e) => setUsername(e.target.value)} 
-            required 
+          <input
+            type="text"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+            required
           />
         </div>
         <div>
           <label>Password</label>
-          <input 
-            type="password" 
-            value={password} 
-            onChange={(e) => setPassword(e.target.value)} 
-            required 
+          <input
+            type="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
           />
         </div>
         <button type="submit" disabled={loading}>
-          {loading ? 'Logging in...' : 'Login'}
+          {loading ? "Logging in..." : "Login"}
         </button>
       </form>
 
