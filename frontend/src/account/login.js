@@ -1,57 +1,53 @@
-import React, { useState } from 'react';
-import axios from 'axios';
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "../context/AuthContext"; // Import useAuth to get login function
 
 const Login = () => {
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
-  const [message, setMessage] = useState('');
-  const [loading, setLoading] = useState(false);
+  const [username, setUsername] = useState(""); // Username state
+  const [password, setPassword] = useState(""); // Password state
+  const { login } = useAuth(); // Get the login function from context
+  const navigate = useNavigate(); // Use navigate for redirection after login
 
+  // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setLoading(true);
-    setMessage('');
 
-    const loginData = { username, password };
+    // Simulating a login response with a fake JWT token
+    // You will need to replace this with your API call to verify the user and get a real token
+    const fakeToken = "your_jwt_token"; // Replace with the token from your authentication server
 
-    try {
-      const response = await axios.post('http://localhost:5000/login', loginData);
-      setMessage(response.data.message); // Success message from backend
-    } catch (error) {
-      setMessage(error.response?.data?.message || 'Error logging in');
-    } finally {
-      setLoading(false);
-    }
+    // Perform login with the received token
+    login(fakeToken); // Call the login function from context to store the token and update authentication state
+
+    // Redirect to the dashboard or another page after successful login
+    navigate("/dashboard");
   };
 
   return (
-    <div>
-      <h2>Login</h2>
+    <div className="login-form">
       <form onSubmit={handleSubmit}>
-        <div>
-          <label>Username</label>
-          <input 
-            type="text" 
-            value={username} 
-            onChange={(e) => setUsername(e.target.value)} 
-            required 
+        <div className="form-group">
+          <label htmlFor="username">Username</label>
+          <input
+            type="text"
+            id="username"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)} // Update username state
+            required
           />
         </div>
-        <div>
-          <label>Password</label>
-          <input 
-            type="password" 
-            value={password} 
-            onChange={(e) => setPassword(e.target.value)} 
-            required 
+        <div className="form-group">
+          <label htmlFor="password">Password</label>
+          <input
+            type="password"
+            id="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)} // Update password state
+            required
           />
         </div>
-        <button type="submit" disabled={loading}>
-          {loading ? 'Logging in...' : 'Login'}
-        </button>
+        <button type="submit">Login</button>
       </form>
-
-      {message && <p>{message}</p>}
     </div>
   );
 };

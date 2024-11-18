@@ -1,5 +1,6 @@
 import React from "react";
 import { BrowserRouter, Route, Navigate, Routes } from "react-router-dom";
+import { AuthProvider } from "./context/AuthContext"; // Import AuthProvider
 
 import Navbar from "./components/Navbar";
 import DashBoard from "./dashboard/DashBoard";
@@ -15,21 +16,23 @@ import ChatRoom from "./chat/ChatRoom";
 
 const App = () => {
   return (
-    <BrowserRouter>
-      <Navbar />
-      <Routes>
-        <Route path="/" exact element={<DashBoard />} />
-        <Route path="/account" element={<NewAccount />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/challenges" element={<CommunityChallenges />} />
-        <Route path="/challenges/create" element={<CreateChallenge />} />
-        <Route path="/challenges/view/:id" element={<ViewChallenge />} />
-        <Route path="/challenges/update/:id" element={<UpdateChallenge />} />
-        <Route path="/challenges/search/:keywords" element={<SearchChallenge />} />
-        <Route path="*" element={<Navigate to="/" />} />
-        <Route path="/chatroom" element={<ChatRoom />} />
-      </Routes>
-    </BrowserRouter>
+    <AuthProvider>
+      <BrowserRouter>
+        <Navbar />
+        <Routes>
+          <Route path="/" exact element={<DashBoard />} />
+          <Route path="/account" element={<NewAccount />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/challenges" element={<CommunityChallenges />} />
+          <Route path="/challenges/create" element={<CreateChallenge />} />
+          <Route path="/challenges/view/:id" element={<ViewChallenge />} />
+          <Route path="/challenges/update/:id" element={<UpdateChallenge />} />
+          <Route path="/challenges/search/:keywords" element={<SearchChallenge />} />
+          <Route path="*" element={<Navigate to="/" />} />
+          <Route path="/chatroom" element={<ChatRoom />} />
+        </Routes>
+      </BrowserRouter>
+    </AuthProvider>
   );
 };
 
