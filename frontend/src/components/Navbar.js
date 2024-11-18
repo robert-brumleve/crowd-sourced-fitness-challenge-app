@@ -2,10 +2,12 @@ import React, { useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import personArmsUp from "../data/images/person-arms-up.svg";
 import { MagnifyingGlassIcon } from "./Icons";
+import { useAuth } from "../context/AuthContext"; // Import the useAuth hook
 
-const Navbar = (props) => {
+const Navbar = () => {
   const [keywords, setKeywords] = useState("");
   const navigate = useNavigate();
+  const { isAuthenticated, logout } = useAuth(); // Destructure login, logout, and isAuthenticated from context
 
   const handleChange = (event) => {
     setKeywords(event.target.value);
@@ -13,13 +15,18 @@ const Navbar = (props) => {
 
   const OnSearch = (event) => {
     event.preventDefault();
-    console.log("Key words: ", keywords);
     if (keywords.trim() === "") {
       navigate("/challenges");
     } else {
       navigate(`/challenges/search/${keywords}`);
     }
   };
+
+  const handleLogout = () => {
+    logout(); // Call the logout function from context
+    navigate("/login"); // Redirect to the login page
+  };
+
   return (
     <nav className="navbar navbar-expand-lg bg-body-tertiary">
       <div className="container-fluid">
@@ -54,17 +61,24 @@ const Navbar = (props) => {
                 Create Account
               </NavLink>
             </li>
+
+            {/* Conditionally render login or logout link */}
+            {!isAuthenticated ? (
+              <li className="nav-item">
+                <NavLink className="nav-link" aria-current="page" to="/login">
+                  Login
+                </NavLink>
+              </li>
+            ) : (
+              <li className="nav-item">
+                <button className="nav-link btn" onClick={handleLogout}>
+                  Logout
+                </button>
+              </li>
+            )}
+
             <li className="nav-item">
-              <NavLink className="nav-link" aria-current="page" to="/login">
-                Login
-              </NavLink>
-            </li>
-            <li className="nav-item">
-              <NavLink
-                className="nav-link"
-                aria-current="page"
-                to="/challenges"
-              >
+              <NavLink className="nav-link" aria-current="page" to="/challenges">
                 Community challenges
               </NavLink>
             </li>

@@ -26,7 +26,7 @@ const registerUser = async (req, res) => {
 
     // Insert new user into the database
     const createdAt = new Date();
-    connection.query('INSERT INTO Users (username, email, password, created_at) VALUES (?, ?, ?, ?)', 
+    connection.query('INSERT INTO Users (username, email, pw, created_at) VALUES (?, ?, ?, ?)', 
       [username, email, hashedPassword, createdAt], (err, result) => {
         if (err) {
           console.error('Error inserting user: ', err);
@@ -59,7 +59,7 @@ const login = (req, res) => {
     const user = results[0];
 
     // Compare provided password with stored hashed password
-    bcrypt.compare(password, user.password, (err, isMatch) => {
+    bcrypt.compare(password, user.pw, (err, isMatch) => {
       if (err) {
         return res.status(500).json({ message: 'Error comparing passwords' });
       }
@@ -69,7 +69,7 @@ const login = (req, res) => {
       }
 
       // Generate a JWT token (valid for 1 hour)
-      const token = jwt.sign({ userID: user.userID, username: user.username }, 'your_jwt_secret', { expiresIn: '1h' });
+      const token = jwt.sign({ userID: user.userID, username: user.username }, 'authToken', { expiresIn: '1h' });
 
       // Respond with success and the JWT token
       res.status(200).json({
