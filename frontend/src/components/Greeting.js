@@ -1,15 +1,9 @@
 import React, { useEffect, useState } from "react";
 
 const Greeting = () => {
-  const [username, setUsername] = useState("");
-
-  useEffect(() => {
-    const storedUsername = localStorage.getItem("username");
-    console.log("Stored Username:", storedUsername);
-    if (storedUsername) {
-      setUsername(storedUsername);
-    }
-  }, []);
+  const username = localStorage.getItem("username");
+  const userID = localStorage.getItem("userID");
+  console.log("localStorage", localStorage);
 
   return <h4>Hello, {username ? username : "Guest"}!</h4>;
 };

@@ -23,11 +23,7 @@ const createChallenge = async (req, res, next) => {
     }
     console.log("check Result", checkResult);
     if (checkResult.length > 0) {
-      return next(
-        new Error(
-          "Challenge name already exists"
-        )
-      );
+      return next(new Error("Challenge name already exists"));
     }
 
     // add new challenge if name is unique
@@ -60,7 +56,10 @@ const getChallengeById = async (req, res, next) => {
   const id = req.params.id;
   console.log("challengeId " + id);
 
-  const sql = "SELECT * FROM challenges WHERE challengeID = ?";
+  const sql = `SELECT challenges.*, users.username 
+  FROM challenges
+  JOIN users ON users.userID = challenges.creatorID
+  WHERE challengeID = ?`;
   connection.query(sql, [id], (err, result) => {
     if (result.length === 0) {
       return next(new Error("Challenge not found."));

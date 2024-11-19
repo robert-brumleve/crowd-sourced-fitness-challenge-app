@@ -1,265 +1,96 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-import { Link } from "react-router-dom";
-import Select from "react-dropdown-select";
-import axios from "axios";
-import { useFormik } from "formik";
+import { useNavigate, Link } from "react-router-dom";
+import ChallengeForm from "../components/ChallengeForm";
 import * as Yup from "yup";
-import difficulty_options from "../data/difficulty";
-import types from "../data/types";
 import challengeURL from "../data/challengeURL";
+import axios from "axios";
+import Header from "../components/Header";
 
 const CreateChallenge = () => {
   const navigate = useNavigate();
-  const [userInfo, setUserInfo] = useState({ userID: "", username: "" });
   const [redirectMessage, setRedirectMessage] = useState("");
-  const [errorNameDuplicate, setErrorNameDuplicate] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
+
+  const userInfo = {
+    username: localStorage.getItem("username"),
+    userID: localStorage.getItem("userID"),
+  };
 
   useEffect(() => {
-    const redirectToLogin = () => {
+    if (!userInfo.username || !userInfo.userID) {
       setRedirectMessage("You must log in to create a challenge.");
       setTimeout(() => navigate("/login"), 5000);
-    };
-
-    try {
-      console.log("localStorage", localStorage);
-      const storedUsername = localStorage.getItem("username");
-      const storedUserID = localStorage.getItem("userID");
-      console.log("Stored frontend Username:", storedUsername);
-      console.log("Stored frontend userID:", storedUserID);
-      if (storedUsername && storedUserID) {
-        setUserInfo({ userID: storedUserID, username: storedUsername });
-      } else {
-        redirectToLogin();
-      }
-    } catch (error) {
-      console.error("localStorage error:", error);
-      redirectToLogin();
     }
-  }, [navigate]);
+  }, [navigate, userInfo]);
 
-  // Validation Schema
   const challengeFormValidation = Yup.object({
     name: Yup.string().required("Challenge name is required"),
     type: Yup.string().required("Type is required"),
     difficulty: Yup.string().required("Difficulty is required"),
   });
 
-  // Formik Hook
-  const formik = useFormik({
-    initialValues: {
-      name: "Sample Challenge",
-      type: "Yoga",
-      description: "A sample description",
-      difficulty: "Easy",
-      username: "",
-      userID: "",
-      imageURL: "http://example.com/image.png",
-      tags: "yoga, wellness",
-    },
-
-    validationSchema: challengeFormValidation,
-    onSubmit: (values) => {
-      // Ensure that userInfo is available and userID is set
-      if (!userInfo.userID) {
-        console.error("Error: userID is not set.");
-        return; // Avoid submitting if userID is not available
-      }
-
+  const formikSubmit = async (values) => {
+    try {
       const challengeData = {
         ...values,
-        creatorID: userInfo.userID, // Set creatorID to userID
-        
+        creatorID: userInfo.userID,
       };
-      console.log("userInfo", userInfo);
-      console.log("values", challengeData)
-      axios
-        .post(challengeURL, challengeData)
-        .then((response) => {
-          console.log("Challenge added:", response.data);
-          navigate("/challenges");
-        })
-        .catch((error) => {
-          if (
-            error.response &&
-            error.response.data &&
-            error.response.data.message === "Challenge name already exists"
-          ) {
-            setErrorNameDuplicate(
-              "Challenge name already exists. Please choose a different name."
-            );
-          } else {
-            setErrorNameDuplicate("An error occurred. Please try again.");
-          }
-        });
-    },
-  });
-  useEffect(() => {
-    if (userInfo.username) {
-      formik.setFieldValue("username", userInfo.username);
-      formik.setFieldValue("userID", userInfo.userID);
+      await axios.post(challengeURL, challengeData);
+      navigate("/challenges");
+    } catch (error) {
+      console.log("print error", error.response.data.message);
+      if (error.response?.data?.message === "Challenge name already exists") {
+        setErrorMessage(
+          "Challenge name already exists. Please choose a different name."
+        );
+      } else {
+        setErrorMessage("An error occurred. Please try again.");
+      }
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [userInfo]);
+  };
+
+  if (redirectMessage) {
+    return (
+      <div className="text-center">
+        <h3>{redirectMessage}</h3>
+        <p>
+          Click <Link to="/challenges">here</Link> to view all community
+          challenges, or you will be redirected to login in 5 seconds.
+        </p>
+      </div>
+    );
+  }
 
   return (
     <div>
-      {redirectMessage && (
-        <div className="text-center">
-          <h3>{redirectMessage}</h3>
-          <p>
-            Click <Link to="/login">here</Link> to log in or you will be
-            redirected to view all community challenges in 5 seconds.
-          </p>
+      <div className="row justify-content-center">
+      <Header header="ADD CHALLENGE" />
+        <div className="card" style={{ width: "50rem" }}>
+          <Link
+            type="button"
+            className="btn-close"
+            aria-label="Close"
+            style={{ position: "absolute", top: "10px", right: "10px" }}
+            to="/challenges"
+          ></Link>
+          <ChallengeForm
+            initialValues={{
+              name: "Sample Challenge",
+              type: "Yoga",
+              description: "A sample description",
+              difficulty: "Easy",
+              username: "",
+              userID: "",
+              imageURL: "http://example.com/image.png",
+              tags: "yoga, wellness",
+            }}
+            validationSchema={challengeFormValidation}
+            onSubmit={formikSubmit}
+            userInfo={userInfo}
+            errorMessage={errorMessage}
+          />
         </div>
-      )}
-      {userInfo.username && (
-        <div className="row justify-content-center">
-          <div className="card" style={{ width: "40rem" }}>
-            <form onSubmit={formik.handleSubmit}>
-              <h2>ADD CHALLENGE</h2>
-              <Link
-                type="button"
-                className="btn-close"
-                aria-label="Close"
-                style={{ position: "absolute", top: "10px", right: "10px" }}
-                to="/challenges"
-              ></Link>
-
-              {/* Name Field */}
-              <div className="mb-2">
-                <label htmlFor="name">Name</label>
-                <input
-                  type="text"
-                  placeholder="Add a new challenge name"
-                  className="form-control"
-                  name="name"
-                  value={formik.values.name}
-                  onChange={formik.handleChange}
-                  onBlur={formik.handleBlur}
-                />
-                {errorNameDuplicate && (
-                  <div className="text-danger">{errorNameDuplicate}</div>
-                )}
-
-                {/* {formik.touched.name && formik.errors.name && (
-                  <div className="text-danger">{formik.errors.name}</div>
-                )} */}
-              </div>
-
-              {/* Type Field */}
-              <div className="mb-2">
-                <label>Type</label>
-                <Select
-                  className="form-control"
-                  options={types}
-                  onChange={(selected) =>
-                    formik.setFieldValue("type", selected[0]?.label || "")
-                  }
-                  values={types.filter(
-                    (option) => option.label === formik.values.type
-                  )}
-                  name="type"
-                />
-                {formik.touched.type && formik.errors.type && (
-                  <div className="text-danger">{formik.errors.type}</div>
-                )}
-              </div>
-
-              {/* Description Field */}
-              <div className="mb-2">
-                <label htmlFor="description">Description</label>
-                <textarea
-                  rows="3"
-                  placeholder="Enter description"
-                  className="form-control"
-                  name="description"
-                  value={formik.values.description}
-                  onChange={formik.handleChange}
-                  onBlur={formik.handleBlur}
-                />
-                {formik.touched.description && formik.errors.description && (
-                  <div className="text-danger">{formik.errors.description}</div>
-                )}
-              </div>
-
-              {/* Difficulty Field */}
-              <div className="mb-2">
-                <label>Difficulty</label>
-                <Select
-                  className="form-control"
-                  options={difficulty_options}
-                  onChange={(selected) =>
-                    formik.setFieldValue("difficulty", selected[0]?.label || "")
-                  }
-                  values={difficulty_options.filter(
-                    (option) => option.label === formik.values.difficulty
-                  )}
-                  name="difficulty"
-                />
-                {formik.touched.difficulty && formik.errors.difficulty && (
-                  <div className="text-danger">{formik.errors.difficulty}</div>
-                )}
-              </div>
-
-              {/* Creator Name Field */}
-              <div className="mb-2">
-                <label htmlFor="username">Creator</label>
-                <input
-                  type="text"
-                  className="form-control"
-                  name="username"
-                  value={formik.values.username}
-                  onBlur={formik.handleBlur}
-                  disabled
-                />
-                {formik.touched.usernam && formik.errors.usernam && (
-                  <div className="text-danger">{formik.errors.usernam}</div>
-                )}
-              </div>
-
-              {/* Image URL Field */}
-              <div className="mb-2">
-                <label htmlFor="imageURL">Image URL</label>
-                <input
-                  type="text"
-                  placeholder="Enter image URL"
-                  className="form-control"
-                  name="imageURL"
-                  value={formik.values.imageURL}
-                  onChange={formik.handleChange}
-                  onBlur={formik.handleBlur}
-                />
-                {formik.touched.imageURL && formik.errors.imageURL && (
-                  <div className="text-danger">{formik.errors.imageURL}</div>
-                )}
-              </div>
-
-              {/* Tags Field */}
-              <div className="mb-2">
-                <label htmlFor="tags">Tags</label>
-                <input
-                  type="text"
-                  placeholder="Enter tags"
-                  className="form-control"
-                  name="tags"
-                  value={formik.values.tags}
-                  onChange={formik.handleChange}
-                  onBlur={formik.handleBlur}
-                />
-                {formik.touched.tags && formik.errors.tags && (
-                  <div className="text-danger">{formik.errors.tags}</div>
-                )}
-              </div>
-
-              {/* Submit Button */}
-              <button type="submit" className="btn btn-success">
-                Add
-              </button>
-            </form>
-          </div>
-        </div>
-      )}
+      </div>
     </div>
   );
 };
