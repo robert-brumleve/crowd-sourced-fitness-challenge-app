@@ -1,10 +1,12 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext"; // Import useAuth to get login function
+import axios from "axios"; // Import axios
 
 const Login = () => {
   const [username, setUsername] = useState(""); // Username state
   const [password, setPassword] = useState(""); // Password state
+  const [error, setError] = useState(""); // Error state to handle invalid login attempts
   const { login } = useAuth(); // Get the login function from context
   const navigate = useNavigate(); // Use navigate for redirection after login
 
@@ -12,15 +14,30 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Simulating a login response with a fake JWT token
-    // You will need to replace this with your API call to verify the user and get a real token
-    const fakeToken = "your_jwt_token"; // Replace with the token from your authentication server
+    // Clear previous errors
+    setError("");
 
-    // Perform login with the received token
-    login(fakeToken); // Call the login function from context to store the token and update authentication state
+    try {
+      // Send POST request with username and password using axios
+      const response = await axios.post("/login", {
+        username,
+        password,
+      });
 
-    // Redirect to the dashboard or another page after successful login
-    navigate("/dashboard");
+      // Check if the response contains a token
+      if (response.data && response.data.token) {
+        const token = response.data.token; // Assuming the token is returned in 'token' field
+        login(token); // Call the login function from context to store the token and update authentication state
+
+        // Redirect to the dashboard or another page after successful login
+        navigate("/dashboard");
+      } else {
+        throw new Error("Invalid response from server");
+      }
+    } catch (error) {
+      // If error occurs, set the error message
+      setError(error.response ? error.response.data.message : error.message);
+    }
   };
 
   return (
@@ -46,6 +63,7 @@ const Login = () => {
             required
           />
         </div>
+        {error && <div className="error-message">{error}</div>} {/* Show error message if any */}
         <button type="submit">Login</button>
       </form>
     </div>
