@@ -30,9 +30,9 @@ const AllChallenges = () => {
 
   return (
     <div className="border p-3">
-      <Header header="COMMUNITY CHALLENGES" />
+      <Header header="COMMUNITY CHALLENGES"/>
       <div className="d-flex justify-content-end">
-      <Link to="/challenges/create" className="btn btn-outline-success">
+        <Link to="/challenges/create" className="btn btn-outline-success">
           {PlusIcon}
         </Link>
       </div>

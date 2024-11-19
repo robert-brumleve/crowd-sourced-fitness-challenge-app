@@ -1,5 +1,5 @@
-import React, { createContext, useState, useContext, useEffect } from 'react';
-import { jwtDecode } from 'jwt-decode';
+import React, { createContext, useState, useContext, useEffect } from "react";
+import { jwtDecode } from "jwt-decode";
 
 // Create the Auth context
 const AuthContext = createContext();
@@ -10,7 +10,7 @@ export const AuthProvider = ({ children }) => {
 
   // Check if the token exists in localStorage on initial load
   useEffect(() => {
-    const token = localStorage.getItem('authToken');
+    const token = localStorage.getItem("authToken");
     if (token) {
       try {
         jwtDecode(token); // Try to decode the token to check if it's valid
@@ -23,14 +23,17 @@ export const AuthProvider = ({ children }) => {
 
   // Function to log in the user
   const login = (token) => {
-    localStorage.setItem('authToken', token);  // Save token to localStorage
-    setIsAuthenticated(true);  // Update the state to reflect the logged-in status
+    localStorage.setItem("authToken", token); // Save token to localStorage
+    setIsAuthenticated(true); // Update the state to reflect the logged-in status
   };
 
   // Function to log out the user
   const logout = () => {
-    localStorage.removeItem('authToken');
-    setIsAuthenticated(false);  // Update state to reflect the logged-out status
+    localStorage.removeItem("authToken");
+    // remove all user detail in local Storage
+    localStorage.removeItem("userID");
+    localStorage.removeItem("username");
+    setIsAuthenticated(false); // Update state to reflect the logged-out status
   };
 
   return (

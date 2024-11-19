@@ -29,6 +29,11 @@ const Login = () => {
         const token = response.data.token; // Assuming the token is returned in 'token' field
         login(token); // Call the login function from context to store the token and update authentication state
 
+        // store user details in localStorage
+        localStorage.setItem("token", response.data.token);
+        localStorage.setItem("userID", response.data.user.userID);
+        localStorage.setItem("username", response.data.user.username);
+
         // Redirect to the dashboard or another page after successful login
         navigate("/dashboard");
       } else {
@@ -63,7 +68,8 @@ const Login = () => {
             required
           />
         </div>
-        {error && <div className="error-message">{error}</div>} {/* Show error message if any */}
+        {error && <div className="error-message">{error}</div>}{" "}
+        {/* Show error message if any */}
         <button type="submit">Login</button>
       </form>
     </div>
