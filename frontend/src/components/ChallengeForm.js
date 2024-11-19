@@ -1,6 +1,5 @@
 import React from "react";
 import { useFormik } from "formik";
-import * as Yup from "yup";
 import Select from "react-dropdown-select";
 import difficulty_options from "../data/difficulty";
 import types from "../data/types";

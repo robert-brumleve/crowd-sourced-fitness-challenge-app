@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useMemo } from "react";
 import axios from "axios";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import Challenge from "../components/Challenge";
@@ -15,10 +15,13 @@ const ViewChallenge = () => {
   const date = new Date(created_at);
   const formattedDate = created_at ? date.toISOString().split("T")[0] : "";
 
-  const userInfo = {
-    username: localStorage.getItem("username"),
-    userID: localStorage.getItem("userID"),
-  };
+  const userInfo = useMemo(
+    () => ({
+      username: localStorage.getItem("username"),
+      userID: localStorage.getItem("userID"),
+    }),
+    []
+  );
 
   useEffect(() => {
     // Get challenge data based on the ID
@@ -37,7 +40,7 @@ const ViewChallenge = () => {
         }
       })
       .catch((err) => console.log(err));
-  }, [id]);
+  }, [userInfo.userID, id]);
 
   useEffect(() => {
     console.log("check authorized 2:", isAuthorized);

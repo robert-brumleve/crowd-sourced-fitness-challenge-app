@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import ChallengeForm from "../components/ChallengeForm";
 import * as Yup from "yup";
@@ -11,10 +11,13 @@ const CreateChallenge = () => {
   const [redirectMessage, setRedirectMessage] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
 
-  const userInfo = {
-    username: localStorage.getItem("username"),
-    userID: localStorage.getItem("userID"),
-  };
+  const userInfo = useMemo(
+    () => ({
+      username: localStorage.getItem("username"),
+      userID: localStorage.getItem("userID"),
+    }),
+    []
+  );
 
   useEffect(() => {
     if (!userInfo.username || !userInfo.userID) {
