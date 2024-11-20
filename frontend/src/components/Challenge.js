@@ -26,9 +26,14 @@ const Challenge = (props) => {
           <li class="list-group-item">Tags: {props.tags}</li>
         </ul>
         <div class="card-body">
-          {props.errorMessage && (
+          {props.errorUpdateMessage && (
             <div className="alert alert-danger">
-              {props.errorMessage}
+              {props.errorUpdateMessage}
+            </div>
+          )}
+          {props.errorDeleteMessage && (
+            <div className="alert alert-danger">
+              {props.errorDeleteMessage}
             </div>
           )}
           <button
@@ -36,6 +41,12 @@ const Challenge = (props) => {
             className="btn btn-outline-info"
           >
             Update
+          </button>          
+          <button
+            onClick={props.handleDeleteClick}
+            className="btn btn-outline-danger"
+          >
+            Delete
           </button>
         </div>
       </div>

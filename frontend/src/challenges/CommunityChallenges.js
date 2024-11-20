@@ -5,7 +5,6 @@ import Header from "../components/Header";
 import ChallengeList from "../components/ChallengesList";
 import TableHeader from "../components/TableHeader";
 import challengeURL from "../data/challengeURL";
-import { PlusIcon } from "../components/Icons";
 
 const AllChallenges = () => {
   const [challenges, setChallenges] = useState([]);
@@ -17,23 +16,13 @@ const AllChallenges = () => {
       .catch((err) => console.log(err));
   }, []);
 
-  const handleDelete = (id) => {
-    axios
-      .delete(`${challengeURL}/delete/${id}`)
-      .then((res) => {
-        setChallenges((prevChallenges) =>
-          prevChallenges.filter((challenge) => challenge.challengeID !== id)
-        );
-      })
-      .catch((err) => console.log(err));
-  };
-
   return (
     <div className="border p-3">
       <Header header="COMMUNITY CHALLENGES"/>
       <div className="d-flex justify-content-end">
         <Link to="/challenges/create" className="btn btn-outline-success">
-          {PlusIcon}
+          {/* {PlusIcon} */}
+          CREATE NEW CHALLENGE
         </Link>
       </div>
 
@@ -49,7 +38,7 @@ const AllChallenges = () => {
                   type={item.type}
                   name={item.name}
                   difficulty={item.difficulty}
-                  handleDelete={handleDelete}
+                  // handleDelete={handleDelete}
                 />
               );
             })}
