@@ -5,7 +5,7 @@ import Header from "../components/Header";
 import ChallengeList from "../components/ChallengesList";
 import TableHeader from "../components/TableHeader";
 import challengeURL from "../data/challengeURL";
-import { CloseIcon, PlusIcon } from "../components/Icons";
+import { CloseIcon} from "../components/Icons";
 
 const Search = () => {
   const { keywords } = useParams();
@@ -36,7 +36,7 @@ const Search = () => {
       <Header header="SEARCH RESULTS" />
       <div className="d-flex justify-content-end">
         <Link to="/challenges/create" className="btn btn-outline-success">
-          {PlusIcon}
+          CREATE NEW CHALLENGE
         </Link>
         <Link to="/challenges" className="btn btn-outline-dark">
           {CloseIcon}

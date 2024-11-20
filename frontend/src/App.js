@@ -11,7 +11,6 @@ import CreateChallenge from "./challenges/CreateChallenge";
 import ViewChallenge from "./challenges/ViewChallenge";
 import UpdateChallenge from "./challenges/UpdateChallenge";
 import SearchChallenge from "./challenges/SearchChallenge";
-
 import ChatRoom from "./chat/ChatRoom";
 
 const App = () => {

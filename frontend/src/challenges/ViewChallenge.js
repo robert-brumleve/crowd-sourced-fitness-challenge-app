@@ -10,7 +10,8 @@ const ViewChallenge = () => {
   const { id } = useParams();
   const [challenge, setChallenge] = useState([]);
   const [isAuthorized, setIsAuthorized] = useState(true);
-  const [errorMessage, setErrorMessage] = useState(null);
+  const [errorUpdateMessage, setErrorUpdateMessage] = useState(null);
+  const [errorDeleteMessage, setErrorDeleteMessage] = useState(null);
   const { created_at } = challenge;
   const date = new Date(created_at);
   const formattedDate = created_at ? date.toISOString().split("T")[0] : "";
@@ -49,10 +50,27 @@ const ViewChallenge = () => {
   const handleUpdateClick = () => {
     if (!isAuthorized) {
       // Show error message and prevent navigation
-      setErrorMessage("You are not authorized to update this challenge.");
+      setErrorUpdateMessage("You are not authorized to update this challenge.");
     } else {
-      setErrorMessage(null);
+      setErrorUpdateMessage(null);
       navigate(`/challenges/update/${challenge.challengeID}`);
+    }
+  };
+
+  const handleDeleteClick = () => {
+    if (!isAuthorized) {
+      // Show error message and prevent navigation
+      setErrorDeleteMessage("You are not authorized to delete this challenge.");
+    } else {
+      const confirmed = window.confirm(
+        "Are you sure you want to delete this challenge?"
+      );
+      if (!confirmed) return;
+      setErrorDeleteMessage(null);
+      axios
+        .delete(`${challengeURL}/delete/${id}`)
+        .then(navigate("/challenges"))
+        .catch((err) => console.log(err));
     }
   };
 
@@ -72,7 +90,9 @@ const ViewChallenge = () => {
           created_at={formattedDate}
           tags={challenge.tags}
           handleUpdateClick={handleUpdateClick}
-          errorMessage={errorMessage}
+          handleDeleteClick={handleDeleteClick}
+          errorUpdateMessage={errorUpdateMessage}
+          errorDeleteMessage={errorDeleteMessage}
         />
       ) : (
         <div>
