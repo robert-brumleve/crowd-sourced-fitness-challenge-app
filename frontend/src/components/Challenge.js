@@ -20,18 +20,23 @@ const Challenge = (props) => {
         <ul class="list-group list-group-flush">
           <li class="list-group-item">Type: {props.type}</li>
           <li class="list-group-item">Level: {props.difficulty}</li>
-          <li class="list-group-item">Creator: {props.creatorID}</li>
+          <li class="list-group-item">Creator: {props.username}</li>
           <li class="list-group-item">Image URL: {props.imageURL}</li>
           <li class="list-group-item">Created at: {props.created_at}</li>
           <li class="list-group-item">Tags: {props.tags}</li>
         </ul>
         <div class="card-body">
-          <Link
-            to={`/challenges/update/${props.challengeID}`}
+          {props.errorMessage && (
+            <div className="alert alert-danger">
+              {props.errorMessage}
+            </div>
+          )}
+          <button
+            onClick={props.handleUpdateClick}
             className="btn btn-outline-info"
           >
             Update
-          </Link>
+          </button>
         </div>
       </div>
     </div>
