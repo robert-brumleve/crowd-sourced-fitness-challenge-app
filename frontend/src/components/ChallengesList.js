@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { TrashIcon, ViewIcon, PlusIcon } from "./Icons";
+import { ViewIcon, PlusIcon } from "./Icons";
 
 const ChallengeList = (props) => {
   return (
