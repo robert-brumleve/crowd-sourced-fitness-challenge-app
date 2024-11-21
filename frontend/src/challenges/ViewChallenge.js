@@ -44,7 +44,7 @@ const ViewChallenge = () => {
   }, [userInfo.userID, id]);
 
   useEffect(() => {
-    console.log("check authorized 2:", isAuthorized);
+    // console.log("check authorized 2:", isAuthorized);
   }, [isAuthorized]);
 
   const handleUpdateClick = () => {

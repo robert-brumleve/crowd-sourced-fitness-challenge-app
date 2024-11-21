@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext"; // Import useAuth to get login function
 import axios from "axios"; // Import axios
+import Header from "../components/Header";
 
 const Login = () => {
   const [username, setUsername] = useState(""); // Username state
@@ -72,14 +73,6 @@ const Login = () => {
         {/* Show error message if any */}
         <button type="submit">Login</button>
       </form>
-
-      {/*Link to Create Account */}
-      <div>
-        <span>don't have an account? </span>
-        <a href="/account" className="link-primary">
-          Register
-        </a>
-      </div>
     </div>
   );
 };
