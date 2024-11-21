@@ -40,7 +40,7 @@ const DashBoard = () => {
           <div class="col-lg-6 col-md-8 mx-auto">
             <h1 class="fw-light">Challenge Dashboard</h1>
             <p class="lead text-muted">
-              This dashboard displays all the challenges you have
+              This dashboard displays the challenges you have
               participated in. Keep moving!
             </p>
             <p>
