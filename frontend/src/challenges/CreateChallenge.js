@@ -40,10 +40,10 @@ const CreateChallenge = () => {
         creatorID: userInfo.userID,
       };
       await axios.post(challengeURL, challengeData)
-      .then(res =>
+      .then(res =>{
         //create chat for new challenge
-        createChat(res.data.challengeID, values.name)
-      );
+        createChat(res.data.challengeID, values.name);
+      });
       navigate("/challenges");
     } catch (error) {
       console.log(error);

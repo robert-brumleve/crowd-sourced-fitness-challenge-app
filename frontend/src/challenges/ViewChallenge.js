@@ -3,6 +3,7 @@ import axios from "axios";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import Challenge from "../components/Challenge";
 import challengeURL from "../data/challengeURL";
+import deleteChat from "../chat/components/DeleteChat";
 
 const ViewChallenge = () => {
   // Get the challengeID from the URL parameters
@@ -69,6 +70,7 @@ const ViewChallenge = () => {
       setErrorDeleteMessage(null);
       axios
         .delete(`${challengeURL}/delete/${id}`)
+        .then(deleteChat(id))
         .then(navigate("/challenges"))
         .catch((err) => console.log(err));
     }
