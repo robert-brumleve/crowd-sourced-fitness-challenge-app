@@ -48,11 +48,13 @@ const ViewChallenge = () => {
     if (!userInfo.username || !userInfo.userID) {
       setErrorJoinMessage(
         <>
-          You should log in to join this challenge. Click <Link to="/login">here</Link> to login.
+          You should log in to join this challenge. Click{" "}
+          <Link to="/login">here</Link> to login.
         </>
       );
     } else {
       setErrorJoinMessage(null);
+      navigate(`/chatroom`);
     }
   };
 
