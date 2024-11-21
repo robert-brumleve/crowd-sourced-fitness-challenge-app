@@ -33,6 +33,8 @@ export const AuthProvider = ({ children }) => {
     // remove all user detail in local Storage
     localStorage.removeItem("userID");
     localStorage.removeItem("username");
+    localStorage.removeItem("email");
+    localStorage.removeItem("profile_picture");
     setIsAuthenticated(false); // Update state to reflect the logged-out status
   };
 

@@ -136,6 +136,8 @@ const login = (req, res) => {
           user: {
             userID: user.userID,
             username: user.username,
+            email: user.email,
+            profile_picture: user.profile_picture,
           },
         });
       });

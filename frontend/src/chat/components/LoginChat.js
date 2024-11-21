@@ -4,10 +4,11 @@ import { setDoc, doc, getDoc } from "firebase/firestore";
 
 const login_chat = async () => {
   //Create user data to firebase if new
-  //console.log("fb", user.userID);
   const user = {
     username: localStorage.getItem("username"),
     userID: localStorage.getItem("userID"),
+    email: localStorage.getItem("email"),
+    picture: localStorage.getItem("profile_picture"),
   };
   try {
     const userRef = doc(db, "users", user.userID);
@@ -18,10 +19,11 @@ const login_chat = async () => {
       const userData = {
         uid: user.userID,
         displayName: user.username,
-        photoURL: null,
+        email: user.email,
+        photoURL: user.picture,
       };
       //userdata
-      console.log("inside usernap not exist");
+      console.log("user not in firebase data, creating new data");
       await setDoc(userRef, userData);
       //chatdata
       await setDoc(doc(db, "userchats", user.userID), {
@@ -29,7 +31,7 @@ const login_chat = async () => {
       });
       //console.log("new user registered: ", user.username);
     } else {
-      console.log("user already exists");
+      console.log("user already exists in firebase, loggin in");
     }
 
     
