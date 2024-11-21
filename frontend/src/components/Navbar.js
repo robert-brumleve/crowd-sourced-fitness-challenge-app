@@ -2,7 +2,7 @@ import React from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import personArmsUp from "../data/images/person-arms-up.svg";
 import { useAuth } from "../context/AuthContext"; // Import the useAuth hook
-import "../App.css"
+import "../App.css";
 
 const Navbar = () => {
   const navigate = useNavigate();
@@ -51,31 +51,6 @@ const Navbar = () => {
               </NavLink>
             </li>
             <li className="nav-item">
-              <NavLink className="nav-link" aria-current="page" to="/account">
-                Create Account
-              </NavLink>
-            </li>
-
-            {/* Conditionally render login or logout link */}
-            {!isAuthenticated ? (
-              <li className="nav-item">
-                <NavLink
-                  className={({ isActive }) => getNavLinkClass(isActive)}
-                  aria-current="page"
-                  to="/login"
-                >
-                  Login
-                </NavLink>
-              </li>
-            ) : (
-              <li className="nav-item">
-                <button className="nav-link btn" onClick={handleLogout}>
-                  Logout
-                </button>
-              </li>
-            )}
-
-            <li className="nav-item">
               <NavLink
                 className={({ isActive }) => getNavLinkClass(isActive)}
                 aria-current="page"
@@ -93,6 +68,25 @@ const Navbar = () => {
                 Chat Room
               </NavLink>
             </li>
+          </ul>
+          <ul className="navbar-nav  mb-2 mb-lg-0 ">
+            {/* Conditionally render login or logout link */}
+            {!isAuthenticated ? (
+              <>
+                {/* show createAccount in login page instead*/}
+                <li className="nav-item">
+                  <NavLink className="nav-link" aria-current="page" to="/login">
+                    Login
+                  </NavLink>
+                </li>
+              </>
+            ) : (
+              <li className="nav-item">
+                <button className="nav-link btn" onClick={handleLogout}>
+                  Logout
+                </button>
+              </li>
+            )}
           </ul>
         </div>
       </div>

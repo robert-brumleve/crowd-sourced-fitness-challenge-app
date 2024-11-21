@@ -12,7 +12,7 @@ const ChallengeList = (props) => {
           to={`/challenges/view/${props.challengeID}`}
           className="text-decoration-none"
         >
-          {ViewIcon}
+          {props.name}
         </Link>
         {props.errorMessage && (
           <div className="alert alert-danger">{props.errorMessage}</div>
