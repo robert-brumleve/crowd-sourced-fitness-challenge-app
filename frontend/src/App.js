@@ -10,7 +10,7 @@ import Login from "./account/login";
 import CreateChallenge from "./challenges/CreateChallenge";
 import ViewChallenge from "./challenges/ViewChallenge";
 import UpdateChallenge from "./challenges/UpdateChallenge";
-import SearchChallenge from "./challenges/SearchChallenge";
+// import SearchChallenge from "./challenges/SearchChallenge";
 import ChatRoom from "./chat/ChatRoom";
 
 const App = () => {
@@ -27,7 +27,7 @@ const App = () => {
           <Route path="/challenges/create" element={<CreateChallenge />} />
           <Route path="/challenges/view/:id" element={<ViewChallenge />} />
           <Route path="/challenges/update/:id" element={<UpdateChallenge />} />
-          <Route path="/challenges/search/:keywords" element={<SearchChallenge />} />
+          {/* <Route path="/challenges/search/:keywords" element={<SearchChallenge />} /> */}
           <Route path="*" element={<Navigate to="/" />} />
           <Route path="/chatroom" element={<ChatRoom />} />
         </Routes>

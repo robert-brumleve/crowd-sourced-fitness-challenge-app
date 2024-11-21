@@ -128,7 +128,7 @@ const ChallengeForm = ({ initialValues, validationSchema, onSubmit, userInfo, er
         )}
       </div>
       {errorMessage && <div className="text-danger">{errorMessage}</div>}
-      <button type="submit" className="btn btn-success">
+      <button type="submit" className="form-control">
         Submit
       </button>
     </form>
