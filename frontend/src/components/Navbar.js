@@ -52,33 +52,21 @@ const Navbar = () => {
         <div className="collapse navbar-collapse" id="navbarSupportedContent">
           <ul className="navbar-nav me-auto mb-2 mb-lg-0">
             <li className="nav-item">
-              <NavLink className="nav-link active" aria-current="page" to="/dashboard/:id">
+              <NavLink
+                className="nav-link active"
+                aria-current="page"
+                to="/dashboard/:id"
+              >
                 Dashboard
               </NavLink>
             </li>
-            <li className="nav-item">
-              <NavLink className="nav-link" aria-current="page" to="/account">
-                Create Account
-              </NavLink>
-            </li>
-
-            {/* Conditionally render login or logout link */}
-            {!isAuthenticated ? (
-              <li className="nav-item">
-                <NavLink className="nav-link" aria-current="page" to="/login">
-                  Login
-                </NavLink>
-              </li>
-            ) : (
-              <li className="nav-item">
-                <button className="nav-link btn" onClick={handleLogout}>
-                  Logout
-                </button>
-              </li>
-            )}
 
             <li className="nav-item">
-              <NavLink className="nav-link" aria-current="page" to="/challenges">
+              <NavLink
+                className="nav-link"
+                aria-current="page"
+                to="/challenges"
+              >
                 Community challenges
               </NavLink>
             </li>
@@ -105,6 +93,26 @@ const Navbar = () => {
               {MagnifyingGlassIcon}
             </button>
           </form>
+
+          <ul className="navbar-nav  mb-2 mb-lg-0 ">
+            {/* Conditionally render login or logout link */}
+            {!isAuthenticated ? (
+              <>
+                {/* show createAccount in login page instead*/}
+                <li className="nav-item">
+                  <NavLink className="nav-link" aria-current="page" to="/login">
+                    Login
+                  </NavLink>
+                </li>
+              </>
+            ) : (
+              <li className="nav-item">
+                <button className="nav-link btn" onClick={handleLogout}>
+                  Logout
+                </button>
+              </li>
+            )}
+          </ul>
         </div>
       </div>
     </nav>
