@@ -1,7 +1,5 @@
 import React, { useEffect, useState, useMemo } from "react";
 import axios from "axios";
-import { useParams } from "react-router-dom";
-import Greeting from "../components/Greeting";
 import UserChallengeList from "../components/UserChallengeList";
 import Header from "../components/Header";
 
