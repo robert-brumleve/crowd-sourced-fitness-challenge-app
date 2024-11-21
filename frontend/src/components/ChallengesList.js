@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { ViewIcon, PlusIcon } from "./Icons";
+import { ViewIcon } from "./Icons";
 
 const ChallengeList = (props) => {
   return (
@@ -19,9 +19,13 @@ const ChallengeList = (props) => {
         {props.errorMessage && (
           <div className="alert alert-danger">{props.errorMessage}</div>
         )}
+        {/* commented out as + icon should not lead to chat room */}
+        {/*
         <Link to={`/chatroom`} className="btn btn-outline-primary btn-sm">
           {PlusIcon}
         </Link>
+        */}
+        
       </td>
     </tr>
   );

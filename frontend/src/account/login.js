@@ -72,6 +72,14 @@ const Login = () => {
         {/* Show error message if any */}
         <button type="submit">Login</button>
       </form>
+
+      {/*Link to Create Account */}
+      <div>
+        <span>don't have an account? </span>
+        <a href="/account" className="link-primary">
+          Register
+        </a>
+      </div>
     </div>
   );
 };
