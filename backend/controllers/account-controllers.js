@@ -1,13 +1,50 @@
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const { connection, port } = require("../db_connection");
+const { Storage } = require('@google-cloud/storage');
 
-// User registration logic
+// Set up Google Cloud Storage
+const storage = new Storage({
+  keyFilename: './key.json',
+});
+
+const bucket = storage.bucket('csfca'); // Replace with your bucket name
+
+// Function to register a new user
 const registerUser = async (req, res) => {
   const { username, email, password } = req.body;
 
+  // If no profile picture is provided (file or default URL), return error
+  if (!req.file && !req.body.profilePicture) {
+    return res.status(400).json({ message: 'Profile picture is required.' });
+  }
+
+  let profilePicturePath;
+
+  // If the file is uploaded, save it to Google Cloud Storage
+  if (req.file) {
+    const fileName = `${Date.now()}_${req.file.originalname}`;
+    const file = bucket.file(fileName);
+
+    // Upload the file to the bucket (no need to set ACL explicitly with UBLA enabled)
+    await file.save(req.file.buffer, {
+      metadata: {
+        contentType: req.file.mimetype,
+      },
+    });
+
+    // Generate the public URL for the uploaded file
+    const publicUrl = `https://storage.googleapis.com/${bucket.name}/${file.name}`;
+    profilePicturePath = publicUrl;
+
+  } else {
+    // Use the default image if no file is uploaded
+    profilePicturePath = req.body.profilePicture; // e.g., '/images/default/image1.jpg'
+  }
+
+  // Validate the user input
   if (!username || !email || !password) {
-    return res.status(400).json({ message: "All fields are required." });
+    return res.status(400).json({ message: 'All fields are required.' });
   }
 
   // Check if the username or email already exists
@@ -17,30 +54,27 @@ const registerUser = async (req, res) => {
     async (err, results) => {
       if (err) {
         console.error("Error querying the database: ", err);
-        return res.status(500).json({ message: "Database error" });
+        return res.status(500).json({ message: 'Database error' });
       }
 
       if (results.length > 0) {
-        return res
-          .status(400)
-          .json({ message: "Username or email already taken." });
+        return res.status(400).json({ message: 'Username or email already taken.' });
       }
 
       // Hash the password
       const hashedPassword = await bcrypt.hash(password, 10);
 
-      // Insert new user into the database
       const createdAt = new Date();
       connection.query(
-        "INSERT INTO Users (username, email, pw, created_at) VALUES (?, ?, ?, ?)",
-        [username, email, hashedPassword, createdAt],
+        "INSERT INTO Users (username, email, pw, profile_picture, created_at) VALUES (?, ?, ?, ?, ?)",
+        [username, email, hashedPassword, profilePicturePath, createdAt],
         (err, result) => {
           if (err) {
-            console.error("Error inserting user: ", err);
-            return res.status(500).json({ message: "Database error" });
+            console.error('Error inserting user: ', err);
+            return res.status(500).json({ message: 'Database error' });
           }
 
-          res.status(201).json({ message: "Account created successfully!" });
+          res.status(201).json({ message: 'Account created successfully!' });
         }
       );
     }
