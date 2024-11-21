@@ -1,8 +1,9 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Header from "./Header";
 
 const Challenge = (props) => {
+  const navigate = useNavigate();
   return (
     <div>
       <Header header="CHALLENGE DETAIL" />
@@ -27,32 +28,37 @@ const Challenge = (props) => {
         </ul>
         <div class="card-body">
           {props.errorUpdateMessage && (
-            <div className="alert alert-danger">
-              {props.errorUpdateMessage}
-            </div>
+            <div className="alert alert-danger">{props.errorUpdateMessage}</div>
           )}
           {props.errorDeleteMessage && (
-            <div className="alert alert-danger">
-              {props.errorDeleteMessage}
-            </div>
+            <div className="alert alert-danger">{props.errorDeleteMessage}</div>
           )}
           {props.errorJoinMessage && (
-            <div className="alert alert-danger">
-              {props.errorJoinMessage}
-            </div>
+            <div className="alert alert-danger">{props.errorJoinMessage}</div>
           )}
-          <button
-            onClick={props.handleJoinClick}
-            className="btn btn-outline-success me-2"
-          >
-            Join
-          </button>
+
+          {!props.hasJoined ? (
+            <button
+              onClick={props.handleJoinClick}
+              className="btn btn-outline-success me-2"
+            >
+              Join
+            </button>
+          ) : (
+            <button
+              onClick={() => navigate(`/chatroom`)} // Navigate to chatroom when clicked
+              className="btn btn-outline-success me-2"
+            >
+              Chat
+            </button>
+          )}
+
           <button
             onClick={props.handleUpdateClick}
             className="btn btn-outline-info me-2"
           >
             Update
-          </button>          
+          </button>
           <button
             onClick={props.handleDeleteClick}
             className="btn btn-outline-danger"
