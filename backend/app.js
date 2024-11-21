@@ -7,15 +7,16 @@ const cors = require("cors");
 
 const challengesRoutes = require("./routes/challenges-routes");
 const accountRoutes = require('./routes/account-routes');  // Importing the new account routes
+const dashboardRoutes = require("./routes/dashboard-routes")
 
 const app = express();
 app.use(express.json());
 app.use(cors());
 
 
-app.use("/challenges", challengesRoutes); 
+app.use("/challenges", challengesRoutes);
 app.use("/", accountRoutes);
-
+app.use("/dashboard", dashboardRoutes);
 
 app.use((req, res, next) => {
   const error = new Error("Could not find this route.");

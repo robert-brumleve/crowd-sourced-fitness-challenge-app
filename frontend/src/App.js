@@ -20,7 +20,8 @@ const App = () => {
       <BrowserRouter>
         <Navbar />
         <Routes>
-          <Route path="/" exact element={<DashBoard />} />
+          <Route path="/" exact element={<CommunityChallenges />} />
+          <Route path="/dashboard/:id" exact element={<DashBoard />} />
           <Route path="/account" element={<NewAccount />} />
           <Route path="/login" element={<Login />} />
           <Route path="/challenges" element={<CommunityChallenges />} />
