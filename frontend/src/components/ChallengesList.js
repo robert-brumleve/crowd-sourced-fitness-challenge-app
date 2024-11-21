@@ -6,13 +6,11 @@ const ChallengeList = (props) => {
   return (
     <tr key={props.challengeID} className="text-center">
       {/* <th scope="row">{props.challengeID}</th> */}
-      <td className="text-center col-sm-3">{props.name}</td>
-      <td className="text-center col-sm-1">{props.type}</td>
-      <td className="text-center col-sm-1">{props.difficulty}</td>
-      <td className="text-center col-sm-1">
+      <td className="text-center col-sm-3">
+        {" "}
         <Link
           to={`/challenges/view/${props.challengeID}`}
-          className="btn btn-outline-info btn-sm"
+          className="text-decoration-none"
         >
           {ViewIcon}
         </Link>
@@ -27,6 +25,8 @@ const ChallengeList = (props) => {
         */}
         
       </td>
+      <td className="text-center col-sm-1">{props.type}</td>
+      <td className="text-center col-sm-1">{props.difficulty}</td>
     </tr>
   );
 };

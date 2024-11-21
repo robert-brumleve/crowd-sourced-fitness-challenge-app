@@ -1,4 +1,4 @@
-.App {
+/* .App {
   text-align: center;
   display: flex;
   background-color: orangered;
@@ -38,4 +38,14 @@
     transform: rotate(360deg);
   }
 }
+ */
 
+ .nav-link {
+  color: #000; /* Default color */
+  text-decoration: none;
+}
+
+.nav-link.active-tab {
+  color: #1dc4e9; 
+  font-weight: bold;
+}

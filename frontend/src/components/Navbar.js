@@ -2,10 +2,15 @@ import React from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import personArmsUp from "../data/images/person-arms-up.svg";
 import { useAuth } from "../context/AuthContext"; // Import the useAuth hook
+import "../App.css"
 
 const Navbar = () => {
   const navigate = useNavigate();
   const { isAuthenticated, logout } = useAuth(); // Destructure login, logout, and isAuthenticated from context
+
+  // when a tab is active
+  const getNavLinkClass = (isActive) =>
+    `nav-link ${isActive ? "active-tab" : ""}`;
 
   const handleLogout = () => {
     logout(); // Call the logout function from context
@@ -38,63 +43,30 @@ const Navbar = () => {
           <ul className="navbar-nav me-auto mb-2 mb-lg-0">
             <li className="nav-item">
               <NavLink
-                className="nav-link active"
+                className={({ isActive }) => getNavLinkClass(isActive)}
                 aria-current="page"
                 to="/dashboard/:id"
               >
                 Dashboard
               </NavLink>
             </li>
-
             <li className="nav-item">
-              <NavLink
-                className="nav-link"
-                aria-current="page"
-                to="/challenges"
-              >
-                Community challenges
+              <NavLink className="nav-link" aria-current="page" to="/account">
+                Create Account
               </NavLink>
             </li>
-            {/* <li className="nav-item">
-              <NavLink
-                className="nav-link"
-                aria-current="page"
-                to="/challenges"
-              >
-                Community challenges
-              </NavLink>
-            </li>
-            <li className="nav-item">
-              <NavLink className="nav-link" aria-current="page" to="chatroom">
-                Chat Room
-              </NavLink>
-            </li>
-          </ul>
-          <form className="d-flex" onSubmit={OnSearch}>
-            <input
-              className="form-control me-2"
-              type="text"
-              placeholder="Challenge keyword"
-              aria-label="Search"
-              value={keywords}
-              onChange={handleChange}
-            />
-            <button className="btn btn-outline-success" type="submit">
-              {MagnifyingGlassIcon}
-            </button>
-          </form>
 
-          <ul className="navbar-nav  mb-2 mb-lg-0 ">
             {/* Conditionally render login or logout link */}
             {!isAuthenticated ? (
-              <>
-                {/* show createAccount in login page instead*/}
-                <li className="nav-item">
-                  <NavLink className="nav-link" aria-current="page" to="/login">
-                    Login
-                  </NavLink>
-                </li>
-              </>
+              <li className="nav-item">
+                <NavLink
+                  className={({ isActive }) => getNavLinkClass(isActive)}
+                  aria-current="page"
+                  to="/login"
+                >
+                  Login
+                </NavLink>
+              </li>
             ) : (
               <li className="nav-item">
                 <button className="nav-link btn" onClick={handleLogout}>
@@ -102,6 +74,25 @@ const Navbar = () => {
                 </button>
               </li>
             )}
+
+            <li className="nav-item">
+              <NavLink
+                className={({ isActive }) => getNavLinkClass(isActive)}
+                aria-current="page"
+                to="/challenges"
+              >
+                Community challenges
+              </NavLink>
+            </li>
+            <li className="nav-item">
+              <NavLink
+                className={({ isActive }) => getNavLinkClass(isActive)}
+                aria-current="page"
+                to="chatroom"
+              >
+                Chat Room
+              </NavLink>
+            </li>
           </ul>
         </div>
       </div>

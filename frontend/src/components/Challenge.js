@@ -36,9 +36,20 @@ const Challenge = (props) => {
               {props.errorDeleteMessage}
             </div>
           )}
+          {props.errorJoinMessage && (
+            <div className="alert alert-danger">
+              {props.errorJoinMessage}
+            </div>
+          )}
+          <button
+            onClick={props.handleJoinClick}
+            className="btn btn-outline-success me-2"
+          >
+            Join
+          </button>
           <button
             onClick={props.handleUpdateClick}
-            className="btn btn-outline-info"
+            className="btn btn-outline-info me-2"
           >
             Update
           </button>          
