@@ -15,7 +15,6 @@ import {
   updateDoc,
 } from "firebase/firestore";
 import { db } from "./lib/firebase";
-import AddUser from "./components/AddUser";
 import { useChatStore } from "./stores/ChatStore";
 import { useInputStore } from "./stores/InputStore";
 import { useActiveTabStore } from "./stores/ActiveTabStore";
@@ -26,12 +25,10 @@ const ChatList = () => {
   const { resetInput } = useInputStore();
   const { setActiveTab } = useActiveTabStore();
   const [chats, setChats] = useState([]);
-  const [addMode, setAddMode] = useState(false);
   const [refresh, setRefresh] = useState(false);
 
   const filteredChats = chats.filter((chatId) => chatId !== undefined);
 
-  //TODO: change to challenge when mysql userhaschallenges is complete
   // Handle when a chat is deleted, remove the chat from the userchat
   useEffect(() => {
     const unsub = onSnapshot(
@@ -111,22 +108,15 @@ const ChatList = () => {
       {/* USER INFO */}
       <div className="userinfo">
         <div className="user">
-          {currentUser.photoURL ? (
-            <img className="user-img" src={currentUser.photoURL} alt="" />
-          ) : (
-            <i className="bx bx-user-circle user-img"></i>
-          )}
+            <img className="user-img" src={currentUser.photoURL ? 
+            currentUser.photoURL : "img/chat/avatar.png"} alt="" 
+            />
           <span>{currentUser.displayName}</span>
         </div>
         {/*user information - to add later*/}
         <div className="icons"></div>
       </div>
-      {/* //TODO: Add User/challenge REMOVE LATER */}
-      <div className="addChat">
-        <button onClick={() => setAddMode((prev) => !prev)}>
-          {addMode ? "minimize" : "add chat"}
-        </button>
-      </div>
+      
       {/* USER'S CHALLENGE LIST' */}
       <div className="challengelist">
         {/*if chat list exists and at least one chat*/}
@@ -175,8 +165,6 @@ const ChatList = () => {
           </>
         )}
       </div>
-      {/* //TODO: search popup, delete later */}
-      {addMode && <AddUser />}
     </div>
   );
 };

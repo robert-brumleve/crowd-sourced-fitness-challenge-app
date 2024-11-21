@@ -5,6 +5,7 @@ import * as Yup from "yup";
 import challengeURL from "../data/challengeURL";
 import axios from "axios";
 import Header from "../components/Header";
+import createChat from "../chat/components/CreateChat";
 
 const CreateChallenge = () => {
   const navigate = useNavigate();
@@ -38,7 +39,11 @@ const CreateChallenge = () => {
         ...values,
         creatorID: userInfo.userID,
       };
-      await axios.post(challengeURL, challengeData);
+      await axios.post(challengeURL, challengeData)
+      .then(res =>
+        //create chat for new challenge
+        createChat(res.data.challengeID, values.name)
+      );
       navigate("/challenges");
     } catch (error) {
       console.log(error);

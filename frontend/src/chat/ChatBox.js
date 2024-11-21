@@ -16,6 +16,7 @@ import { useChatStore } from "./stores/ChatStore";
 import { useUserStore } from "./stores/UserStore";
 import upload from "./components/Upload";
 import { useInputStore } from "./stores/InputStore";
+import checkImageExists from "./components/CheckImageExists";
 
 const ChatBox = () => {
   const [chat, setChat] = useState();
@@ -52,6 +53,9 @@ const ChatBox = () => {
         alert("Cannot retreive message as the chat no longer exists.");
         return;
       }
+
+      //check for any deleted image from the database
+      checkImageExists(currentChatId, res.data().images);
 
       const items = res.data().messages;
       //retrieve sender info from each message for display
@@ -95,6 +99,11 @@ const ChatBox = () => {
           text,
           createdAt: new Date(),
           ...(imgURL && { imgUrl: imgURL }),
+        }),
+        ...(imgURL && {
+          images: arrayUnion({
+            imgUrl: imgURL,
+          }),
         }),
       });
 
@@ -176,8 +185,15 @@ const ChatBox = () => {
               {message.senderId !== currentUser.uid && (
                 <span className="names">{message.sender.displayName}</span>
               )}
+
               {message.imgUrl && (
                 <img className="msg-img" src={message.imgUrl} alt="" />
+              )}
+              {message.imgUrl === "" && (
+                <div className="removed">
+                  <i className="bx bx-image"/>
+                  <p>This image was deleted</p>
+                  </div>
               )}
               {message.text !== "" && <p>{message.text}</p>}
 

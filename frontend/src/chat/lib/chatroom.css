@@ -182,7 +182,8 @@
         border-bottom: 1px solid #dddddd;
         
         .challenge{
-            
+            display:flex;
+            flex-direction: column;
             
             .name{    
               font-size: 18px;
@@ -272,6 +273,19 @@
                     border-radius:10px;
                     object-fit: cover;
                     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+
+                }
+                .removed{
+                    padding:5px;
+                    padding-left: 10px;
+                    padding-right: 10px;
+                    margin:0;
+                    background-color: var(--primary-color);
+                        color: white;
+                    border-radius: 10px;
+                    p{
+                        font-style: italic;
+                    }
                 }
             }
         }
