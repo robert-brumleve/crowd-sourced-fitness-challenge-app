@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { ViewIcon, PlusIcon } from "./Icons";
+import { ViewIcon } from "./Icons";
 
 const ChallengeList = (props) => {
   return (
