@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext"; // Import useAuth to get login function
 import axios from "axios"; // Import axios
 import login_chat from "../chat/components/LoginChat";
+import Header from "../components/Header";
 
 const Login = () => {
   const [username, setUsername] = useState(""); // Username state
@@ -52,39 +53,49 @@ const Login = () => {
   };
 
   return (
-    <div className="login-form">
-      <form onSubmit={handleSubmit}>
-        <div className="form-group">
-          <label htmlFor="username">Username</label>
-          <input
-            type="text"
-            id="username"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)} // Update username state
-            required
-          />
-        </div>
-        <div className="form-group">
-          <label htmlFor="password">Password</label>
-          <input
-            type="password"
-            id="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)} // Update password state
-            required
-          />
-        </div>
-        {error && <div className="error-message">{error}</div>}{" "}
-        {/* Show error message if any */}
-        <button type="submit">Login</button>
-      </form>
-
-      {/*Link to Create Account */}
+    <div className="row justify-content-center">
+      <div className="card-header text-center">
+        <Header header="LOGIN" />
+      </div>
+      <div style={{ width: "25rem" }}>
+        <form onSubmit={handleSubmit}>
+          <div className="form-group">
+            <label htmlFor="username">Username</label>
+            <input
+              type="text"
+              className="form-control"
+              id="username"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)} // Update username state
+              required
+            />
+          </div>
+          <div className="form-group">
+            <label htmlFor="password">Password</label>
+            <input
+              type="password"
+              className="form-control"
+              id="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)} // Update password state
+              required
+            />
+          </div>
+          {error && (
+            <div className="error-message alert alert-danger mt-3">{error}</div>
+          )}{" "}
+          {/* Show error message if any */}
+          <button type="submit" className="btn btn-primary">
+            Login
+          </button>
+        </form>
+        {/*Link to Create Account */}
       <div>
-        <span>don't have an account? </span>
+        <span>Don't have an account? </span>
         <a href="/account" className="link-primary">
           Register
         </a>
+      </div>
       </div>
     </div>
   );

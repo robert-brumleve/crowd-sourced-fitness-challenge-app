@@ -1,26 +1,16 @@
-import React, { useState } from "react";
+import React from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import personArmsUp from "../data/images/person-arms-up.svg";
-import { MagnifyingGlassIcon } from "./Icons";
 import { useAuth } from "../context/AuthContext"; // Import the useAuth hook
+import "../App.css";
 
 const Navbar = () => {
-  const [keywords, setKeywords] = useState("");
   const navigate = useNavigate();
   const { isAuthenticated, logout } = useAuth(); // Destructure login, logout, and isAuthenticated from context
 
-  const handleChange = (event) => {
-    setKeywords(event.target.value);
-  };
-
-  const OnSearch = (event) => {
-    event.preventDefault();
-    if (keywords.trim() === "") {
-      navigate("/challenges");
-    } else {
-      navigate(`/challenges/search/${keywords}`);
-    }
-  };
+  // when a tab is active
+  const getNavLinkClass = (isActive) =>
+    `nav-link ${isActive ? "active-tab" : ""}`;
 
   const handleLogout = () => {
     logout(); // Call the logout function from context
@@ -53,47 +43,32 @@ const Navbar = () => {
           <ul className="navbar-nav me-auto mb-2 mb-lg-0">
             <li className="nav-item">
               <NavLink
-                className="nav-link active"
+                className={({ isActive }) => getNavLinkClass(isActive)}
                 aria-current="page"
                 to="/dashboard/:id"
               >
                 Dashboard
               </NavLink>
             </li>
-
             <li className="nav-item">
               <NavLink
-                className="nav-link"
+                className={({ isActive }) => getNavLinkClass(isActive)}
                 aria-current="page"
                 to="/challenges"
               >
                 Community challenges
               </NavLink>
             </li>
-            {/* <li className="nav-item">
+            <li className="nav-item">
               <NavLink
-                className="nav-link"
+                className={({ isActive }) => getNavLinkClass(isActive)}
                 aria-current="page"
-                to="/u1/challenges"
+                to="chatroom"
               >
-                My challenges
+                Chat Room
               </NavLink>
-            </li> */}
+            </li>
           </ul>
-          <form className="d-flex" onSubmit={OnSearch}>
-            <input
-              className="form-control me-2"
-              type="text"
-              placeholder="Challenge keyword"
-              aria-label="Search"
-              value={keywords}
-              onChange={handleChange}
-            />
-            <button className="btn btn-outline-success" type="submit">
-              {MagnifyingGlassIcon}
-            </button>
-          </form>
-
           <ul className="navbar-nav  mb-2 mb-lg-0 ">
             {/* Conditionally render login or logout link */}
             {!isAuthenticated ? (

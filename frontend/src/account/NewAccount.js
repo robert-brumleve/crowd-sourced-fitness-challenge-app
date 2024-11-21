@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import axios from 'axios';
+import React, { useState } from "react";
+import axios from "axios";
 
 const NewAccount = () => {
   const [username, setUsername] = useState('');
@@ -32,7 +32,7 @@ const NewAccount = () => {
       });
       setMessage(response.data.message); // Success message from backend
     } catch (error) {
-      setMessage(error.response?.data?.message || 'Error creating account');
+      setMessage(error.response?.data?.message || "Error creating account");
     }
   };
 

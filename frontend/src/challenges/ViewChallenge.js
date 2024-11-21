@@ -6,13 +6,14 @@ import challengeURL from "../data/challengeURL";
 import deleteChat from "../chat/components/DeleteChat";
 
 const ViewChallenge = () => {
-  // Get the challengeID from the URL parameters
   const navigate = useNavigate();
   const { id } = useParams();
   const [challenge, setChallenge] = useState([]);
   const [isAuthorized, setIsAuthorized] = useState(true);
   const [errorUpdateMessage, setErrorUpdateMessage] = useState(null);
   const [errorDeleteMessage, setErrorDeleteMessage] = useState(null);
+  const [errorJoinMessage, setErrorJoinMessage] = useState(null);
+  const [hasJoined, setHasJoined] = useState(false); //tracj if join join a challenge
   const { created_at } = challenge;
   const date = new Date(created_at);
   const formattedDate = created_at ? date.toISOString().split("T")[0] : "";
@@ -44,9 +45,19 @@ const ViewChallenge = () => {
       .catch((err) => console.log(err));
   }, [userInfo.userID, id]);
 
-  useEffect(() => {
-    console.log("check authorized 2:", isAuthorized);
-  }, [isAuthorized]);
+  const handleJoinClick = () => {
+    if (!userInfo.username || !userInfo.userID) {
+      setErrorJoinMessage(
+        <>
+          You should log in to join this challenge. Click{" "}
+          <Link to="/login">here</Link> to login.
+        </>
+      );
+    } else {
+      setErrorJoinMessage(null);
+      setHasJoined(true)
+    }
+  };
 
   const handleUpdateClick = () => {
     if (!isAuthorized) {
@@ -93,8 +104,11 @@ const ViewChallenge = () => {
           tags={challenge.tags}
           handleUpdateClick={handleUpdateClick}
           handleDeleteClick={handleDeleteClick}
+          handleJoinClick={handleJoinClick}
           errorUpdateMessage={errorUpdateMessage}
           errorDeleteMessage={errorDeleteMessage}
+          errorJoinMessage={errorJoinMessage}
+          hasJoined = {hasJoined}
         />
       ) : (
         <div>

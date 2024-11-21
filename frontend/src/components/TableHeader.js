@@ -13,8 +13,6 @@ const TableHeader = () => {
         <th scope="col" className="text-center">
           Difficulty
         </th>        
-        <th scope="col" className="text-center">          
-        </th>
       </tr>
     </thead>
   );
