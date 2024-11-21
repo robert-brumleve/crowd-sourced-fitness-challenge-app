@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import axios from "axios";
+import Header from "../components/Header";
 
 const NewAccount = () => {
   const [username, setUsername] = useState('');
@@ -51,13 +52,17 @@ const NewAccount = () => {
   };
 
   return (
-    <div>
-      <h2>Create Account</h2>
+    <div className="row justify-content-center">
+      <div className="card-header text-center">
+        <Header header="Create Account" />
+      </div>
+      <div style={{ width: "40rem" }}>
       <form onSubmit={handleSubmit}>
         <div>
           <label>Username</label>
           <input 
             type="text" 
+            className="form-control"
             value={username} 
             onChange={(e) => setUsername(e.target.value)} 
             required 
@@ -67,6 +72,7 @@ const NewAccount = () => {
           <label>Email</label>
           <input 
             type="email" 
+            className="form-control"
             value={email} 
             onChange={(e) => setEmail(e.target.value)} 
             required 
@@ -76,18 +82,20 @@ const NewAccount = () => {
           <label>Password</label>
           <input 
             type="password" 
+            className="form-control"
             value={password} 
             onChange={(e) => setPassword(e.target.value)} 
             required 
           />
         </div>
-        <div>
+        <div className="mt-2 mb-2">
           <label>Profile Picture</label>
-          <button type="button" onClick={() => setShowImageSelector(true)}>
+          <button type="button" className="btn btn-outline-success" onClick={() => setShowImageSelector(true)}>
             Default Pictures
           </button>
           <input 
             type="file" 
+            className="form-control"
             onChange={handleFileChange} // Handle file selection
           />
           {profilePicture && (
@@ -97,10 +105,10 @@ const NewAccount = () => {
             </div>
           )}
         </div>
-        <button type="submit">Create Account</button>
+        <button type="submit" className="btn btn-outline-primary">Create Account</button>
       </form>
 
-      {message && <p>{message}</p>}
+      {message && <div className="mt-3 text-center text-danger">{message}</div>}
 
       {/* Image Selector Modal */}
       {showImageSelector && (
@@ -131,6 +139,7 @@ const NewAccount = () => {
           </div>
         </div>
       )}
+      </div>
     </div>
   );
 };
