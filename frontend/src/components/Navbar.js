@@ -52,7 +52,7 @@ const Navbar = () => {
         <div className="collapse navbar-collapse" id="navbarSupportedContent">
           <ul className="navbar-nav me-auto mb-2 mb-lg-0">
             <li className="nav-item">
-              <NavLink className="nav-link active" aria-current="page" to="/">
+              <NavLink className="nav-link active" aria-current="page" to="/dashboard/:id">
                 Dashboard
               </NavLink>
             </li>
@@ -82,7 +82,7 @@ const Navbar = () => {
                 Community challenges
               </NavLink>
             </li>
-            <li className="nav-item">
+            {/* <li className="nav-item">
               <NavLink
                 className="nav-link"
                 aria-current="page"
@@ -90,7 +90,7 @@ const Navbar = () => {
               >
                 My challenges
               </NavLink>
-            </li>
+            </li> */}
           </ul>
           <form className="d-flex" onSubmit={OnSearch}>
             <input
