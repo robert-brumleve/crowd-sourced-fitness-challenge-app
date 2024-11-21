@@ -79,10 +79,16 @@ const Login = () => {
             <div className="error-message alert alert-danger mt-3">{error}</div>
           )}{" "}
           {/* Show error message if any */}
-          <button type="submit" className="btn btn-primary">
+          <button type="submit" className="btn btn-outline-primary">
             Login
           </button>
         </form>
+        <div>
+          <span>Don't have an account? </span>
+          <a href="/account" className="link-primary">
+            Register
+          </a>
+        </div>
       </div>
     </div>
   );
