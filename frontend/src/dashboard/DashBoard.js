@@ -1,8 +1,8 @@
 import React, { useEffect, useState, useMemo } from "react";
 import axios from "axios";
-import UserChallengeList from "../components/UserChallengeList";
+// import UserChallengeList from "../components/UserChallengeList";
 import Header from "../components/Header";
-import Greeting from "../components/Greeting";
+// import Greeting from "../components/Greeting";
 import { Link } from "react-router-dom";
 
 
