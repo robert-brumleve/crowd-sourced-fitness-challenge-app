@@ -1,4 +1,10 @@
 const { connection, port } = require("../db_connection");
+// Set up Google Cloud Storage
+const { Storage } = require('@google-cloud/storage');
+const storage = new Storage({
+  keyFilename: './key.json',
+});
+const bucket = storage.bucket('csfca'); 
 
 const getChallenges = async (req, res, next) => {
   sql = "SELECT * FROM challenges";
@@ -11,9 +17,26 @@ const getChallenges = async (req, res, next) => {
 };
 
 const createChallenge = async (req, res, next) => {
-  // console.log("Request Body:", req.body);
-  const { name, type, description, difficulty, creatorID, imageURL, tags } =
+  const { name, type, description, difficulty, creatorID,  tags } =
     req.body;
+  //handle image
+  let imageURL;
+  // If the file is uploaded, save it to Google Cloud Storage
+  if (req.file) {
+    const fileName = `${Date.now()}_${req.file.originalname}`;
+    const file = bucket.file(fileName);
+    // Upload the file to the bucket (no need to set ACL explicitly with UBLA enabled)
+    await file.save(req.file.buffer, {
+      metadata: {
+        contentType: req.file.mimetype,
+      },
+    });
+    // Generate the public URL for the uploaded file
+    const publicUrl = `https://storage.googleapis.com/${bucket.name}/${file.name}`;
+    imageURL = publicUrl;
+  } else {
+    imageURL = null;
+  }
 
   // check if name is duplicate
   const checkName = "SELECT * FROM challenges WHERE name = ?";

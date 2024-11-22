@@ -35,15 +35,24 @@ const CreateChallenge = () => {
 
   const formikSubmit = async (values) => {
     try {
-      const challengeData = {
-        ...values,
-        creatorID: userInfo.userID,
-      };
-      await axios.post(challengeURL, challengeData)
-      .then(res =>{
-        //create chat for new challenge
-        createChat(res.data.challengeID, values.name);
-      });
+      //serialize data and the image file
+      const formData = new FormData();
+      for (const key in values) {
+        formData.append(key, values[key]);
+      }
+      formData.append("creatorID", userInfo.userID);
+
+      //send request(handle file upload)
+      await axios
+        .post(challengeURL, formData, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        })
+        .then((res) => {
+          //create chat for new challenge
+          createChat(res.data.challengeID, values.name);
+        });
       navigate("/challenges");
     } catch (error) {
       console.log(error);
@@ -90,7 +99,7 @@ const CreateChallenge = () => {
               difficulty: "Easy",
               username: userInfo.username,
               userID: userInfo.userID,
-              imageURL: "image.com",
+
               tags: "wellness",
             }}
             validationSchema={challengeFormValidation}
