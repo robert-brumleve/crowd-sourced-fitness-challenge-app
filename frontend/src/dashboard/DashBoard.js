@@ -3,6 +3,7 @@ import axios from "axios";
 import UserChallengeList from "../components/UserChallengeList";
 import Header from "../components/Header";
 import Greeting from "../components/Greeting";
+import { Link } from "react-router-dom";
 
 
 const DashBoard = () => {
@@ -34,7 +35,6 @@ const DashBoard = () => {
 
   return (
     <div>
-      <Greeting />
       <section class="py-5 text-center container">
         <div class="row py-lg-5">
           <div class="col-lg-6 col-md-8 mx-auto">
@@ -53,7 +53,7 @@ const DashBoard = () => {
         </div>
       </section>
       <Header header="MY CHALLENGES"/>
-      <div className="table-responsive">
+      {/* <div className="table-responsive">
         <table className="table table-sm table-bordered table-hover">
           <thead>
             <th>User ID</th>
@@ -73,7 +73,77 @@ const DashBoard = () => {
             })}
           </tbody>
         </table>
-      </div>
+      </div> */}
+
+
+    <div>
+      {challenges.map((item, index) => {
+      return (
+      <div class="album py-5 bg-light">
+                <div class="container">
+                  <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
+                    <div class="col">
+                      <div class="card shadow-sm">
+                        <svg
+                          class="bd-placeholder-img card-img-top"
+                          width="100%"
+                          height="225"
+                          xmlns="http://www.w3.org/2000/svg"
+                          role="img"
+                          aria-label="Placeholder: Thumbnail"
+                          preserveAspectRatio="xMidYMid slice"
+                          focusable="false"
+                        >
+                          <title>Placeholder</title>
+                          <rect width="100%" height="100%" fill="#55595c" />
+                          <text x="50%" y="50%" fill="#eceeef" dy=".3em">
+                            Thumbnail
+                          </text>
+                        </svg>
+
+                        <div class="card-body" key={ index }>
+                          <p class="card-text">{item.name}</p>
+                          <div class="d-flex justify-content-between align-items-center">
+                            <div class="btn-group">
+                              {/* Button to view challenge */}
+                              <button
+                                type="button"
+                                class="btn btn-sm btn-outline-secondary"
+                              >
+                                <Link
+                                  to={`/challenges/view/${item.challengeID}`}
+                                  className="btn btn-info btn-sm"
+                                >
+                                  View{" "}
+                                </Link>
+                              </button>
+
+                              {/* Button to complete challenge */}
+                              <button
+                                type="button"
+                                class="btn btn-sm btn-outline-secondary"
+                              >
+                                <Link
+                                  to={`/challenges/update/${item.challengeID}`}
+                                  className="btn btn-sm btn-primary mx-2"
+                                >
+                                  {" "}
+                                  Complete Challenge{" "}
+                                </Link>
+                              </button>
+                            </div>
+                            {/* List the challenge's difficulty level*/}
+                            <small class="text-muted">{item.difficulty}</small>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              );
+            })}
+          </div>
 
 
     </div>

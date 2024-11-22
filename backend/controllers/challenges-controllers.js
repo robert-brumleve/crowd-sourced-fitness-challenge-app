@@ -56,8 +56,8 @@ const getChallengeById = async (req, res, next) => {
   const id = req.params.id;
   console.log("challengeId " + id);
 
-  const sql = `SELECT challenges.*, users.username 
-  FROM challenges 
+  const sql = `SELECT challenges.*, users.username
+  FROM challenges
   JOIN users ON users.userID = challenges.creatorID
   WHERE challengeID = ?
   `;
@@ -144,9 +144,34 @@ const searchChallenge = async (req, res, next) => {
   });
 };
 
+const joinChallenge = async (req, res, next) => {
+  console.log("Request Info:", req.body);
+  const { userID, challengeID, completed } =
+    req.body;
+  // add new challenge if name is unique
+  const sql = `INSERT INTO users_has_challenges (userID, challengeID, completed)
+     VALUES (?, ?, 0)`;
+  const values = [
+    userID,
+    challengeID,
+    completed,
+  ];
+  connection.query(sql, values, (insertError, result) => {
+    if (insertError) {
+      console.error("Error inserting challenge:", insertError);
+      return next(new Error("Database error"));
+    }
+    res.status(201).json({
+      message: "Challenge joined successfully!",
+      challengeID: result.insertId,
+    });
+  });
+};
+
 exports.getChallenges = getChallenges;
 exports.createChallenge = createChallenge;
 exports.getChallengeById = getChallengeById;
 exports.deleteChallengeById = deleteChallengeById;
 exports.updateChallenge = updateChallenge;
 exports.searchChallenge = searchChallenge;
+exports.joinChallenge = joinChallenge;

@@ -54,7 +54,18 @@ const ViewChallenge = () => {
       );
     } else {
       setErrorJoinMessage(null);
-      setHasJoined(true)
+      setHasJoined(true);
+      // If user can join the challenge, add data to users_has_challenges table
+      try {
+        let result = axios.post(`${challengeURL}/join`, {
+          userID: userInfo.userID,
+          challengeID: id,
+          completed: '0'
+      });
+      // console.log(result.response.data);
+      } catch (error) {
+      console.error(error.response.data);
+      }
     }
   };
 
