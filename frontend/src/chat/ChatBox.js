@@ -9,6 +9,7 @@ import {
   doc,
   getDoc,
   onSnapshot,
+  serverTimestamp,
   updateDoc,
 } from "firebase/firestore";
 import { db } from "./lib/firebase";
@@ -21,8 +22,7 @@ import checkImageExists from "./components/CheckImageExists";
 const ChatBox = () => {
   const [chat, setChat] = useState();
   const { text, setText, resetInput, imgInput, setImgInput } = useInputStore();
-  const { currentChatId, fetchChatInfo, currentChat, participants } =
-    useChatStore();
+  const { currentChatId, fetchChatInfo, currentChat, participants } = useChatStore();
   const { currentUser } = useUserStore();
   const lastMessageRef = useRef(null);
 
@@ -131,7 +131,7 @@ const ChatBox = () => {
           userChatsData.chats[chatIndex].lastMessage = text;
           userChatsData.chats[chatIndex].isSeen =
             userchatsId === currentUser.uid ? true : false;
-          userChatsData.chats[chatIndex].updatedAt = Date.now();
+          userChatsData.chats[chatIndex].updatedAt = serverTimestamp();
 
           await updateDoc(userChatsRef, {
             chats: userChatsData.chats,

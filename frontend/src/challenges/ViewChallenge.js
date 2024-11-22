@@ -4,6 +4,7 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 import Challenge from "../components/Challenge";
 import challengeURL from "../data/challengeURL";
 import deleteChat from "../chat/components/DeleteChat";
+import createUserChat from "../chat/components/CreateUserChat";
 
 const ViewChallenge = () => {
   const navigate = useNavigate();
@@ -86,9 +87,10 @@ const ViewChallenge = () => {
             challengeID: id,
             completed: "0",
           })
-          .then
-          //createUserChat(userInfo.userID, challenge.challengeID);
-          ()
+          .then(
+            //include chat to the user in firebase
+            createUserChat(userInfo.userID, challenge.challengeID)
+          )
           .then(setHasJoined(true));
         // console.log(result.response.data);
       } catch (error) {
