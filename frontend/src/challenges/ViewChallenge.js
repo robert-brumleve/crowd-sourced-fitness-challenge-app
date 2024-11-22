@@ -57,7 +57,7 @@ const ViewChallenge = () => {
       setHasJoined(true);
       // If user can join the challenge, add data to users_has_challenges table
       try {
-        let result = axios.post(`${challengeURL}/join`, {
+        axios.post(`${challengeURL}/join`, {
           userID: userInfo.userID,
           challengeID: id,
           completed: '0'
