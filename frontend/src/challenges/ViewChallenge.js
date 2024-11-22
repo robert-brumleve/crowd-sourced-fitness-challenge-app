@@ -32,7 +32,7 @@ const ViewChallenge = () => {
     axios
       .get(`${challengeURL}/view/${id}`)
       .then((res) => {
-        console.log(res);
+        //console.log(res);
         setChallenge(res.data[0]);
         if (Number(res.data[0].creatorID) !== Number(userInfo.userID)) {
           // console.log("userInfo.userID", typeof userInfo.userID);
@@ -45,6 +45,28 @@ const ViewChallenge = () => {
       .catch((err) => console.log(err));
   }, [userInfo.userID, id]);
 
+  // Get challenge data based on the userID
+  // Then check if user has joined challenged already.
+  useEffect(() => {
+    if (userInfo.userID != null) {
+      axios
+        .get(
+          `http://localhost:5000/dashboard/userchallenges/${userInfo.userID}`
+        )
+        .then((res) => {
+          const items = res.data;
+          items.forEach((item) => {
+            if (Number(item.challengeID) === Number(id)) {
+              //matching challengeid found in user
+              setHasJoined(true);
+              return;
+            }
+          });
+        })
+        .catch((err) => console.log(err));
+    }
+  }, [userInfo.userID, id, hasJoined, setHasJoined]);
+
   const handleJoinClick = () => {
     if (!userInfo.username || !userInfo.userID) {
       setErrorJoinMessage(
@@ -55,17 +77,22 @@ const ViewChallenge = () => {
       );
     } else {
       setErrorJoinMessage(null);
-      setHasJoined(true);
+
       // If user can join the challenge, add data to users_has_challenges table
       try {
-        axios.post(`${challengeURL}/join`, {
-          userID: userInfo.userID,
-          challengeID: id,
-          completed: '0'
-      });
-      // console.log(result.response.data);
+        axios
+          .post(`${challengeURL}/join`, {
+            userID: userInfo.userID,
+            challengeID: id,
+            completed: "0",
+          })
+          .then
+          //createUserChat(userInfo.userID, challenge.challengeID);
+          ()
+          .then(setHasJoined(true));
+        // console.log(result.response.data);
       } catch (error) {
-      console.error(error.response.data);
+        console.error(error.response.data);
       }
     }
   };
@@ -119,7 +146,7 @@ const ViewChallenge = () => {
           errorUpdateMessage={errorUpdateMessage}
           errorDeleteMessage={errorDeleteMessage}
           errorJoinMessage={errorJoinMessage}
-          hasJoined = {hasJoined}
+          hasJoined={hasJoined}
         />
       ) : (
         <div>
