@@ -1,10 +1,12 @@
-import React from "react";
+import React, { useState } from "react";
 import { useFormik } from "formik";
 import Select from "react-dropdown-select";
 import difficulty_options from "../data/difficulty";
 import types from "../data/types";
 
 const ChallengeForm = ({ initialValues, validationSchema, onSubmit, userInfo, errorMessage }) => {
+  const [previewImg, setPreviewImg] = useState(null);
+  
   const formik = useFormik({
     initialValues,
     validationSchema,
@@ -18,6 +20,15 @@ const ChallengeForm = ({ initialValues, validationSchema, onSubmit, userInfo, er
 
   const getSelectedValue = (property, options) => {
     return options.filter((option) => option.label === formik.values[property]);
+  };
+
+  const handleFileChange = (e) => {
+    const file = e.target.files[0]; // Get the selected file
+    if (file) {
+      formik.setFieldValue("imageURL",file); 
+      const imgUrl = URL.createObjectURL(file); 
+      setPreviewImg(imgUrl); // Set the preview image
+    }
   };
 
   return (
@@ -98,15 +109,20 @@ const ChallengeForm = ({ initialValues, validationSchema, onSubmit, userInfo, er
 
       {/* Image URL Field */}
       <div className="mb-2">
-        <label htmlFor="imageURL">Image URL</label>
+        <label htmlFor="imageURL">Image</label>
         <input
-          type="text"
+          type="file"
           className="form-control"
           name="imageURL"
-          value={formik.values.imageURL}
-          onChange={formik.handleChange}
+          onChange={handleFileChange}
           onBlur={formik.handleBlur}
         />
+        {previewImg && (
+            <div>
+              <p>Selected Image:</p>
+              <img src={previewImg} alt="Profile" width="50" height="50" />
+            </div>
+          )}
         {formik.touched.imageURL && formik.errors.imageURL && (
           <div className="text-danger">{formik.errors.imageURL}</div>
         )}
