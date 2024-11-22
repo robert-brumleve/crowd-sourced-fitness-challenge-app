@@ -24,5 +24,6 @@ router.patch("/update/:id", challengesControllers.updateChallenge);
 
 // router.get("/search/:keywords", challengesControllers.searchChallenge);
 
+router.post("/join", challengesControllers.joinChallenge);
 
 module.exports = router;
