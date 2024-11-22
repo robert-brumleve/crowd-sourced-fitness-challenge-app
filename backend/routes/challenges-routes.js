@@ -1,12 +1,20 @@
 const express = require("express");
 
+//for image upload
+const multer = require('multer'); 
+const multerStorage = multer.memoryStorage(); // Store files in memory
+const upload = multer({
+  storage: multerStorage,
+  limits: { fileSize: 5 * 1024 * 1024 }, // Limit to 5MB
+}).single('imageURL');
+
 const challengesControllers = require("../controllers/challenges-controllers");
 
 const router = express.Router();
 
 router.get("/", challengesControllers.getChallenges);
 
-router.post("/", challengesControllers.createChallenge);
+router.post("/", upload, challengesControllers.createChallenge);
 
 router.get("/view/:id", challengesControllers.getChallengeById);
 
