@@ -134,7 +134,7 @@ const ViewChallenge = () => {
   };
 
   const handleChatClick =() =>{
-    changeChat(id);
+    changeChat(id.toString());
     navigate(`/chatroom`);
   };
 

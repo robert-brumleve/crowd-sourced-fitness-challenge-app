@@ -2,6 +2,7 @@ import {
   arrayUnion,
   doc,
   getDoc,
+  setDoc,
   updateDoc,
 } from "firebase/firestore";
 import { db } from "../lib/firebase";
@@ -21,28 +22,30 @@ const createUserChat = async (uid, cid, cname) => {
     if (!chatSnap.exists()) {
       createChat(challengeId, challengeName);
     }
-
-    if (userChatSnap.exists()) {
-      //add chat to user
-      const chatData = {
-        chatId: challengeId,
-        lastMessage: "",
-        type: "",
-        updatedAt: null,
-      };
+    
+    if (!userChatSnap.exists()) {
+      await setDoc(userChatRef, {
+        chats: [],
+      });
       
-      await updateDoc(userChatRef, {
-        chats: arrayUnion(chatData),
-      });
-      //add user to chat participant
-      await updateDoc(chatRef, {
-        participantId: arrayUnion({
-          uid: userId,
-        }),
-      });
-    } else {
-      console.log("usersnap does not exist");
-    }
+    } 
+
+    const chatData = {
+      chatId: challengeId,
+      lastMessage: "",
+      type: "",
+      updatedAt: null,
+    };
+    
+    await updateDoc(userChatRef, {
+      chats: arrayUnion(chatData),
+    });
+    //add user to chat participant
+    await updateDoc(chatRef, {
+      participantId: arrayUnion({
+        uid: userId,
+      }),
+    });
   } catch (err) {
     console.log(err);
   }
