@@ -1,38 +1,43 @@
 import React, { useEffect, useState } from "react";
 import ChatList from "./ChatList";
 import ChatBox from "./ChatBox";
-import ChatLogin from "./components/ChatLogin";
-import { auth } from "./lib/firebase";
-import { onAuthStateChanged } from "firebase/auth";
 import "./lib/chatroom.css";
 import "boxicons/css/boxicons.min.css";
 import { useUserStore } from "./stores/UserStore";
 import { useChatStore } from "./stores/ChatStore";
 import { useActiveTabStore } from "./stores/ActiveTabStore";
+import { useNavigate, Link } from "react-router-dom";
 
 function ChatRoom() {
   const { currentUser, fetchUserInfo } = useUserStore();
-  const { currentChatId } = useChatStore();
-  const {activeTab, setActiveTab} = useActiveTabStore();
+  const { currentChatId} = useChatStore();
+  const { activeTab, setActiveTab } = useActiveTabStore();
   const [isMobileView, setIsMobileView] = useState(false);
+  const navigate = useNavigate();
+  const [redirectMessage, setRedirectMessage] = useState("");
+  const username = localStorage.getItem("username");
+  const userID = localStorage.getItem("userID")?.toString();
+
   
-
-  //listen for user
-  //TODO: Change to SQL user data
+  //listen for user status
   useEffect(() => {
-    const unsub = onAuthStateChanged(auth, (user) => {
-      fetchUserInfo(user?.uid);
-      //console.log("user?:", user?.uid);
-    });
+    const unsub = () => {
+      if (!username || !userID) {
+        setRedirectMessage("You must log in to use the chat.");
+        setTimeout(() => navigate("/login"), 5000);
+      }
 
+      fetchUserInfo(userID);
+      //getChatListQuery(userID);
+    };
     return () => {
       unsub();
     };
-  }, [fetchUserInfo]);
+  }, [fetchUserInfo, userID, username, navigate, ]);
 
   //listen for window size change
   useEffect(() => {
-    const handleResize = () => setIsMobileView(window.innerWidth <= 650);
+    const handleResize = () => setIsMobileView(window.innerWidth <= 655);
     handleResize();
     window.addEventListener("resize", handleResize);
     return () => {
@@ -41,11 +46,10 @@ function ChatRoom() {
   }, []);
 
   //Checks if chat is selected to switch to chatbox in mobileview
-  const isChatSelected = () =>{
-    if (currentChatId){
+  const isChatSelected = () => {
+    if (currentChatId) {
       setActiveTab("chatbox");
-    }
-    else{
+    } else {
       setActiveTab("chatlist");
       alert("Please select a chat first");
     }
@@ -58,7 +62,6 @@ function ChatRoom() {
           <>
             <ChatList />
             {currentChatId && <ChatBox />}
-            <ChatLogin />
           </>
         ) : (
           <>
@@ -67,7 +70,7 @@ function ChatRoom() {
               <ul className="nav_list">
                 <li>
                   <button
-                    className={activeTab === "chatlist"? "active" : ""}
+                    className={activeTab === "chatlist" ? "active" : ""}
                     onClick={() => setActiveTab("chatlist")}
                   >
                     <i className="bx bx-list-ul"></i>
@@ -87,7 +90,15 @@ function ChatRoom() {
         )
       ) : (
         <>
-          <ChatLogin />
+          {redirectMessage && (
+            <div className="text-center">
+              <h3>{redirectMessage}</h3>
+              <p>
+                Click <Link to="/challenges">here</Link> to view all community
+                challenges, or you will be redirected to login in 5 seconds.
+              </p>
+            </div>
+          )}
         </>
       )}
     </div>

@@ -16,6 +16,9 @@ import { useChatStore } from "./stores/ChatStore";
 import { useUserStore } from "./stores/UserStore";
 import upload from "./components/Upload";
 import { useInputStore } from "./stores/InputStore";
+import checkImageExists from "./components/CheckImageExists";
+import { useChatListStore } from "./stores/ChatListStore";
+import { Link } from "react-router-dom";
 
 const ChatBox = () => {
   const [chat, setChat] = useState();
@@ -24,6 +27,7 @@ const ChatBox = () => {
     useChatStore();
   const { currentUser } = useUserStore();
   const lastMessageRef = useRef(null);
+  const { chatListDetail } = useChatListStore();
 
   /* auto scroll to last message*/
   useEffect(() => {
@@ -53,6 +57,9 @@ const ChatBox = () => {
         return;
       }
 
+      //check for any deleted image from the database
+      checkImageExists(currentChatId, res.data().images);
+
       const items = res.data().messages;
       //retrieve sender info from each message for display
       const promises = items.map(async (item) => {
@@ -72,7 +79,6 @@ const ChatBox = () => {
 
   // handle image upload
   const handleImg = (e) => {
-    console.log("in handle img", e.target.files[0]);
     if (e.target.files[0]) {
       setImgInput(e.target.files[0]);
     }
@@ -80,6 +86,7 @@ const ChatBox = () => {
 
   //Handle when sending a message
   const handleSend = async () => {
+    
     if (text === "" && imgInput.file == null) return;
     let imgURL = null;
 
@@ -96,13 +103,17 @@ const ChatBox = () => {
           createdAt: new Date(),
           ...(imgURL && { imgUrl: imgURL }),
         }),
+        ...(imgURL && {
+          images: arrayUnion({
+            imgUrl: imgURL,
+          }),
+        }),
       });
 
       const userIds = currentChat.participantId;
-
       //update status of last message seen for each users.
-      userIds.forEach(async (userchatsId) => {
-        const userChatsRef = doc(db, "userchats", userchatsId);
+      userIds.forEach(async (index) => {
+        const userChatsRef = doc(db, "userchats", index.uid);
         const userChatsSnapshot = await getDoc(userChatsRef);
 
         if (userChatsSnapshot.exists()) {
@@ -121,8 +132,8 @@ const ChatBox = () => {
           }
           userChatsData.chats[chatIndex].lastMessage = text;
           userChatsData.chats[chatIndex].isSeen =
-            userchatsId === currentUser.uid ? true : false;
-          userChatsData.chats[chatIndex].updatedAt = Date.now();
+            index.uid === currentUser.uid ? true : false;
+          userChatsData.chats[chatIndex].updatedAt = new Date();
 
           await updateDoc(userChatsRef, {
             chats: userChatsData.chats,
@@ -141,15 +152,25 @@ const ChatBox = () => {
       {/*--- CHAT TITLE  ---- */}
       <div className="top">
         <div className="challenge">
-          {/*TODO: change to challenge name later */}
-          <span className="name">{currentChatId}</span>
-          {/* get number of participants */}
-          <span className="usernum">( {participants.length} members )</span>
+          {
+          chatListDetail?.[currentChatId]?.imageURL && (
+            <img
+              className="chal-pic"
+              src={chatListDetail[currentChatId].imageURL}
+              alt="."
+            /> 
+          )}
+          <div className="info">
+            <span className="name">{chatListDetail[currentChatId]?.name}</span>
+            {/* get number of participants */}
+            <span className="usernum">( {participants.length} members )</span>
+          </div>
         </div>
 
         <div className="homeicon">
-          {/*TODO: link to the challenge page*/}
-          <i className="bx bx-home bx-sm"></i>
+          <Link to={`/challenges/view/${currentChatId}`}>
+            <i className="bx bx-home bx-sm"></i>
+          </Link>
         </div>
       </div>
 
@@ -176,8 +197,15 @@ const ChatBox = () => {
               {message.senderId !== currentUser.uid && (
                 <span className="names">{message.sender.displayName}</span>
               )}
+
               {message.imgUrl && (
                 <img className="msg-img" src={message.imgUrl} alt="" />
+              )}
+              {message.imgUrl === "" && (
+                <div className="removed">
+                  <i className="bx bx-image" />
+                  <p>This image was deleted</p>
+                </div>
               )}
               {message.text !== "" && <p>{message.text}</p>}
 

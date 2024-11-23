@@ -5,6 +5,7 @@ import ChallengeForm from "../components/ChallengeForm";
 import challengeURL from "../data/challengeURL";
 import Header from "../components/Header";
 import * as Yup from "yup";
+import updateChat from "../chat/components/UpdateChat";
 
 const UpdateChallenge = () => {
   const { id } = useParams();
@@ -39,8 +40,9 @@ const UpdateChallenge = () => {
 
   const updateChallenge = async (values) => {
     try {
-      await axios.patch(`${challengeURL}/update/${id}`, values);
-      navigate("/challenges");
+      await axios.patch(`${challengeURL}/update/${id}`, values)
+      .then(updateChat(id,values.name))
+      .then(navigate("/challenges"));
     } catch (error) {
       console.log(error);
       if (error.response?.data?.message === "Challenge name already exists") {

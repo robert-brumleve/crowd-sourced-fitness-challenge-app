@@ -22,6 +22,7 @@ export const useChatStore = create((set) => ({
       const docRef = doc(db, "chats", chatId);
       const docSnap = await getDoc(docRef);
       if (docSnap.exists()) {
+        
         set({
           currentChat: docSnap.data(),
           participants: docSnap.data().participantId,
@@ -33,4 +34,10 @@ export const useChatStore = create((set) => ({
       return set({ currentChat: null });
     }
   },
+  
+  
+    
+    
+    
+    
 }));

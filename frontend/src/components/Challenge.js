@@ -1,9 +1,9 @@
 import React from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import Header from "./Header";
 
 const Challenge = (props) => {
-  const navigate = useNavigate();
+  
   return (
     <div>
       <Header header="CHALLENGE DETAIL" />
@@ -66,7 +66,7 @@ const Challenge = (props) => {
             </button>
           ) : (
             <button
-              onClick={() => navigate(`/chatroom`)} // Navigate to chatroom when clicked
+              onClick={props.handleChatClick} // Navigate to chatroom when clicked
               className="btn btn-outline-success me-2"
             >
               Chat

@@ -59,15 +59,7 @@ const Navbar = () => {
                 Community challenges
               </NavLink>
             </li>
-            <li className="nav-item">
-              <NavLink
-                className={({ isActive }) => getNavLinkClass(isActive)}
-                aria-current="page"
-                to="chatroom"
-              >
-                Chat Room
-              </NavLink>
-            </li>
+            
           </ul>
           <ul className="navbar-nav  mb-2 mb-lg-0 ">
             {/* Conditionally render login or logout link */}

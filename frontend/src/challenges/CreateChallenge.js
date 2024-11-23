@@ -5,6 +5,7 @@ import * as Yup from "yup";
 import challengeURL from "../data/challengeURL";
 import axios from "axios";
 import Header from "../components/Header";
+import createChat from "../chat/components/CreateChat";
 
 const CreateChallenge = () => {
   const navigate = useNavigate();
@@ -33,20 +34,25 @@ const CreateChallenge = () => {
   });
 
   const formikSubmit = async (values) => {
-    try { 
+    try {
       //serialize data and the image file
       const formData = new FormData();
-      for (const key in values){
-        formData.append(key,values[key]);
+      for (const key in values) {
+        formData.append(key, values[key]);
       }
-      formData.append('creatorID', userInfo.userID);
+      formData.append("creatorID", userInfo.userID);
 
       //send request(handle file upload)
-     await axios.post(challengeURL, formData, {
-      headers: {
-        'Content-Type': 'multipart/form-data', 
-      },
-     });
+      await axios
+        .post(challengeURL, formData, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        })
+        .then((res) => {
+          //create chat for new challenge
+          createChat(res.data.challengeID, values.name);
+        });
       navigate("/challenges");
     } catch (error) {
       console.log(error);

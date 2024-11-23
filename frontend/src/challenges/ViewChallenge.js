@@ -3,6 +3,10 @@ import axios from "axios";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import Challenge from "../components/Challenge";
 import challengeURL from "../data/challengeURL";
+import deleteChat from "../chat/components/DeleteChat";
+import createUserChat from "../chat/components/CreateUserChat";
+import { useChatStore } from "../chat/stores/ChatStore";
+import { useChatListStore } from "../chat/stores/ChatListStore";
 
 const ViewChallenge = () => {
   const navigate = useNavigate();
@@ -16,7 +20,8 @@ const ViewChallenge = () => {
   const { created_at } = challenge;
   const date = new Date(created_at);
   const formattedDate = created_at ? date.toISOString().split("T")[0] : "";
-
+  const { changeChat } = useChatStore();
+  const {storeChatListDetail} = useChatListStore();
   const userInfo = useMemo(
     () => ({
       username: localStorage.getItem("username"),
@@ -31,7 +36,7 @@ const ViewChallenge = () => {
     axios
       .get(`${challengeURL}/view/${id}`)
       .then((res) => {
-        console.log(res);
+        //console.log(res);
         setChallenge(res.data[0]);
         if (Number(res.data[0].creatorID) !== Number(userInfo.userID)) {
           // console.log("userInfo.userID", typeof userInfo.userID);
@@ -44,7 +49,39 @@ const ViewChallenge = () => {
       .catch((err) => console.log(err));
   }, [userInfo.userID, id]);
 
-  const handleJoinClick = () => {
+  // Get challenge data based on the userID
+  // Then check if user has joined challenged already.
+  useEffect(() => {
+    if (userInfo.userID != null) {
+      axios
+        .get(
+          `http://localhost:5000/dashboard/userchallenges/${userInfo.userID}`
+        )
+        .then((res) => {
+          const items = res.data;
+
+          //store challenge info for chat
+          let temporary = {};
+          items.forEach((element) => {
+            const key = element.challengeID.toString();
+            temporary[key] = element;
+          });
+          storeChatListDetail(temporary);
+
+          //check if user already joined
+          items.forEach((item) => {
+            if (Number(item.challengeID) === Number(id)) {
+              //matching challengeid found in user
+              setHasJoined(true);
+              return;
+            }
+          });
+        })
+        .catch((err) => console.log(err));
+    }
+  }, [userInfo.userID, id, hasJoined, setHasJoined,storeChatListDetail]);
+
+  const handleJoinClick = async () => {
     if (!userInfo.username || !userInfo.userID) {
       setErrorJoinMessage(
         <>
@@ -54,17 +91,27 @@ const ViewChallenge = () => {
       );
     } else {
       setErrorJoinMessage(null);
-      setHasJoined(true);
+
       // If user can join the challenge, add data to users_has_challenges table
       try {
-        axios.post(`${challengeURL}/join`, {
-          userID: userInfo.userID,
-          challengeID: id,
-          completed: '0'
-      });
-      // console.log(result.response.data);
+        axios
+          .post(`${challengeURL}/join`, {
+            userID: userInfo.userID,
+            challengeID: id,
+            completed: "0",
+          })
+          .then(
+            //include chat to the user in firebase
+            await createUserChat(
+              userInfo.userID,
+              challenge.challengeID,
+              challenge.name
+            )
+          )
+          .then(setHasJoined(true));
+        // console.log(result.response.data);
       } catch (error) {
-      console.error(error.response.data);
+        console.error(error.response.data);
       }
     }
   };
@@ -91,9 +138,17 @@ const ViewChallenge = () => {
       setErrorDeleteMessage(null);
       axios
         .delete(`${challengeURL}/delete/${id}`)
+        .then(deleteChat(id))
         .then(navigate("/challenges"))
         .catch((err) => console.log(err));
     }
+  };
+
+  const handleChatClick = async () => {
+    const chatId = id.toString();
+    //console.log("chatbutton",chatListDetail);
+    await changeChat(chatId);
+    navigate(`/chatroom`);
   };
 
   return (
@@ -117,7 +172,8 @@ const ViewChallenge = () => {
           errorUpdateMessage={errorUpdateMessage}
           errorDeleteMessage={errorDeleteMessage}
           errorJoinMessage={errorJoinMessage}
-          hasJoined = {hasJoined}
+          hasJoined={hasJoined}
+          handleChatClick={handleChatClick}
         />
       ) : (
         <div>
