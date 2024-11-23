@@ -18,15 +18,16 @@ import { db } from "./lib/firebase";
 import { useChatStore } from "./stores/ChatStore";
 import { useInputStore } from "./stores/InputStore";
 import { useActiveTabStore } from "./stores/ActiveTabStore";
+import axios from "axios";
 
 const ChatList = () => {
   const { currentUser } = useUserStore();
-  const { changeChat, currentChatId } = useChatStore();
+  const { changeChat, currentChatId  } = useChatStore();
   const { resetInput } = useInputStore();
   const { setActiveTab } = useActiveTabStore();
   const [chats, setChats] = useState([]);
   const [refresh, setRefresh] = useState(false);
-
+  const [chatsDetails, setChatsDetails] = useState();
   const filteredChats = chats.filter((chatId) => chatId !== undefined);
 
   // Handle when a chat is deleted, remove the chat from the userchat
@@ -63,6 +64,22 @@ const ChatList = () => {
       unsub();
     };
   }, [currentUser.uid, refresh]);
+
+
+  // Get challenge data to retreive challenge name and image
+  useEffect(() => {
+    axios
+      .get(`http://localhost:5000/dashboard/userchallenges/${currentUser.uid}`)
+      .then((res) => {
+        let temporary = {}
+        res.data.forEach(element => {
+          temporary[element.challengeID] = element;
+        });
+        setChatsDetails(temporary);
+          })
+      .catch((err) => console.log(err));
+  }, [currentUser.uid,refresh]);
+
 
   // handle when chat from the list is selected
   const handleSelect = async (chat) => {
@@ -108,15 +125,21 @@ const ChatList = () => {
       {/* USER INFO */}
       <div className="userinfo">
         <div className="user">
-            <img className="user-img" src={currentUser.photoURL ? 
-            currentUser.photoURL : "img/chat/avatar.png"} alt="" 
-            />
+          <img
+            className="user-img"
+            src={
+              currentUser.photoURL
+                ? currentUser.photoURL
+                : "img/chat/avatar.png"
+            }
+            alt=""
+          />
           <span>{currentUser.displayName}</span>
         </div>
         {/*user information - to add later*/}
         <div className="icons"></div>
       </div>
-      
+
       {/* USER'S CHALLENGE LIST' */}
       <div className="challengelist">
         {/*if chat list exists and at least one chat*/}
@@ -128,11 +151,11 @@ const ChatList = () => {
               onClick={() => handleSelect(chat)}
             >
               {/* Challenge photo */}
-              {/* //TODO: change to challenge picture if mysql is made*/}
-              <img className="chal-img" src="img/chat/fitness.png" alt="" />
+              <img className="chal-img" 
+              src={ chatsDetails[chat.chatId].imageURL || "img/chat/fitness.png"} alt="" />
               <div className="texts">
-                {/*//TODO: change to challenge name */}
-                <span>{chat.chatId}</span>
+                {/* challenge name */}
+                <span>{chatsDetails[chat.chatId].name}</span>
                 <p className="lastMessage">
                   {chat.type === "text" ? (
                     chat.lastMessage
