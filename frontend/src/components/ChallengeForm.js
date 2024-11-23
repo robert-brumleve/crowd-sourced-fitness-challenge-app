@@ -24,9 +24,10 @@ const ChallengeForm = ({
     const selectedType = selected[0]?.label || "";
     formik.setFieldValue(name, selectedType);
     formik.setFieldValue(
-      "badgeName",
+      "badgeURL",
       `${process.env.PUBLIC_URL}/img/badges/${selectedType}.jpg`
     );
+    formik.setFieldValue("badgeName", selectedType);
   };
 
   const getSelectedValue = (property, options) => {
@@ -157,10 +158,22 @@ const ChallengeForm = ({
 
       {/* BadgeName Field */}
       <div className="mb-2">
-        <label htmlFor="badgeImage">Badge</label>
-        {formik.values.type ? (
+        <label>Badge</label>
+        <input
+          type="text"
+          className="form-control"
+          name="badgeName"
+          value={formik.values.badgeName}
+          disabled
+        />
+      </div>
+
+      {/* BadgeURL Field */}
+      <div className="mb-2">
+        {/* <label htmlFor="badgeImage">Badge</label> */}
+        {formik.values.badgeURL ? (
           <img
-            src={formik.values.badgeName}
+            src={formik.values.badgeURL}
             alt={formik.values.type}
             style={{ width: "100px", height: "100px", objectFit: "cover" }}
           />
