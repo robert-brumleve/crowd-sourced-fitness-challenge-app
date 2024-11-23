@@ -11,7 +11,6 @@ const createUserChat = async (uid, cid, cname) => {
   const userId = uid.toString();
   const challengeId = cid.toString();
   const challengeName = cname;
-  console.log("userid", userId);
 
   const chatRef = doc(db, "chats", challengeId);
   const userChatRef = doc(db, "userchats", userId);
@@ -24,7 +23,6 @@ const createUserChat = async (uid, cid, cname) => {
     }
 
     if (userChatSnap.exists()) {
-      console.log("usersnap exists");
       //add chat to user
       const chatData = {
         chatId: challengeId,
@@ -32,7 +30,7 @@ const createUserChat = async (uid, cid, cname) => {
         type: "",
         updatedAt: null,
       };
-      console.log(chatData);
+      
       await updateDoc(userChatRef, {
         chats: arrayUnion(chatData),
       });

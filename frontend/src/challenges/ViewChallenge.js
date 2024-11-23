@@ -50,8 +50,7 @@ const ViewChallenge = () => {
   // Then check if user has joined challenged already.
   useEffect(() => {
     if (userInfo.userID != null) {
-      try{
-        axios
+      axios
         .get(
           `http://localhost:5000/dashboard/userchallenges/${userInfo.userID}`
         )
@@ -65,10 +64,7 @@ const ViewChallenge = () => {
             }
           });
         })
-      }catch (error){
-        console.log(error);
-      }
-      
+        .catch((err) => console.log(err));
     }
   }, [userInfo.userID, id, hasJoined, setHasJoined]);
 
@@ -93,7 +89,11 @@ const ViewChallenge = () => {
           })
           .then(
             //include chat to the user in firebase
-            createUserChat(userInfo.userID, challenge.challengeID, challenge.name)
+            createUserChat(
+              userInfo.userID,
+              challenge.challengeID,
+              challenge.name
+            )
           )
           .then(setHasJoined(true));
         // console.log(result.response.data);

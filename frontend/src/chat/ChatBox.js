@@ -9,7 +9,6 @@ import {
   doc,
   getDoc,
   onSnapshot,
-  serverTimestamp,
   updateDoc,
 } from "firebase/firestore";
 import { db } from "./lib/firebase";
@@ -108,10 +107,9 @@ const ChatBox = () => {
       });
 
       const userIds = currentChat.participantId;
-
       //update status of last message seen for each users.
-      userIds.forEach(async (userchatsId) => {
-        const userChatsRef = doc(db, "userchats", userchatsId);
+      userIds.forEach(async (index) => {
+        const userChatsRef = doc(db, "userchats", index.uid);
         const userChatsSnapshot = await getDoc(userChatsRef);
 
         if (userChatsSnapshot.exists()) {
@@ -130,8 +128,8 @@ const ChatBox = () => {
           }
           userChatsData.chats[chatIndex].lastMessage = text;
           userChatsData.chats[chatIndex].isSeen =
-            userchatsId === currentUser.uid ? true : false;
-          userChatsData.chats[chatIndex].updatedAt = serverTimestamp();
+            index.uid === currentUser.uid ? true : false;
+          userChatsData.chats[chatIndex].updatedAt = new Date();
 
           await updateDoc(userChatsRef, {
             chats: userChatsData.chats,
