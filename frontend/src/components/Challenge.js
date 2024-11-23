@@ -46,7 +46,7 @@ const Challenge = (props) => {
             </button>
           ) : (
             <button
-              onClick={() => navigate(`/chatroom`)} // Navigate to chatroom when clicked
+              onClick={props.handleChatClick} // Navigate to chatroom when clicked
               className="btn btn-outline-success me-2"
             >
               Chat

@@ -18,6 +18,7 @@ import upload from "./components/Upload";
 import { useInputStore } from "./stores/InputStore";
 import checkImageExists from "./components/CheckImageExists";
 import { useChatDetailStore } from "./stores/ChatDetailStore";
+import { Link } from "react-router-dom";
 
 const ChatBox = () => {
   const [chat, setChat] = useState();
@@ -149,13 +150,13 @@ const ChatBox = () => {
       {/*--- CHAT TITLE  ---- */}
       <div className="top">
         <div className="challenge">
-          {/*TODO: change to challenge name later */}
+          {chatDetail[currentChatId].imageURL &&
           <img
                 className="chal-pic"
-                src={chatDetail[currentChatId].imageURL 
-                  && chatDetail[currentChatId].imageURL}
+                src={chatDetail[currentChatId].imageURL}
                 alt="."
               />
+          }
           <div className='info'>
             <span className="name">{chatDetail[currentChatId].name}</span>
           {/* get number of participants */}
@@ -165,8 +166,11 @@ const ChatBox = () => {
         </div>
 
         <div className="homeicon">
-          {/*TODO: link to the challenge page*/}
-          <i className="bx bx-home bx-sm"></i>
+        <Link
+           to={`/challenges/view/${currentChatId}`}>
+            <i className="bx bx-home bx-sm"></i>
+           </Link>
+          
           
         </div>
       </div>

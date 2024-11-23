@@ -5,6 +5,7 @@ import Challenge from "../components/Challenge";
 import challengeURL from "../data/challengeURL";
 import deleteChat from "../chat/components/DeleteChat";
 import createUserChat from "../chat/components/CreateUserChat";
+import { useChatStore } from "../chat/stores/ChatStore";
 
 const ViewChallenge = () => {
   const navigate = useNavigate();
@@ -18,6 +19,7 @@ const ViewChallenge = () => {
   const { created_at } = challenge;
   const date = new Date(created_at);
   const formattedDate = created_at ? date.toISOString().split("T")[0] : "";
+  const {changeChat} = useChatStore()
 
   const userInfo = useMemo(
     () => ({
@@ -131,6 +133,11 @@ const ViewChallenge = () => {
     }
   };
 
+  const handleChatClick =() =>{
+    changeChat(id);
+    navigate(`/chatroom`);
+  };
+
   return (
     <div>
       {challenge ? (
@@ -153,6 +160,7 @@ const ViewChallenge = () => {
           errorDeleteMessage={errorDeleteMessage}
           errorJoinMessage={errorJoinMessage}
           hasJoined={hasJoined}
+          handleChatClick={handleChatClick}
         />
       ) : (
         <div>
