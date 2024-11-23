@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useMemo } from "react";
 import axios from "axios";
-import UserChallengeList from "../components/UserChallengeList";
+// import UserChallengeList from "../components/UserChallengeList";
 import Header from "../components/Header";
 // import Greeting from "../components/Greeting";
 import { Link } from "react-router-dom";
@@ -10,7 +10,7 @@ const DashBoard = () => {
   // const { id } = useParams();
   const [challenges, setChallenges] = useState([]);
   const [badges, setBadges] = useState([]);
-  const [errorJoinMessage, setErrorJoinMessage] = useState(null);
+  const [errorJoinMessage, setErrorJoinMessage] = useState();
 
   const userInfo = useMemo(
     () => ({
