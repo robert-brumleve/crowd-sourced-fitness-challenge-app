@@ -154,7 +154,8 @@ const ChatList = () => {
             >
               {/* Challenge photo */}
               <img className="chal-img" 
-              src={ chatDetail[chat.chatId].imageURL || "img/chat/fitness.png"} alt="" />
+              src={ chatDetail[chat.chatId].imageURL !== null ? 
+              chatDetail[chat.chatId].imageURL : "img/chat/fitness.png"} alt="" />
               <div className="texts">
                 {/* challenge name */}
                 <span>{chatDetail[chat.chatId].name}</span>

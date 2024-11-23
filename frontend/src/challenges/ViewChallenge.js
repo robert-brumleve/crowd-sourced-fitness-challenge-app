@@ -92,8 +92,8 @@ const ViewChallenge = () => {
           .then(
             //include chat to the user in firebase
             createUserChat(
-              userInfo.userID,
-              challenge.challengeID,
+              userInfo.userID.toString(),
+              challenge.challengeID.toString(),
               challenge.name
             )
           )
@@ -134,7 +134,7 @@ const ViewChallenge = () => {
   };
 
   const handleChatClick =() =>{
-    changeChat(id.toString());
+    changeChat(challenge.challengeID.toString());
     navigate(`/chatroom`);
   };
 

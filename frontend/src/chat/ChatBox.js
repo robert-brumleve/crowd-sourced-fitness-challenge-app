@@ -150,12 +150,15 @@ const ChatBox = () => {
       {/*--- CHAT TITLE  ---- */}
       <div className="top">
         <div className="challenge">
-          {chatDetail[currentChatId].imageURL &&
+          {chatDetail[currentChatId].imageURL !== null?(
           <img
                 className="chal-pic"
                 src={chatDetail[currentChatId].imageURL}
                 alt="."
               />
+            ) :(
+            <></>
+          )
           }
           <div className='info'>
             <span className="name">{chatDetail[currentChatId].name}</span>
