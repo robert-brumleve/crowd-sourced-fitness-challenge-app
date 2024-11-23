@@ -17,10 +17,18 @@ const getChallenges = async (req, res, next) => {
 };
 
 const createChallenge = async (req, res, next) => {
-  const { name, type, description, difficulty, creatorID, tags, badgeName } =
-    req.body;
+  const {
+    name,
+    type,
+    description,
+    difficulty,
+    creatorID,
+    tags,
+    badgeName,
+    badgeURL,
+  } = req.body;
 
-  console.log("badgeName: ", badgeName);
+  // console.log("badgeName: ", badgeName);
   //handle image
   let imageURL;
   // If the file is uploaded, save it to Google Cloud Storage
@@ -53,8 +61,8 @@ const createChallenge = async (req, res, next) => {
   });
 
   // add new challenge if name is unique
-  const sql = `INSERT INTO challenges (name, type, description, difficulty, creatorID, created_at, imageURL, tags, badgeName)
-     VALUES (?, ?, ?, ?, ?, NOW(), ?, ?, ?)`;
+  const sql = `INSERT INTO challenges (name, type, description, difficulty, creatorID, created_at, imageURL, tags, badgeName, badgeURL)
+     VALUES (?, ?, ?, ?, ?, NOW(), ?, ?, ?, ?)`;
   const values = [
     name,
     type,
@@ -64,6 +72,7 @@ const createChallenge = async (req, res, next) => {
     imageURL,
     tags,
     badgeName,
+    badgeURL,
   ];
   connection.query(sql, values, (insertError, result) => {
     if (insertError) {
