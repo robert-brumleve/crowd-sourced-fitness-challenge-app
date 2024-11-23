@@ -21,6 +21,7 @@ const App = () => {
         <Routes>
           <Route path="/" exact element={<CommunityChallenges />} />
           <Route path="/dashboard/:id" exact element={<DashBoard />} />
+          {/* <Route path="/dashboard//userbadges/:id" element={<DashBoard />} /> */}
           <Route path="/dashboard/updatecompleted/:uid/:cid" element={<DashBoard />} />
           <Route path="/account" element={<NewAccount />} />
           <Route path="/login" element={<Login />} />
