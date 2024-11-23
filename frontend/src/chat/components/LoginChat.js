@@ -1,6 +1,6 @@
 import "../lib/chatroom.css";
 import { db } from "../lib/firebase";
-import { setDoc, doc, getDoc } from "firebase/firestore";
+import { setDoc, doc, getDoc, serverTimestamp } from "firebase/firestore";
 
 const login_chat = async () => {
   //Create user data to firebase if new
@@ -21,6 +21,7 @@ const login_chat = async () => {
         displayName: user.username,
         email: user.email,
         photoURL: user.picture,
+        createdAt: serverTimestamp(),
       };
       //userdata
       console.log("user not in firebase data, creating new data");
