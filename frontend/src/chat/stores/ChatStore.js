@@ -33,13 +33,10 @@ export const useChatStore = create((set) => ({
       return set({ currentChat: null });
     }
   },
-  chatsListDetail:{},
-  SetChatListDetail: (data)=>{
-    try {
-      
-      set({chatsListDetail: data});
-    }catch (err){
-      return set({chatListNames: {}});
-    }
-  },
+  
+  
+    
+    
+    
+    
 }));

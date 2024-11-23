@@ -19,15 +19,16 @@ import { useChatStore } from "./stores/ChatStore";
 import { useInputStore } from "./stores/InputStore";
 import { useActiveTabStore } from "./stores/ActiveTabStore";
 import axios from "axios";
+import { useChatDetailStore } from "./stores/ChatDetailStore";
 
 const ChatList = () => {
   const { currentUser } = useUserStore();
   const { changeChat, currentChatId  } = useChatStore();
+  const { chatDetail, storeChatDetail } = useChatDetailStore();
   const { resetInput } = useInputStore();
   const { setActiveTab } = useActiveTabStore();
   const [chats, setChats] = useState([]);
   const [refresh, setRefresh] = useState(false);
-  const [chatsDetails, setChatsDetails] = useState();
   const filteredChats = chats.filter((chatId) => chatId !== undefined);
 
   // Handle when a chat is deleted, remove the chat from the userchat
@@ -73,9 +74,10 @@ const ChatList = () => {
       .then((res) => {
         let temporary = {}
         res.data.forEach(element => {
-          temporary[element.challengeID] = element;
+          temporary[element.challengeID.toString()] = element;
         });
-        setChatsDetails(temporary);
+        //console.log(temporary);
+        storeChatDetail(temporary);
           })
       .catch((err) => console.log(err));
   }, [currentUser.uid,refresh]);
@@ -152,10 +154,10 @@ const ChatList = () => {
             >
               {/* Challenge photo */}
               <img className="chal-img" 
-              src={ chatsDetails[chat.chatId].imageURL || "img/chat/fitness.png"} alt="" />
+              src={ chatDetail[chat.chatId].imageURL || "img/chat/fitness.png"} alt="" />
               <div className="texts">
                 {/* challenge name */}
-                <span>{chatsDetails[chat.chatId].name}</span>
+                <span>{chatDetail[chat.chatId].name}</span>
                 <p className="lastMessage">
                   {chat.type === "text" ? (
                     chat.lastMessage
