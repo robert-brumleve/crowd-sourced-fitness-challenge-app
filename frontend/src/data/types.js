@@ -9,7 +9,10 @@ const types = [
   { value: 8, label: "Rowing" },
   { value: 9, label: "HIIT" },
   { value: 10, label: "Core" },
-  { value: 11, label: "wellness" },
+  { value: 11, label: "Archery" },
+  { value: 12, label: "Badminton" },
+  { value: 13, label: "Basketball" },
+  { value: 14, label: "Volleyball" },
   
 ];
 export default types;

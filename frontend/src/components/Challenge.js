@@ -14,6 +14,20 @@ const Challenge = (props) => {
           style={{ top: "10px", right: "10px" }}
           aria-label="Close"
         ></Link>
+        <img
+          class="card-img-top"
+          src={
+            props.imageURL ||
+            `${process.env.PUBLIC_URL}/img/defaultChallengeImg.png`
+          }
+          alt="Challenge Detail"
+          style={{
+            height: "10rem",
+            width: "100%",
+            objectFit: "contain",
+            alignSelf: "left",
+          }}
+        ></img>
         <div className="card-body">
           <h5 class="card-title">{props.name}</h5>
           <p className="card-text">{props.description}</p>
@@ -22,9 +36,15 @@ const Challenge = (props) => {
           <li class="list-group-item">Type: {props.type}</li>
           <li class="list-group-item">Level: {props.difficulty}</li>
           <li class="list-group-item">Creator: {props.username}</li>
-          <li class="list-group-item">Image URL: {props.imageURL}</li>
           <li class="list-group-item">Created at: {props.created_at}</li>
           <li class="list-group-item">Tags: {props.tags}</li>
+          <li class="list-group-item">
+            Badge:{" "}
+            <img
+              src={`${process.env.PUBLIC_URL}/img/badges/${props.type}.jpg`}
+              alt={props.type}
+            />
+          </li>
         </ul>
         <div class="card-body">
           {props.errorUpdateMessage && (
