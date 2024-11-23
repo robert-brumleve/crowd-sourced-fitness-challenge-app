@@ -10,46 +10,31 @@ import { useNavigate, Link } from "react-router-dom";
 
 function ChatRoom() {
   const { currentUser, fetchUserInfo } = useUserStore();
-  const { currentChatId } = useChatStore();
+  const { currentChatId} = useChatStore();
   const { activeTab, setActiveTab } = useActiveTabStore();
   const [isMobileView, setIsMobileView] = useState(false);
-
   const navigate = useNavigate();
   const [redirectMessage, setRedirectMessage] = useState("");
-
   const username = localStorage.getItem("username");
   const userID = localStorage.getItem("userID")?.toString();
 
+  
   //listen for user status
   useEffect(() => {
-    const unsub = ()=>{
-       if (!username || !userID) {
-      setRedirectMessage("You must log in to use the chat.");
-      setTimeout(() => navigate("/login"), 5000);
-    }
+    const unsub = () => {
+      if (!username || !userID) {
+        setRedirectMessage("You must log in to use the chat.");
+        setTimeout(() => navigate("/login"), 5000);
+      }
 
-    fetchUserInfo(userID);
-    }
-    return ()=>{
-      unsub();
-    }
-   
-  }, [fetchUserInfo, userID, username, navigate]);
-
-  //listen for user
-  //TODO: Change to SQL user data
-  /*
-  useEffect(() => {
-    const unsub = onAuthStateChanged(auth, (user) => {
-      fetchUserInfo(user?.uid);
-      //console.log("user?:", user?.uid);
-    });
-
+      fetchUserInfo(userID);
+      //getChatListQuery(userID);
+    };
     return () => {
       unsub();
     };
-  }, [fetchUserInfo]);
-*/
+  }, [fetchUserInfo, userID, username, navigate, ]);
+
   //listen for window size change
   useEffect(() => {
     const handleResize = () => setIsMobileView(window.innerWidth <= 655);

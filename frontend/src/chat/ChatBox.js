@@ -17,16 +17,17 @@ import { useUserStore } from "./stores/UserStore";
 import upload from "./components/Upload";
 import { useInputStore } from "./stores/InputStore";
 import checkImageExists from "./components/CheckImageExists";
-import { useChatDetailStore } from "./stores/ChatDetailStore";
+import { useChatListStore } from "./stores/ChatListStore";
 import { Link } from "react-router-dom";
 
 const ChatBox = () => {
   const [chat, setChat] = useState();
   const { text, setText, resetInput, imgInput, setImgInput } = useInputStore();
-  const { currentChatId, fetchChatInfo, currentChat, participants} = useChatStore();
+  const { currentChatId, fetchChatInfo, currentChat, participants } =
+    useChatStore();
   const { currentUser } = useUserStore();
   const lastMessageRef = useRef(null);
-  const { chatDetail } = useChatDetailStore();
+  const { chatListDetail } = useChatListStore();
 
   /* auto scroll to last message*/
   useEffect(() => {
@@ -85,6 +86,7 @@ const ChatBox = () => {
 
   //Handle when sending a message
   const handleSend = async () => {
+    
     if (text === "" && imgInput.file == null) return;
     let imgURL = null;
 
@@ -150,31 +152,25 @@ const ChatBox = () => {
       {/*--- CHAT TITLE  ---- */}
       <div className="top">
         <div className="challenge">
-          {chatDetail[currentChatId].imageURL !== null?(
-          <img
-                className="chal-pic"
-                src={chatDetail[currentChatId].imageURL}
-                alt="."
-              />
-            ) :(
-            <></>
-          )
-          }
-          <div className='info'>
-            <span className="name">{chatDetail[currentChatId].name}</span>
-          {/* get number of participants */}
-          <span className="usernum">( {participants.length} members )</span>
+          {
+          chatListDetail?.[currentChatId]?.imageURL && (
+            <img
+              className="chal-pic"
+              src={chatListDetail[currentChatId].imageURL}
+              alt="."
+            /> 
+          )}
+          <div className="info">
+            <span className="name">{chatListDetail[currentChatId]?.name}</span>
+            {/* get number of participants */}
+            <span className="usernum">( {participants.length} members )</span>
           </div>
-          
         </div>
 
         <div className="homeicon">
-        <Link
-           to={`/challenges/view/${currentChatId}`}>
+          <Link to={`/challenges/view/${currentChatId}`}>
             <i className="bx bx-home bx-sm"></i>
-           </Link>
-          
-          
+          </Link>
         </div>
       </div>
 
@@ -207,9 +203,9 @@ const ChatBox = () => {
               )}
               {message.imgUrl === "" && (
                 <div className="removed">
-                  <i className="bx bx-image"/>
+                  <i className="bx bx-image" />
                   <p>This image was deleted</p>
-                  </div>
+                </div>
               )}
               {message.text !== "" && <p>{message.text}</p>}
 

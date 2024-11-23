@@ -20,7 +20,7 @@ const createUserChat = async (uid, cid, cname) => {
     const userChatSnap = await getDoc(userChatRef);
     //create a chat for pre-existing challenge not added to firebase
     if (!chatSnap.exists()) {
-      createChat(challengeId, challengeName);
+      await createChat(challengeId, challengeName);
     }
     
     if (!userChatSnap.exists()) {

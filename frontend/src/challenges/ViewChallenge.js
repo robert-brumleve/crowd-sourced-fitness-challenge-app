@@ -6,6 +6,7 @@ import challengeURL from "../data/challengeURL";
 import deleteChat from "../chat/components/DeleteChat";
 import createUserChat from "../chat/components/CreateUserChat";
 import { useChatStore } from "../chat/stores/ChatStore";
+import { useChatListStore } from "../chat/stores/ChatListStore";
 
 const ViewChallenge = () => {
   const navigate = useNavigate();
@@ -19,8 +20,8 @@ const ViewChallenge = () => {
   const { created_at } = challenge;
   const date = new Date(created_at);
   const formattedDate = created_at ? date.toISOString().split("T")[0] : "";
-  const {changeChat} = useChatStore()
-
+  const { changeChat } = useChatStore();
+  const {storeChatListDetail} = useChatListStore();
   const userInfo = useMemo(
     () => ({
       username: localStorage.getItem("username"),
@@ -58,6 +59,16 @@ const ViewChallenge = () => {
         )
         .then((res) => {
           const items = res.data;
+
+          //store challenge info for chat
+          let temporary = {};
+          items.forEach((element) => {
+            const key = element.challengeID.toString();
+            temporary[key] = element;
+          });
+          storeChatListDetail(temporary);
+
+          //check if user already joined
           items.forEach((item) => {
             if (Number(item.challengeID) === Number(id)) {
               //matching challengeid found in user
@@ -68,9 +79,9 @@ const ViewChallenge = () => {
         })
         .catch((err) => console.log(err));
     }
-  }, [userInfo.userID, id, hasJoined, setHasJoined]);
+  }, [userInfo.userID, id, hasJoined, setHasJoined,storeChatListDetail]);
 
-  const handleJoinClick = () => {
+  const handleJoinClick = async () => {
     if (!userInfo.username || !userInfo.userID) {
       setErrorJoinMessage(
         <>
@@ -91,9 +102,9 @@ const ViewChallenge = () => {
           })
           .then(
             //include chat to the user in firebase
-            createUserChat(
-              userInfo.userID.toString(),
-              challenge.challengeID.toString(),
+            await createUserChat(
+              userInfo.userID,
+              challenge.challengeID,
               challenge.name
             )
           )
@@ -133,8 +144,10 @@ const ViewChallenge = () => {
     }
   };
 
-  const handleChatClick =() =>{
-    changeChat(challenge.challengeID.toString());
+  const handleChatClick = async () => {
+    const chatId = id.toString();
+    //console.log("chatbutton",chatListDetail);
+    await changeChat(chatId);
     navigate(`/chatroom`);
   };
 

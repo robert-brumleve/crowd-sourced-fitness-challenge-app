@@ -18,13 +18,12 @@ import { db } from "./lib/firebase";
 import { useChatStore } from "./stores/ChatStore";
 import { useInputStore } from "./stores/InputStore";
 import { useActiveTabStore } from "./stores/ActiveTabStore";
-import axios from "axios";
-import { useChatDetailStore } from "./stores/ChatDetailStore";
+import { useChatListStore } from "./stores/ChatListStore";
 
 const ChatList = () => {
   const { currentUser } = useUserStore();
-  const { changeChat, currentChatId  } = useChatStore();
-  const { chatDetail, storeChatDetail } = useChatDetailStore();
+  const { changeChat, currentChatId } = useChatStore();
+  const { chatListDetail } = useChatListStore();
   const { resetInput } = useInputStore();
   const { setActiveTab } = useActiveTabStore();
   const [chats, setChats] = useState([]);
@@ -37,7 +36,7 @@ const ChatList = () => {
       doc(db, "userchats", currentUser.uid),
       async (res) => {
         const items = res.data().chats;
-
+ 
         const promises = items.map(async (item) => {
           const chatDocRef = doc(db, "chats", item.chatId);
           try {
@@ -67,22 +66,6 @@ const ChatList = () => {
   }, [currentUser.uid, refresh]);
 
 
-  // Get challenge data to retreive challenge name and image
-  useEffect(() => {
-    axios
-      .get(`http://localhost:5000/dashboard/userchallenges/${currentUser.uid}`)
-      .then((res) => {
-        let temporary = {}
-        res.data.forEach(element => {
-          temporary[element.challengeID.toString()] = element;
-        });
-        //console.log(temporary);
-        storeChatDetail(temporary);
-          })
-      .catch((err) => console.log(err));
-  }, [currentUser.uid,refresh,storeChatDetail]);
-
-
   // handle when chat from the list is selected
   const handleSelect = async (chat) => {
     const userChatsRef = doc(db, "userchats", currentUser.uid);
@@ -97,7 +80,6 @@ const ChatList = () => {
       const chatIndex = userChatsData.chats.findIndex(
         (c) => c.chatId === chat.chatId
       );
-      //console.log("chatIndex:", chatIndex);
       //exit if no index found.
       if (chatIndex == null) {
         console.log("selected chat no longer exists", chatIndex);
@@ -153,12 +135,18 @@ const ChatList = () => {
               onClick={() => handleSelect(chat)}
             >
               {/* Challenge photo */}
-              <img className="chal-img" 
-              src={ chatDetail[chat.chatId].imageURL !== null ? 
-              chatDetail[chat.chatId].imageURL : "img/chat/fitness.png"} alt="" />
+              <img
+                className="chal-img"
+                src={
+                  chatListDetail[chat.chatId].imageURL
+                    ? chatListDetail[chat.chatId].imageURL
+                    : "img/chat/fitness.png"
+                }
+                alt=""
+              />
               <div className="texts">
                 {/* challenge name */}
-                <span>{chatDetail[chat.chatId].name}</span>
+                <span>{chatListDetail[chat.chatId].name}</span>
                 <p className="lastMessage">
                   {chat.type === "text" ? (
                     chat.lastMessage
