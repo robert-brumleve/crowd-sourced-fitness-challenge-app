@@ -52,7 +52,7 @@ function ChatRoom() {
 */
   //listen for window size change
   useEffect(() => {
-    const handleResize = () => setIsMobileView(window.innerWidth <= 650);
+    const handleResize = () => setIsMobileView(window.innerWidth <= 655);
     handleResize();
     window.addEventListener("resize", handleResize);
     return () => {

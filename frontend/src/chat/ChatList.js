@@ -80,7 +80,7 @@ const ChatList = () => {
         storeChatDetail(temporary);
           })
       .catch((err) => console.log(err));
-  }, [currentUser.uid,refresh]);
+  }, [currentUser.uid,refresh,storeChatDetail]);
 
 
   // handle when chat from the list is selected
