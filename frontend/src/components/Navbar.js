@@ -1,6 +1,6 @@
 import React from "react";
 import { NavLink, useNavigate } from "react-router-dom";
-import personArmsUp from "../data/images/person-arms-up.svg";
+import personArmsUp from "../data/images/logo.png";
 import { useAuth } from "../context/AuthContext"; // Import the useAuth hook
 import "../App.css";
 
@@ -23,7 +23,7 @@ const Navbar = () => {
         <NavLink className="navbar-brand" aria-current="page" to="/">
           <img
             src={personArmsUp}
-            alt="person-arms-up"
+            alt="logo"
             style={{ width: "50px", height: "50px" }}
           />
           Fitness Challenge
