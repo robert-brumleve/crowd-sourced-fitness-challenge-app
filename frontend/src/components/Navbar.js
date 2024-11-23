@@ -59,25 +59,67 @@ const Navbar = () => {
                 Community challenges
               </NavLink>
             </li>
-            
           </ul>
+
           <ul className="navbar-nav  mb-2 mb-lg-0 ">
             {/* Conditionally render login or logout link */}
             {!isAuthenticated ? (
               <>
                 {/* show createAccount in login page instead*/}
                 <li className="nav-item">
-                  <NavLink className="nav-link" aria-current="page" to="/login">
+                  <button
+                    class="btn btn-primary"
+                    type="button"
+                    aria-expanded="false"
+                    onClick={() => navigate("/login")}
+                  >
                     Login
-                  </NavLink>
+                  </button>
                 </li>
               </>
             ) : (
-              <li className="nav-item">
-                <button className="nav-link btn" onClick={handleLogout}>
-                  Logout
-                </button>
-              </li>
+              <>
+                {/* dropdown menu with user info and logout */}
+                <li className="nav-item dropdown">
+                  <button
+                    class="btn btn-primary dropdown-toggle"
+                    type="button"
+                    id="dropdownMenuButton"
+                    data-bs-toggle="dropdown"
+                    aria-expanded="false"
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      gap: "10px",
+                      border: "none",
+                      padding:'5px',
+                    }}
+                  >
+                    <img
+                      className="d-inline-block align-center"
+                      src={
+                        localStorage.getItem("profile_picture")
+                          ? localStorage.getItem("profile_picture")
+                          : "img/chat/avatar.png"
+                      }
+                      alt=""
+                      style={{
+                        width: "30px",
+                        height: "30px",
+                        borderRadius: "50%",
+                      }}
+                    />
+                    {localStorage.getItem("username")}
+                  </button>
+                  <ul class="dropdown-menu">
+                    <li >
+                      <button className="dropdown-item" onClick={handleLogout}>
+                        Logout
+                      </button>
+                    </li>
+                  </ul>
+                </li>
+              </>
             )}
           </ul>
         </div>
