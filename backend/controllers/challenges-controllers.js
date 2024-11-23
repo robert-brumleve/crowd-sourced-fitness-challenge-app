@@ -1,10 +1,10 @@
 const { connection, port } = require("../db_connection");
 // Set up Google Cloud Storage
-const { Storage } = require('@google-cloud/storage');
+const { Storage } = require("@google-cloud/storage");
 const storage = new Storage({
-  keyFilename: './key.json',
+  keyFilename: "./key.json",
 });
-const bucket = storage.bucket('csfca'); 
+const bucket = storage.bucket("csfca");
 
 const getChallenges = async (req, res, next) => {
   sql = "SELECT * FROM challenges";
@@ -17,8 +17,10 @@ const getChallenges = async (req, res, next) => {
 };
 
 const createChallenge = async (req, res, next) => {
-  const { name, type, description, difficulty, creatorID,  tags } =
+  const { name, type, description, difficulty, creatorID, tags, badgeName } =
     req.body;
+
+  console.log("badgeName: ", badgeName);
   //handle image
   let imageURL;
   // If the file is uploaded, save it to Google Cloud Storage
@@ -51,8 +53,8 @@ const createChallenge = async (req, res, next) => {
   });
 
   // add new challenge if name is unique
-  const sql = `INSERT INTO challenges (name, type, description, difficulty, creatorID, created_at, imageURL, tags)
-     VALUES (?, ?, ?, ?, ?, NOW(), ?, ?)`;
+  const sql = `INSERT INTO challenges (name, type, description, difficulty, creatorID, created_at, imageURL, tags, badgeName)
+     VALUES (?, ?, ?, ?, ?, NOW(), ?, ?, ?)`;
   const values = [
     name,
     type,
@@ -61,6 +63,7 @@ const createChallenge = async (req, res, next) => {
     creatorID,
     imageURL,
     tags,
+    badgeName,
   ];
   connection.query(sql, values, (insertError, result) => {
     if (insertError) {
@@ -169,16 +172,11 @@ const searchChallenge = async (req, res, next) => {
 
 const joinChallenge = async (req, res, next) => {
   console.log("Request Info:", req.body);
-  const { userID, challengeID, completed } =
-    req.body;
+  const { userID, challengeID, completed } = req.body;
   // add new challenge if name is unique
   const sql = `INSERT INTO users_has_challenges (userID, challengeID, completed)
      VALUES (?, ?, 0)`;
-  const values = [
-    userID,
-    challengeID,
-    completed,
-  ];
+  const values = [userID, challengeID, completed];
   connection.query(sql, values, (insertError, result) => {
     if (insertError) {
       console.error("Error inserting challenge:", insertError);

@@ -4,9 +4,15 @@ import Select from "react-dropdown-select";
 import difficulty_options from "../data/difficulty";
 import types from "../data/types";
 
-const ChallengeForm = ({ initialValues, validationSchema, onSubmit, userInfo, errorMessage }) => {
+const ChallengeForm = ({
+  initialValues,
+  validationSchema,
+  onSubmit,
+  userInfo,
+  errorMessage,
+}) => {
   const [previewImg, setPreviewImg] = useState(null);
-  
+
   const formik = useFormik({
     initialValues,
     validationSchema,
@@ -15,7 +21,12 @@ const ChallengeForm = ({ initialValues, validationSchema, onSubmit, userInfo, er
 
   // Handle the Select change dynamically
   const handleSelectChange = (name) => (selected) => {
-    formik.setFieldValue(name, selected[0]?.label || "");
+    const selectedType = selected[0]?.label || "";
+    formik.setFieldValue(name, selectedType);
+    formik.setFieldValue(
+      "badgeName",
+      `${process.env.PUBLIC_URL}/img/badges/${selectedType}.jpg`
+    );
   };
 
   const getSelectedValue = (property, options) => {
@@ -25,8 +36,8 @@ const ChallengeForm = ({ initialValues, validationSchema, onSubmit, userInfo, er
   const handleFileChange = (e) => {
     const file = e.target.files[0]; // Get the selected file
     if (file) {
-      formik.setFieldValue("imageURL",file); 
-      const imgUrl = URL.createObjectURL(file); 
+      formik.setFieldValue("imageURL", file);
+      const imgUrl = URL.createObjectURL(file);
       setPreviewImg(imgUrl); // Set the preview image
     }
   };
@@ -118,11 +129,11 @@ const ChallengeForm = ({ initialValues, validationSchema, onSubmit, userInfo, er
           onBlur={formik.handleBlur}
         />
         {previewImg && (
-            <div>
-              <p>Selected Image:</p>
-              <img src={previewImg} alt="Profile" width="50" height="50" />
-            </div>
-          )}
+          <div>
+            <p>Selected Image:</p>
+            <img src={previewImg} alt="Profile" width="50" height="50" />
+          </div>
+        )}
         {formik.touched.imageURL && formik.errors.imageURL && (
           <div className="text-danger">{formik.errors.imageURL}</div>
         )}
@@ -143,6 +154,21 @@ const ChallengeForm = ({ initialValues, validationSchema, onSubmit, userInfo, er
           <div className="text-danger">{formik.errors.tags}</div>
         )}
       </div>
+
+      {/* BadgeName Field */}
+      <div className="mb-2">
+        <label htmlFor="badgeImage">Badge</label>
+        {formik.values.type ? (
+          <img
+            src={formik.values.badgeName}
+            alt={formik.values.type}
+            style={{ width: "100px", height: "100px", objectFit: "cover" }}
+          />
+        ) : (
+          <p>No badge selected</p>
+        )}
+      </div>
+
       {errorMessage && <div className="text-danger">{errorMessage}</div>}
       <button type="submit" className="form-control">
         Submit

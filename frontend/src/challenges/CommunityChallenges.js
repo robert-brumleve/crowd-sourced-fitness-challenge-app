@@ -9,6 +9,7 @@ import challengeURL from "../data/challengeURL";
 const AllChallenges = () => {
   const [challenges, setChallenges] = useState([]);
   const [filteredChallenges, setFilteredChallenges] = useState([]);
+  const [sorting, setSorting] = useState({ field: 'name', ascending: false })
 
   useEffect(() => {
     axios

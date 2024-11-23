@@ -92,9 +92,9 @@ const CreateChallenge = () => {
               description: "A sample description",
               difficulty: "Easy",
               username: userInfo.username,
-              userID: userInfo.userID,
-              
+              userID: userInfo.userID,              
               tags: "wellness",
+              badgeName:"",
             }}
             validationSchema={challengeFormValidation}
             onSubmit={formikSubmit}
