@@ -9,6 +9,8 @@ import { Link } from "react-router-dom";
 const DashBoard = () => {
   // const { id } = useParams();
   const [challenges, setChallenges] = useState([]);
+  const [badges, setBadges] = useState([]);
+  const [errorJoinMessage, setErrorJoinMessage] = useState();
 
   const userInfo = useMemo(
     () => ({
@@ -20,10 +22,8 @@ const DashBoard = () => {
 
   const id = userInfo.userID;
 
+  // Get challenge data based on the userID
   useEffect(() => {
-    // console.log("userID from localStorage:", userInfo.userID);
-
-    // Get challenge data based on the userID
     axios
       .get(`http://localhost:5000/dashboard/userchallenges/${id}`)
       .then((res) => {
@@ -32,6 +32,43 @@ const DashBoard = () => {
       })
       .catch((err) => console.log(err));
   }, [id]);
+
+// Get badges data based on the userID
+  useEffect(() => {
+    axios
+      .get(`http://localhost:5000/dashboard/userbadges/${id}`)
+      .then((res) => {
+        console.log(res);
+        setBadges(res.data);
+      })
+      .catch((err) => console.log(err));
+  }, [id]);
+
+  // Function to handle when user click on Complete Challenge
+  const handleCompleteClick = async (value) => {
+    if (!userInfo.username || !userInfo.userID) {
+      setErrorJoinMessage(
+        <>
+          You should log in to complete this challenge. Click{" "}
+          <Link to="/login">here</Link> to login.
+        </>
+      );
+    } else {
+      setErrorJoinMessage(null);
+      // When user click on Complete challenge, the completed column in users_has_challenges will be updated to 1 (True)
+      const cid = value;
+      try {
+          await axios.post(`http://localhost:5000/dashboard/updatecompleted/${id}/${cid}`, {
+          completed: 1,
+          userid: id,
+          challengeid: cid
+      });
+      // console.log(result.response.data);
+      } catch (error) {
+      console.error(error.response.data);
+      }
+    }
+  };
 
   return (
     <div>
@@ -52,30 +89,23 @@ const DashBoard = () => {
           </div>
         </div>
       </section>
-      <Header header="MY CHALLENGES"/>
-      {/* <div className="table-responsive">
-        <table className="table table-sm table-bordered table-hover">
+
+      <div className="table-responsive" class="py-5 text-center container" >
+        <table className="table table-sm table-bordered table-hover" class="col-lg-6 col-md-8 mx-auto">
           <thead>
-            <th>User ID</th>
-            <th>Challenge ID</th>
-            <th>Name</th>
+            <th>My badges</th>
         </thead>
         <tbody>
-            {challenges.map((item, i) => {
-              return (
-                <UserChallengeList
-                  // key={item.userID}
-                  userID={item.userID}
-                  challengeID={item.challengeID}
-                  name={item.name}
-                />
-              );
-            })}
+            {badges.map((item, i) => (
+              <tr key = {i}>
+                  <td>{item.badgeName}</td>
+              </tr>
+            ))}
           </tbody>
         </table>
-      </div> */}
+      </div>
 
-
+      <Header header="MY CHALLENGES"/>
     <div>
       {challenges.map((item, index) => {
       return (
@@ -122,14 +152,11 @@ const DashBoard = () => {
                               <button
                                 type="button"
                                 class="btn btn-sm btn-outline-secondary"
+                                onClick={() => handleCompleteClick(item.challengeID)}
+                                errorJoinMessage={errorJoinMessage}
                               >
-                                <Link
-                                  to={`/challenges/update/${item.challengeID}`}
-                                  className="btn btn-sm btn-primary mx-2"
-                                >
                                   {" "}
                                   Complete Challenge{" "}
-                                </Link>
                               </button>
                             </div>
                             {/* List the challenge's difficulty level*/}

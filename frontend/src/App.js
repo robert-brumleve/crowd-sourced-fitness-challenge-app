@@ -21,6 +21,8 @@ const App = () => {
         <Routes>
           <Route path="/" exact element={<CommunityChallenges />} />
           <Route path="/dashboard/:id" exact element={<DashBoard />} />
+          {/* <Route path="/dashboard//userbadges/:id" element={<DashBoard />} /> */}
+          <Route path="/dashboard/updatecompleted/:uid/:cid" element={<DashBoard />} />
           <Route path="/account" element={<NewAccount />} />
           <Route path="/login" element={<Login />} />
           <Route path="/challenges" element={<CommunityChallenges />} />
@@ -30,6 +32,7 @@ const App = () => {
           {/* <Route path="/challenges/search/:keywords" element={<SearchChallenge />} /> */}
           <Route path="*" element={<Navigate to="/" />} />
           <Route path="/chatroom" element={<ChatRoom />} />
+
         </Routes>
       </BrowserRouter>
     </AuthProvider>
