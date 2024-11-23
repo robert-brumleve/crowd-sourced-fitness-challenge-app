@@ -9,6 +9,7 @@ import { Link } from "react-router-dom";
 const DashBoard = () => {
   // const { id } = useParams();
   const [challenges, setChallenges] = useState([]);
+  const [errorJoinMessage, setErrorJoinMessage] = useState(null);
 
   const userInfo = useMemo(
     () => ({
@@ -32,6 +33,32 @@ const DashBoard = () => {
       })
       .catch((err) => console.log(err));
   }, [id]);
+
+  const handleCompleteClick = async (value) => {
+    if (!userInfo.username || !userInfo.userID) {
+      setErrorJoinMessage(
+        <>
+          You should log in to complete this challenge. Click{" "}
+          <Link to="/login">here</Link> to login.
+        </>
+      );
+    } else {
+      // setErrorJoinMessage(null);
+      // When user click on Complete challenge, the completed column in users_has_challenges will be updated to 1 (True)
+      const cid = value;
+      try {
+          await axios.post(`http://localhost:5000/dashboard/updatecompleted/${id}/${cid}`, {
+          completed: 1,
+          userid: id,
+          challengeid: cid
+      });
+      // console.log(result.response.data);
+      } catch (error) {
+      console.error(error.response.data);
+      }
+    }
+  };
+
 
   return (
     <div>
@@ -122,14 +149,10 @@ const DashBoard = () => {
                               <button
                                 type="button"
                                 class="btn btn-sm btn-outline-secondary"
+                                onClick={() => handleCompleteClick(item.challengeID)}
                               >
-                                <Link
-                                  to={`/challenges/update/${item.challengeID}`}
-                                  className="btn btn-sm btn-primary mx-2"
-                                >
                                   {" "}
                                   Complete Challenge{" "}
-                                </Link>
                               </button>
                             </div>
                             {/* List the challenge's difficulty level*/}
