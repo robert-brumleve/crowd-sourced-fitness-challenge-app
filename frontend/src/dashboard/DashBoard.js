@@ -153,6 +153,7 @@ const DashBoard = () => {
                                 type="button"
                                 class="btn btn-sm btn-outline-secondary"
                                 onClick={() => handleCompleteClick(item.challengeID)}
+                                errorJoinMessage={errorJoinMessage}
                               >
                                   {" "}
                                   Complete Challenge{" "}
