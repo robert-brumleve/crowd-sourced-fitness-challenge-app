@@ -1,12 +1,12 @@
 const express = require("express");
 
 //for image upload
-const multer = require('multer'); 
+const multer = require("multer");
 const multerStorage = multer.memoryStorage(); // Store files in memory
 const upload = multer({
   storage: multerStorage,
   limits: { fileSize: 5 * 1024 * 1024 }, // Limit to 5MB
-}).single('imageURL');
+}).single("imageURL");
 
 const challengesControllers = require("../controllers/challenges-controllers");
 
@@ -25,5 +25,7 @@ router.patch("/update/:id", challengesControllers.updateChallenge);
 // router.get("/search/:keywords", challengesControllers.searchChallenge);
 
 router.post("/join", challengesControllers.joinChallenge);
+
+router.get("/challengeWithUser", challengesControllers.challengeWithUser);
 
 module.exports = router;
