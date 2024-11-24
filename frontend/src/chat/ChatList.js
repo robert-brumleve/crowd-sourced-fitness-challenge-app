@@ -112,7 +112,7 @@ const ChatList = () => {
           <img
             className="user-img"
             src={
-              currentUser.photoURL !== null
+              (currentUser.photoURL !== null && currentUser.photoURL !== "")
                 ? currentUser.photoURL
                 : "img/chat/avatar.png"
             }
