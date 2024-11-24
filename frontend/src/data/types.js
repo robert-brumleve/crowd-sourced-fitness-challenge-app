@@ -13,7 +13,7 @@ const types = [
   { value: 12, label: "Badminton" },
   { value: 13, label: "Basketball" },
   { value: 14, label: "Volleyball" },
-  { value: 14, label: "HighPlank" },
-  { value: 14, label: "PushUp" },
+  { value: 15, label: "HighPlank" },
+  { value: 16, label: "PushUp" },
 ];
 export default types;

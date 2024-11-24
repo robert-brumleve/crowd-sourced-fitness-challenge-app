@@ -21,7 +21,9 @@ const ViewChallenge = () => {
   const date = new Date(created_at);
   const formattedDate = created_at ? date.toISOString().split("T")[0] : "";
   const { changeChat } = useChatStore();
-  const {storeChatListDetail} = useChatListStore();
+  const { storeChatListDetail } = useChatListStore();
+  const [challengeListWithJoinedUsers, setChallengeListWithJoinedUsers] =
+    useState([]);
   const userInfo = useMemo(
     () => ({
       username: localStorage.getItem("username"),
@@ -29,6 +31,18 @@ const ViewChallenge = () => {
     }),
     []
   );
+
+  useEffect(() => {
+    axios
+      .get(`${challengeURL}/challengeWithUser`)
+
+      .then((res) => {
+        console.log("res", res);
+        setChallengeListWithJoinedUsers(res.data);
+        console.log("challengeListWithJoinedUsers:", res.data);
+      })
+      .catch((err) => console.log(err));
+  }, []);
 
   useEffect(() => {
     // Get challenge data based on the ID
@@ -79,7 +93,7 @@ const ViewChallenge = () => {
         })
         .catch((err) => console.log(err));
     }
-  }, [userInfo.userID, id, hasJoined, setHasJoined,storeChatListDetail]);
+  }, [userInfo.userID, id, hasJoined, setHasJoined, storeChatListDetail]);
 
   const handleJoinClick = async () => {
     if (!userInfo.username || !userInfo.userID) {
@@ -127,21 +141,35 @@ const ViewChallenge = () => {
   };
 
   const handleDeleteClick = () => {
+    console.log("id", typeof id);
+    // console.log("challengeListWithJoinedUsers", challengeListWithJoinedUsers)
     if (!isAuthorized) {
       // Show error message and prevent navigation
       setErrorDeleteMessage("You are not authorized to delete this challenge.");
-    } else {
-      const confirmed = window.confirm(
-        "Are you sure you want to delete this challenge?"
-      );
-      if (!confirmed) return;
-      setErrorDeleteMessage(null);
-      axios
-        .delete(`${challengeURL}/delete/${id}`)
-        .then(deleteChat(id))
-        .then(navigate("/challenges"))
-        .catch((err) => console.log(err));
     }
+    const challengeIDListWithJoinedUsers = challengeListWithJoinedUsers.map(
+      (challenge) => challenge.challengeID
+    );
+    console.log("list", challengeIDListWithJoinedUsers)
+    const isChallengeJoined = challengeIDListWithJoinedUsers.includes(parseInt(id, 10));
+    console.log("isChallengeJoined", isChallengeJoined);
+
+    if (isChallengeJoined) {
+      setErrorDeleteMessage(
+        "Challenge is not able to be deleted because someone has joined this challenge"
+      );
+      return;
+    }
+    const confirmed = window.confirm(
+      "Are you sure you want to delete this challenge?"
+    );
+    if (!confirmed) return;
+    setErrorDeleteMessage(null);
+    axios
+      .delete(`${challengeURL}/delete/${id}`)
+      .then(deleteChat(id))
+      .then(navigate("/challenges"))
+      .catch((err) => console.log(err));
   };
 
   const handleChatClick = async () => {

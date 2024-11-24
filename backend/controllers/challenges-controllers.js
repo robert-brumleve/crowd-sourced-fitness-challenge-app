@@ -179,6 +179,21 @@ const searchChallenge = async (req, res, next) => {
   });
 };
 
+//get list of challngeID that has users joined
+const challengeWithUser = async (req, res, next) => {
+  const sql = "SELECT challengeID FROM users_has_challenges";
+  connection.query(sql, (err, result) => {
+    if (err) {
+      console.error("Error fetgettingching challenge data:", err.message);
+      return res.status(500).json({ error: "Failed to get challenges" });
+    }
+    if (result.length === 0) {
+      return res.status(404).json({ message: "No challenges found" });
+    }
+    return res.status(200).json(result);
+  });
+};
+
 const joinChallenge = async (req, res, next) => {
   console.log("Request Info:", req.body);
   const { userID, challengeID, completed } = req.body;
@@ -205,3 +220,4 @@ exports.deleteChallengeById = deleteChallengeById;
 exports.updateChallenge = updateChallenge;
 exports.searchChallenge = searchChallenge;
 exports.joinChallenge = joinChallenge;
+exports.challengeWithUser = challengeWithUser;
