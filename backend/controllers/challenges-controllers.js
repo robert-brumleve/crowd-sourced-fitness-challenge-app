@@ -28,7 +28,8 @@ const createChallenge = async (req, res, next) => {
     badgeURL,
   } = req.body;
 
-  // console.log("badgeName: ", badgeName);
+
+  console.log("req.body: ", req.body);
   //handle image
   let imageURL;
   // If the file is uploaded, save it to Google Cloud Storage
@@ -133,10 +134,39 @@ const deleteChallengeById = async (req, res, next) => {
 // update the challenge with the provided values
 const updateChallenge = async (req, res, next) => {
   const id = req.params.id;
+  console.log("type of id", typeof id);
   console.log("challengeID " + id);
-  const { name, type, description, difficulty, creatorID, imageURL, tags } =
-    req.body;
-  const sql = `UPDATE challenges SET name=?,type=?, description=?, difficulty=?, creatorID=?, imageURL=?, tags=? WHERE challengeID=?`;
+  let {
+    name,
+    type,
+    description,
+    difficulty,
+    creatorID,
+    // imageURL,
+    tags,
+    badgeName,
+    badgeURL,
+  } = req.body;
+  console.log("req.body", req.body);
+  console.log("req.body keys:", Object.keys(req.body));
+  let imageURL;
+  // If the file is uploaded, save it to Google Cloud Storage
+  if (req.file) {
+    const fileName = `${Date.now()}_${req.file.originalname}`;
+    const file = bucket.file(fileName);
+    // Upload the file to the bucket (no need to set ACL explicitly with UBLA enabled)
+    await file.save(req.file.buffer, {
+      metadata: {
+        contentType: req.file.mimetype,
+      },
+    });
+    // Generate the public URL for the uploaded file
+    const publicUrl = `https://storage.googleapis.com/${bucket.name}/${file.name}`;
+    imageURL = publicUrl;
+  } else {
+    imageURL = null;
+  }
+  const sql = `UPDATE challenges SET name=?,type=?, description=?, difficulty=?, creatorID=?, imageURL=?, tags=?, badgeName=?, badgeURL=? WHERE challengeID=?`;
   const values = [
     name,
     type,
@@ -145,6 +175,8 @@ const updateChallenge = async (req, res, next) => {
     creatorID,
     imageURL,
     tags,
+    badgeName,
+    badgeURL,
     id,
   ];
   connection.query(sql, values, (err, result) => {

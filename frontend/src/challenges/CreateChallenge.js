@@ -44,6 +44,7 @@ const CreateChallenge = () => {
 
       //send request(handle file upload)
       await axios
+
         .post(challengeURL, formData, {
           headers: {
             "Content-Type": "multipart/form-data",
