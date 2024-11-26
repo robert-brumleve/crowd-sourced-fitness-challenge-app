@@ -38,9 +38,9 @@ const ViewChallenge = () => {
       .get(`${challengeURL}/challengeWithUser`)
 
       .then((res) => {
-        console.log("res", res);
+        //console.log("res", res);
         setChallengeListWithJoinedUsers(res.data);
-        console.log("challengeListWithJoinedUsers:", res.data);
+        //console.log("challengeListWithJoinedUsers:", res.data);
       })
       .catch((err) => console.log(err));
   }, []);
@@ -65,9 +65,7 @@ const ViewChallenge = () => {
 
     // Get chatinfo from the chat
     fetchChatInfo(id.toString());
-    
-    }, [userInfo.userID, id, fetchChatInfo]);
-
+  }, [userInfo.userID, id, fetchChatInfo]);
 
   // Get challenge data based on the userID
   // Then check if user has joined challenged already.
@@ -156,8 +154,10 @@ const ViewChallenge = () => {
     const challengeIDListWithJoinedUsers = challengeListWithJoinedUsers.map(
       (challenge) => challenge.challengeID
     );
-    console.log("list", challengeIDListWithJoinedUsers)
-    const isChallengeJoined = challengeIDListWithJoinedUsers.includes(parseInt(id, 10));
+    console.log("list", challengeIDListWithJoinedUsers);
+    const isChallengeJoined = challengeIDListWithJoinedUsers.includes(
+      parseInt(id, 10)
+    );
     console.log("isChallengeJoined", isChallengeJoined);
 
     if (isChallengeJoined) {
@@ -189,31 +189,32 @@ const ViewChallenge = () => {
     <div>
       {challenge ? (
         <>
-        <Challenge
-          key={challenge.challengeID}
-          challengeID={challenge.challengeID}
-          name={challenge.name}
-          description={challenge.description}
-          type={challenge.type}
-          difficulty={challenge.difficulty}
-          creatorID={challenge.creatorID}
-          username={challenge.username}
-          imageURL={challenge.imageURL}
-          created_at={formattedDate}
-          tags={challenge.tags}
-          handleUpdateClick={handleUpdateClick}
-          handleDeleteClick={handleDeleteClick}
-          handleJoinClick={handleJoinClick}
-          errorUpdateMessage={errorUpdateMessage}
-          errorDeleteMessage={errorDeleteMessage}
-          errorJoinMessage={errorJoinMessage}
-          hasJoined={hasJoined}
-          handleChatClick={handleChatClick}
-        />
-        {currentChat && currentChat.images.length > 0 &&
-        <ImageAlbum images={currentChat.images}/>}
-
-      </>
+          <Challenge
+            key={challenge.challengeID}
+            challengeID={challenge.challengeID}
+            name={challenge.name}
+            description={challenge.description}
+            type={challenge.type}
+            difficulty={challenge.difficulty}
+            creatorID={challenge.creatorID}
+            username={challenge.username}
+            imageURL={challenge.imageURL}
+            created_at={formattedDate}
+            tags={challenge.tags}
+            handleUpdateClick={handleUpdateClick}
+            handleDeleteClick={handleDeleteClick}
+            handleJoinClick={handleJoinClick}
+            errorUpdateMessage={errorUpdateMessage}
+            errorDeleteMessage={errorDeleteMessage}
+            errorJoinMessage={errorJoinMessage}
+            hasJoined={hasJoined}
+            handleChatClick={handleChatClick}
+            isAuthorized={isAuthorized}
+          />
+          {currentChat && currentChat.images.length > 0 && (
+            <ImageAlbum images={currentChat.images} />
+          )}
+        </>
       ) : (
         <div>
           <p>No challenge available. Create a new one</p>
