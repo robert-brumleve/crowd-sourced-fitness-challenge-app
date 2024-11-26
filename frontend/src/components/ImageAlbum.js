@@ -23,7 +23,7 @@ const ImageAlbum = ({ images }) => {
                 <img
                   src={image.imgUrl}
                   className="d-block w-100 img-fluid rounded" // Make sure images are responsive
-                  alt={`Image ${index + 1}`}
+                  alt=""
                   style={{
                     cursor: "pointer",
                     height: "auto", // Maintain aspect ratio
@@ -66,7 +66,7 @@ const ImageAlbum = ({ images }) => {
                 <div className="modal-body d-flex justify-content-center align-items-center text-center">
                   <img
                     src={image.imgUrl} // Display the image in the modal
-                    alt={`Image ${index + 1}`}
+                    alt=""
                     className="img-fluid rounded" // Ensure the image is responsive
                     style={{
                       //width: "100%", // Ensure image takes full width
