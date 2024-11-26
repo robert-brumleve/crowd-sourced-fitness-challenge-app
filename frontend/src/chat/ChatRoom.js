@@ -49,7 +49,7 @@ function ChatRoom() {
 useEffect(()=>{
   if (currentChatId) {
     setActiveTab("chatbox");};
-},[currentChatId]);
+},[currentChatId, setActiveTab]);
 
   //Checks if chat is selected to switch to chatbox in mobileview
   const isChatSelected = () => {

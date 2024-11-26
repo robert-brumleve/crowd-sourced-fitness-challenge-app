@@ -120,7 +120,7 @@ const DashBoard = () => {
                   <div class="col">
                     <div class="card shadow-sm">
                       {item.imageURL ? (
-                        <img src={item.imageURL} />
+                        <img src={item.imageURL} alt=""/>
                       ) : (
                         <>
                           <svg
