@@ -114,7 +114,9 @@ const DashBoard = () => {
                   <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
                     <div class="col">
                       <div class="card shadow-sm">
-                        <svg
+                        {item.imageURL ?
+                        (<img src={item.imageURL}/>)
+                        :(<svg
                           class="bd-placeholder-img card-img-top"
                           width="100%"
                           height="225"
@@ -130,7 +132,8 @@ const DashBoard = () => {
                             Thumbnail
                           </text>
                         </svg>
-
+)}
+                        
                         <div class="card-body" key={ index }>
                           <p class="card-text">{item.name}</p>
                           <div class="d-flex justify-content-between align-items-center">
