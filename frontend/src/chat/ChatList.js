@@ -137,7 +137,7 @@ const ChatList = () => {
               {/* Challenge photo */}
               <img
                 className="chal-img"
-                src={
+                src={ chatListDetail &&
                   chatListDetail[chat.chatId].imageURL
                     ? chatListDetail[chat.chatId].imageURL
                     : "img/chat/fitness.png"
@@ -146,7 +146,7 @@ const ChatList = () => {
               />
               <div className="texts">
                 {/* challenge name */}
-                <span>{chatListDetail[chat.chatId].name}</span>
+                <span>{chatListDetail && chatListDetail[chat.chatId].name}</span>
                 <p className="lastMessage">
                   {chat.type === "text" ? (
                     chat.lastMessage
