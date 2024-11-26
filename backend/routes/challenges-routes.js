@@ -20,7 +20,7 @@ router.get("/view/:id", challengesControllers.getChallengeById);
 
 router.delete("/delete/:id", challengesControllers.deleteChallengeById);
 
-router.patch("/update/:id", challengesControllers.updateChallenge);
+router.patch("/update/:id", upload, challengesControllers.updateChallenge);
 
 // router.get("/search/:keywords", challengesControllers.searchChallenge);
 
