@@ -39,10 +39,23 @@ const UpdateChallenge = () => {
   }
 
   const updateChallenge = async (values) => {
+    console.log("values", values);
+    const formData = new FormData();
+    for (const key in values) {
+      if (values[key] !== null && values[key] !== "") {
+        formData.append(key, values[key]);
+      }
+    }
+    
     try {
-      await axios.patch(`${challengeURL}/update/${id}`, values)
-      .then(updateChat(id,values.name))
-      .then(navigate("/challenges"));
+      await axios
+        .patch(`${challengeURL}/update/${id}`, formData, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        })
+        .then(updateChat(id, values.name))
+        .then(navigate("/challenges"));
     } catch (error) {
       console.log(error);
       if (error.response?.data?.message === "Challenge name already exists") {
@@ -69,7 +82,16 @@ const UpdateChallenge = () => {
           ></Link>
           <div className="w-50 bg-white rounded p-3"></div>
           <ChallengeForm
-            initialValues={challenge}
+            initialValues={
+              challenge || {
+                name: "",
+                type: "",
+                difficulty: "",
+                description: "",
+                tags: "",
+                imageURL: "",
+              }
+            }
             validationSchema={challengeFormValidation}
             onSubmit={updateChallenge}
             userInfo={userInfo}

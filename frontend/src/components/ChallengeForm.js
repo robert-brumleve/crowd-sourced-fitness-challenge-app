@@ -14,6 +14,7 @@ const ChallengeForm = ({
   const [previewImg, setPreviewImg] = useState(null);
 
   const formik = useFormik({
+    enableReinitialize: true,
     initialValues,
     validationSchema,
     onSubmit,

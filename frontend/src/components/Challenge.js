@@ -3,7 +3,6 @@ import { Link } from "react-router-dom";
 import Header from "./Header";
 
 const Challenge = (props) => {
-  
   return (
     <div>
       <Header header="CHALLENGE DETAIL" />
@@ -38,11 +37,19 @@ const Challenge = (props) => {
           <li class="list-group-item">Creator: {props.username}</li>
           <li class="list-group-item">Created at: {props.created_at}</li>
           <li class="list-group-item">Tags: {props.tags}</li>
-          <li class="list-group-item">
-            Badge:{" "}
+          <li
+            className="list-group-item"
+            style={{ display: "flex", alignItems: "center" }}
+          >
+            <span style={{ marginRight: "1rem" }}>Badge:</span>
             <img
               src={`${process.env.PUBLIC_URL}/img/badges/${props.type}.jpg`}
               alt={props.type}
+              style={{
+                height: "5rem",
+                width: "5rem", // Ensures square shape
+                objectFit: "contain",
+              }}
             />
           </li>
         </ul>
