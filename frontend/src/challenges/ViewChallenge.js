@@ -7,6 +7,7 @@ import deleteChat from "../chat/components/DeleteChat";
 import createUserChat from "../chat/components/CreateUserChat";
 import { useChatStore } from "../chat/stores/ChatStore";
 import { useChatListStore } from "../chat/stores/ChatListStore";
+import ImageAlbum from "../components/ImageAlbum";
 
 const ViewChallenge = () => {
   const navigate = useNavigate();
@@ -20,7 +21,7 @@ const ViewChallenge = () => {
   const { created_at } = challenge;
   const date = new Date(created_at);
   const formattedDate = created_at ? date.toISOString().split("T")[0] : "";
-  const { changeChat } = useChatStore();
+  const { changeChat, fetchChatInfo, currentChat } = useChatStore();
   const { storeChatListDetail } = useChatListStore();
   const [challengeListWithJoinedUsers, setChallengeListWithJoinedUsers] =
     useState([]);
@@ -61,7 +62,12 @@ const ViewChallenge = () => {
         }
       })
       .catch((err) => console.log(err));
-  }, [userInfo.userID, id]);
+
+    // Get chatinfo from the chat
+    fetchChatInfo(id.toString());
+    
+    }, [userInfo.userID, id, fetchChatInfo]);
+
 
   // Get challenge data based on the userID
   // Then check if user has joined challenged already.
@@ -182,6 +188,7 @@ const ViewChallenge = () => {
   return (
     <div>
       {challenge ? (
+        <>
         <Challenge
           key={challenge.challengeID}
           challengeID={challenge.challengeID}
@@ -203,6 +210,10 @@ const ViewChallenge = () => {
           hasJoined={hasJoined}
           handleChatClick={handleChatClick}
         />
+        {currentChat && currentChat.images.length > 0 &&
+        <ImageAlbum images={currentChat.images}/>}
+
+      </>
       ) : (
         <div>
           <p>No challenge available. Create a new one</p>
