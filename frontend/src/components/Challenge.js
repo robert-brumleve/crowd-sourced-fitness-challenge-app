@@ -4,9 +4,9 @@ import Header from "./Header";
 
 const Challenge = (props) => {
   return (
-    <div>
+    <div className="mx-auto">
       <Header header="CHALLENGE DETAIL" />
-      <div className="card mx-auto" style={{ width: "45rem" }}>
+      <div className="card mx-auto" style={{ maxWidth: "45rem" }}>
         <Link
           to="/challenges"
           className="btn-close btn-close-dark position-absolute"
@@ -80,18 +80,24 @@ const Challenge = (props) => {
             </button>
           )}
 
-          <button
-            onClick={props.handleUpdateClick}
-            className="btn btn-outline-info me-2"
-          >
-            Update
-          </button>
-          <button
-            onClick={props.handleDeleteClick}
-            className="btn btn-outline-danger"
-          >
-            Delete
-          </button>
+          {!props.isAuthorized ? (
+            <></>
+          ) : (
+            <>
+              <button
+                onClick={props.handleUpdateClick}
+                className="btn btn-outline-info me-2"
+              >
+                Update
+              </button>
+              <button
+                onClick={props.handleDeleteClick}
+                className="btn btn-outline-danger"
+              >
+                Delete
+              </button>
+            </>
+          )}
         </div>
       </div>
     </div>

@@ -45,6 +45,12 @@ function ChatRoom() {
     };
   }, []);
 
+  //listen chatid and change active tab for mobilesize
+useEffect(()=>{
+  if (currentChatId) {
+    setActiveTab("chatbox");};
+},[currentChatId, setActiveTab]);
+
   //Checks if chat is selected to switch to chatbox in mobileview
   const isChatSelected = () => {
     if (currentChatId) {

@@ -5,7 +5,6 @@ import Header from "../components/Header";
 // import Greeting from "../components/Greeting";
 import { Link } from "react-router-dom";
 
-
 const DashBoard = () => {
   // const { id } = useParams();
   const [challenges, setChallenges] = useState([]);
@@ -33,7 +32,7 @@ const DashBoard = () => {
       .catch((err) => console.log(err));
   }, [id]);
 
-// Get badges data based on the userID
+  // Get badges data based on the userID
   useEffect(() => {
     axios
       .get(`http://localhost:5000/dashboard/userbadges/${id}`)
@@ -58,14 +57,17 @@ const DashBoard = () => {
       // When user click on Complete challenge, the completed column in users_has_challenges will be updated to 1 (True)
       const cid = value;
       try {
-          await axios.post(`http://localhost:5000/dashboard/updatecompleted/${id}/${cid}`, {
-          completed: 1,
-          userid: id,
-          challengeid: cid
-      });
-      // console.log(result.response.data);
+        await axios.post(
+          `http://localhost:5000/dashboard/updatecompleted/${id}/${cid}`,
+          {
+            completed: 1,
+            userid: id,
+            challengeid: cid,
+          }
+        );
+        // console.log(result.response.data);
       } catch (error) {
-      console.error(error.response.data);
+        console.error(error.response.data);
       }
     }
   };
@@ -90,89 +92,98 @@ const DashBoard = () => {
         </div>
       </section>
 
-      <div className="table-responsive" class="py-5 text-center container" >
-        <table className="table table-sm table-bordered table-hover" class="col-lg-6 col-md-8 mx-auto">
+      <div className="table-responsive" class="py-5 text-center container">
+        <table
+          className="table table-sm table-bordered table-hover"
+          class="col-lg-6 col-md-8 mx-auto"
+        >
           <thead>
             <th>My badges</th>
-        </thead>
-        <tbody>
+          </thead>
+          <tbody>
             {badges.map((item, i) => (
-              <tr key = {i}>
-                  <td>{item.badgeName}</td>
+              <tr key={i}>
+                <td>{item.badgeName}</td>
               </tr>
             ))}
           </tbody>
         </table>
       </div>
 
-      <Header header="MY CHALLENGES"/>
-    <div>
-      {challenges.map((item, index) => {
-      return (
-      <div class="album py-5 bg-light">
-                <div class="container">
-                  <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
-                    <div class="col">
-                      <div class="card shadow-sm">
-                        <svg
-                          class="bd-placeholder-img card-img-top"
-                          width="100%"
-                          height="225"
-                          xmlns="http://www.w3.org/2000/svg"
-                          role="img"
-                          aria-label="Placeholder: Thumbnail"
-                          preserveAspectRatio="xMidYMid slice"
-                          focusable="false"
-                        >
-                          <title>Placeholder</title>
-                          <rect width="100%" height="100%" fill="#55595c" />
-                          <text x="50%" y="50%" fill="#eceeef" dy=".3em">
-                            Thumbnail
-                          </text>
-                        </svg>
+      <Header header="MY CHALLENGES" />
+      <div>
+        {challenges.map((item, index) => {
+          return (
+            <div class="album py-5 bg-light">
+              <div class="container">
+                <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
+                  <div class="col">
+                    <div class="card shadow-sm">
+                      {item.imageURL ? (
+                        <img src={item.imageURL} alt=""/>
+                      ) : (
+                        <>
+                          <svg
+                            class="bd-placeholder-img card-img-top"
+                            width="100%"
+                            height="225"
+                            xmlns="http://www.w3.org/2000/svg"
+                            role="img"
+                            aria-label="Placeholder: Thumbnail"
+                            preserveAspectRatio="xMidYMid slice"
+                            focusable="false"
+                          >
+                            <title>Placeholder</title>
+                            <rect width="100%" height="100%" fill="#55595c" />
+                            <text x="50%" y="50%" fill="#eceeef" dy=".3em">
+                              Thumbnail
+                            </text>
+                          </svg>
+                        </>
+                      )}
 
-                        <div class="card-body" key={ index }>
-                          <p class="card-text">{item.name}</p>
-                          <div class="d-flex justify-content-between align-items-center">
-                            <div class="btn-group">
-                              {/* Button to view challenge */}
-                              <button
-                                type="button"
-                                class="btn btn-sm btn-outline-secondary"
+                      <div class="card-body" key={index}>
+                        <p class="card-text">{item.name}</p>
+                        <div class="d-flex justify-content-between align-items-center">
+                          <div class="btn-group">
+                            {/* Button to view challenge */}
+                            <button
+                              type="button"
+                              class="btn btn-sm btn-outline-secondary"
+                            >
+                              <Link
+                                to={`/challenges/view/${item.challengeID}`}
+                                className="btn btn-info btn-sm"
                               >
-                                <Link
-                                  to={`/challenges/view/${item.challengeID}`}
-                                  className="btn btn-info btn-sm"
-                                >
-                                  View{" "}
-                                </Link>
-                              </button>
+                                View{" "}
+                              </Link>
+                            </button>
 
-                              {/* Button to complete challenge */}
-                              <button
-                                type="button"
-                                class="btn btn-sm btn-outline-secondary"
-                                onClick={() => handleCompleteClick(item.challengeID)}
-                                errorJoinMessage={errorJoinMessage}
-                              >
-                                  {" "}
-                                  Complete Challenge{" "}
-                              </button>
-                            </div>
-                            {/* List the challenge's difficulty level*/}
-                            <small class="text-muted">{item.difficulty}</small>
+                            {/* Button to complete challenge */}
+                            <button
+                              type="button"
+                              class="btn btn-sm btn-outline-secondary"
+                              onClick={() =>
+                                handleCompleteClick(item.challengeID)
+                              }
+                              errorJoinMessage={errorJoinMessage}
+                            >
+                              {" "}
+                              Complete Challenge{" "}
+                            </button>
                           </div>
+                          {/* List the challenge's difficulty level*/}
+                          <small class="text-muted">{item.difficulty}</small>
                         </div>
                       </div>
                     </div>
                   </div>
                 </div>
               </div>
-              );
-            })}
-          </div>
-
-
+            </div>
+          );
+        })}
+      </div>
     </div>
   );
 };
