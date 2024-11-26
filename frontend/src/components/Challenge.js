@@ -4,9 +4,9 @@ import Header from "./Header";
 
 const Challenge = (props) => {
   return (
-    <div>
+    <div className="mx-auto" >
       <Header header="CHALLENGE DETAIL" />
-      <div className="card mx-auto" style={{ width: "45rem" }}>
+      <div className="card mx-auto" style={{ maxWidth: "45rem" }}>
         <Link
           to="/challenges"
           className="btn-close btn-close-dark position-absolute"
