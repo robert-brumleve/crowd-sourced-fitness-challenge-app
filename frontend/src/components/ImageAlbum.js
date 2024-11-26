@@ -10,9 +10,9 @@ const ImageAlbum = ({ images }) => {
         <span className="fs-4 fw-bold mb-3 d-block text-center">
           Gallery of Shared Images
         </span>
-        <div className="row">
+        <div className="row row-cols-2">
           {images.map((image, index) => (
-            <div className="col-lg-4 col-md-6 mb-4 mb-lg-0" key={index}>
+            <div className="col-md-4 mb-4 mb-lg-0" key={index}>
               <div
                 className="bg-image hover-overlay ripple shadow-1-strong rounded
                 justify-content-center d-flex "
@@ -28,7 +28,7 @@ const ImageAlbum = ({ images }) => {
                     cursor: "pointer",
                     height: "auto", // Maintain aspect ratio
                     maxHeight: "500px",
-                    maxWidth: "95%", // Prevent image from overflowing
+                    maxWidth: "200px", // Prevent image from overflowing
                     padding: "5px",
                   }}
                 />
