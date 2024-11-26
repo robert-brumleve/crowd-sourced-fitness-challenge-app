@@ -136,9 +136,6 @@ const updateChallenge = async (req, res, next) => {
   const id = req.params.id;
   console.log("type of id", typeof id);
   console.log("challengeID " + id);
-  // if (!req.body || Object.keys(req.body).length === 0) {
-  //   return res.status(400).json({ message: "Request body is empty" });
-  // }
   let {
     name,
     type,
