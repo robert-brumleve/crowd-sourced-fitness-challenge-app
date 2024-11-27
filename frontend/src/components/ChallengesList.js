@@ -3,23 +3,34 @@ import { Link } from "react-router-dom";
 
 const ChallengeList = (props) => {
   return (
-    <tr key={props.challengeID} className="text-center">
-      {/* <th scope="row">{props.challengeID}</th> */}
-      <td className="text-center col-sm-3">
-        {" "}
+    <div className="card" style={{ width: "18rem" }}>
+      <img
+        className="card-img-top"
+        src={
+          props.imageURL ||
+          `${process.env.PUBLIC_URL}/img/defaultChallengeImg.png`
+        }
+        alt="Challenge Detail"
+        style={{
+          height: "10rem",
+          width: "100%",
+        }}
+      />
+      <div className="card-body">
+        <h5 className="card-title">{props.name}</h5>
+        <p className="card-text">
+          {props.description.split(" ").slice(0, 10).join(" ")}
+          {props.description.split(" ").length > 10 && "..."}
+        </p>
+        <p className="card-text">Type: {props.type}</p>
         <Link
           to={`/challenges/view/${props.challengeID}`}
           className="text-decoration-none"
         >
-          {props.name}
+          View detail
         </Link>
-        {props.errorMessage && (
-          <div className="alert alert-danger">{props.errorMessage}</div>
-        )}
-      </td>
-      <td className="text-center col-sm-1">{props.type}</td>
-      <td className="text-center col-sm-1">{props.difficulty}</td>
-    </tr>
+      </div>
+    </div>
   );
 };
 

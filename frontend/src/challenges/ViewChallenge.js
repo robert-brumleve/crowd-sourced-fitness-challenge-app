@@ -2,7 +2,7 @@ import React, { useEffect, useState, useMemo } from "react";
 import axios from "axios";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import Challenge from "../components/Challenge";
-import challengeURL from "../data/challengeURL";
+import url from "../components/Backend_URL";
 import deleteChat from "../chat/components/DeleteChat";
 import createUserChat from "../chat/components/CreateUserChat";
 import { useChatStore } from "../chat/stores/ChatStore";
@@ -35,7 +35,7 @@ const ViewChallenge = () => {
 
   useEffect(() => {
     axios
-      .get(`${challengeURL}/challengeWithUser`)
+      .get(`${url}/challenges/challengeWithUser`)
 
       .then((res) => {
         //console.log("res", res);
@@ -49,7 +49,7 @@ const ViewChallenge = () => {
     // Get challenge data based on the ID
     console.log("userID from localStorage:", userInfo.userID);
     axios
-      .get(`${challengeURL}/view/${id}`)
+      .get(`${url}/challenges/view/${id}`)
       .then((res) => {
         //console.log(res);
         setChallenge(res.data[0]);
@@ -73,7 +73,7 @@ const ViewChallenge = () => {
     if (userInfo.userID != null) {
       axios
         .get(
-          `http://localhost:5000/dashboard/userchallenges/${userInfo.userID}`
+          `${url}/dashboard/userchallenges/${userInfo.userID}`
         )
         .then((res) => {
           const items = res.data;
@@ -113,7 +113,7 @@ const ViewChallenge = () => {
       // If user can join the challenge, add data to users_has_challenges table
       try {
         axios
-          .post(`${challengeURL}/join`, {
+          .post(`${url}/challenges/join`, {
             userID: userInfo.userID,
             challengeID: id,
             completed: "0",
@@ -172,7 +172,7 @@ const ViewChallenge = () => {
     if (!confirmed) return;
     setErrorDeleteMessage(null);
     axios
-      .delete(`${challengeURL}/delete/${id}`)
+      .delete(`${url}/challenges/delete/${id}`)
       .then(deleteChat(id))
       .then(navigate("/challenges"))
       .catch((err) => console.log(err));

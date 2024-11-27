@@ -2,10 +2,10 @@ import React, { useState, useEffect, useMemo } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import ChallengeForm from "../components/ChallengeForm";
 import * as Yup from "yup";
-import challengeURL from "../data/challengeURL";
 import axios from "axios";
 import Header from "../components/Header";
 import createChat from "../chat/components/CreateChat";
+import url from "../components/Backend_URL";
 
 const CreateChallenge = () => {
   const navigate = useNavigate();
@@ -45,7 +45,7 @@ const CreateChallenge = () => {
       //send request(handle file upload)
       await axios
 
-        .post(challengeURL, formData, {
+        .post(`${url}/challenges`, formData, {
           headers: {
             "Content-Type": "multipart/form-data",
           },

@@ -19,22 +19,3 @@ connection.connect((err) => {
 });
 
 module.exports = { connection, port };
-
-// const sql = require("mssql");
-// require("dotenv").config();
-
-// (async () => {
-//   try {
-//     // make sure that any items are correctly URL encoded in the connection string
-//     await sql.connect(
-//       `Server=${process.env.DB_HOST},1433;Database=${process.env.DB_DATABASE};User Id=${process.env.DB_USER};Password=${process.env.DB_PASSWORD};Encrypt=true;TrustServerCertificate=True;`
-//     );
-//     // const result = await sql.query`select * from mytable where id = ${value}`
-//     // console.dir(result)
-//   } catch (err) {
-//     console.error("Error connecting to the database:", err);
-//     return;
-//   }
-// })();
-
-// module.exports = { sql };

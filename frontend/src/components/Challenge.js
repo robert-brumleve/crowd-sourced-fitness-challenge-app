@@ -14,7 +14,7 @@ const Challenge = (props) => {
           aria-label="Close"
         ></Link>
         <img
-          class="card-img-top"
+          className="card-img-top"
           src={
             props.imageURL ||
             `${process.env.PUBLIC_URL}/img/defaultChallengeImg.png`
@@ -28,15 +28,15 @@ const Challenge = (props) => {
           }}
         ></img>
         <div className="card-body">
-          <h5 class="card-title">{props.name}</h5>
+          <h5 className="card-title">{props.name}</h5>
           <p className="card-text">{props.description}</p>
         </div>
-        <ul class="list-group list-group-flush">
-          <li class="list-group-item">Type: {props.type}</li>
-          <li class="list-group-item">Level: {props.difficulty}</li>
-          <li class="list-group-item">Creator: {props.username}</li>
-          <li class="list-group-item">Created at: {props.created_at}</li>
-          <li class="list-group-item">Tags: {props.tags}</li>
+        <ul className="list-group list-group-flush">
+          <li className="list-group-item">Type: {props.type}</li>
+          <li className="list-group-item">Level: {props.difficulty}</li>
+          <li className="list-group-item">Creator: {props.username}</li>
+          <li className="list-group-item">Created at: {props.created_at}</li>
+          <li className="list-group-item">Tags: {props.tags}</li>
           <li
             className="list-group-item"
             style={{ display: "flex", alignItems: "center" }}
@@ -53,7 +53,7 @@ const Challenge = (props) => {
             />
           </li>
         </ul>
-        <div class="card-body">
+        <div className="card-body">
           {props.errorUpdateMessage && (
             <div className="alert alert-danger">{props.errorUpdateMessage}</div>
           )}

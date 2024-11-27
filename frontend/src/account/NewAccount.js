@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 import Header from "../components/Header";
+import url from "../components/Backend_URL";
 
 const NewAccount = () => {
   const [username, setUsername] = useState('');
@@ -10,6 +11,7 @@ const NewAccount = () => {
   const [profilePicture, setProfilePicture] = useState(null); // State for profile picture
   const [showImageSelector, setShowImageSelector] = useState(false); // State for controlling modal visibility
   const [selectedFile, setSelectedFile] = useState(null); // State for selected file
+  
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -26,7 +28,7 @@ const NewAccount = () => {
     }
 
     try {
-      const response = await axios.post('http://localhost:5000/register', formData, {
+      const response = await axios.post(`${url}/register`, formData, {
         headers: {
           'Content-Type': 'multipart/form-data', // Set the content type for file uploads
         },

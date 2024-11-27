@@ -2,10 +2,10 @@ import React, { useState, useEffect } from "react";
 import { useNavigate, useParams, Link } from "react-router-dom";
 import axios from "axios";
 import ChallengeForm from "../components/ChallengeForm";
-import challengeURL from "../data/challengeURL";
 import Header from "../components/Header";
 import * as Yup from "yup";
 import updateChat from "../chat/components/UpdateChat";
+import url from "../components/Backend_URL";
 
 const UpdateChallenge = () => {
   const { id } = useParams();
@@ -27,7 +27,7 @@ const UpdateChallenge = () => {
 
   useEffect(() => {
     axios
-      .get(`${challengeURL}/view/${id}`)
+      .get(`${url}/challenges/view/${id}`)
       .then((res) => {
         setChallenge(res.data[0]);
       })
@@ -49,7 +49,7 @@ const UpdateChallenge = () => {
     
     try {
       await axios
-        .patch(`${challengeURL}/update/${id}`, formData, {
+        .patch(`${url}/challenges/update/${id}`, formData, {
           headers: {
             "Content-Type": "multipart/form-data",
           },

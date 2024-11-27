@@ -8,9 +8,7 @@ function Card(props) {
   return (
     <div className="card w-50">
       <div className="card-body">
-        <h5 class="card-title fw-bolder">{props.name}</h5>
-        {/* <img className="circle-img" src={props.img} alt="avatar_img" /> */}
-        {/* <p className="card-text">Name: {props.description}</p> */}
+        <h5 className="card-title fw-bolder">{props.name}</h5>
         <p className="card-text">Description: {props.description}</p>
         <p className="card-text">Level: {props.difficulty}</p>
         <p className="card-text">Created by: {props.creatorID}</p>
