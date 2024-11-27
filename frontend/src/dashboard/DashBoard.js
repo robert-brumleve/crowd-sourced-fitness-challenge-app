@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useMemo } from "react";
 import axios from "axios";
 // import UserChallengeList from "../components/UserChallengeList";
-import Header from "../components/Header";
+// import Header from "../components/Header";
 // import Greeting from "../components/Greeting";
 import { Link } from "react-router-dom";
 import url from "../components/Backend_URL";
@@ -90,22 +90,16 @@ const DashBoard = () => {
         </div>
       </section>
 
+      {/* <Header header="MY CHALLENGES" /> */}
       <div className="table-responsive py-5 text-center container">
-        <table className="table table-sm table-bordered table-hover col-lg-6 col-md-8 mx-auto">
-          <thead>
-            <th>My badges</th>
-          </thead>
-          <tbody>
+          <h3>MY BADGES</h3>
+          <div>
             {badges.map((item, i) => (
-              <tr key={i}>
-                <td>{item.badgeName}</td>
-              </tr>
+                <img src={item.badgeURL} alt="" width="50" height="60"/>
             ))}
-          </tbody>
-        </table>
+            </div>
       </div>
 
-      <Header header="MY CHALLENGES" />
       <div>
         {challenges.map((item, index) => {
           return (

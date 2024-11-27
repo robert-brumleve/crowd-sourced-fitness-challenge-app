@@ -1,11 +1,9 @@
 const { connection, port } = require("../db_connection");
 
+// Get all entries from users_has_challenges table
 const getUserChallenges = async (req, res, next) => {
-
     const sql = "SELECT * FROM users_has_challenges";
-
     connection.query(sql, (err, result) => {
-        // console.log("testing works");
         if (result.length === 0) {
         return next(new Error("Challenges not found."));
         }
@@ -16,10 +14,10 @@ const getUserChallenges = async (req, res, next) => {
     });
     };
 
+// Get all challenges a user joins using userID
 const getChallengesByUserId = async (req, res, next) => {
     const id = req.params.id;
     console.log("Chalenges for userID " + id);
-
     const sql = `SELECT uc.userID, uc.challengeID, c.name, c.imageURL
     FROM users_has_challenges uc
     JOIN challenges c ON uc.challengeID = c.challengeID
@@ -46,19 +44,6 @@ const updateUserHasChallenges = async (req, res, next) => {
 
     const sql = `UPDATE users_has_challenges SET completed=? WHERE userID=? AND challengeID=?`;
 
-    // const sql = `SELECT * FROM users_has_challenges WHERE userID = ? AND challengeID = ?`;
-    // connection.query(sql, [userid, challengeid], (err, result) => {
-    //     console.log("badge testing works");
-
-    //     if (result.length === 0) {
-    //       return next(new Error("Challenge not found."));
-    //     }
-    //     if (err) {
-    //       return next(new Error("Database error"));
-    //     }
-    //     res.json(result);
-    //   });
-    // };
     const values = [
         completed,
         uid,
@@ -84,7 +69,7 @@ const getBadgesByUserId = async (req, res, next) => {
         const id = req.params.id;
         console.log("Badges for userID " + id);
 
-        const sql = `SELECT uc.userID, uc.challengeID, c.badgeName
+        const sql = `SELECT uc.userID, uc.challengeID, c.badgeName, c.badgeURL
         FROM users_has_challenges uc
         JOIN challenges c ON uc.challengeID = c.challengeID
         WHERE uc.userID = ? && uc.completed = 1

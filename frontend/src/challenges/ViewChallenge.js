@@ -109,7 +109,6 @@ const ViewChallenge = () => {
       );
     } else {
       setErrorJoinMessage(null);
-
       // If user can join the challenge, add data to users_has_challenges table
       try {
         axios
