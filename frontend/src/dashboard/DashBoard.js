@@ -77,6 +77,8 @@ const DashBoard = () => {
       <section class="py-5 text-center container">
         <div class="row py-lg-5">
           <div class="col-lg-6 col-md-8 mx-auto">
+
+            {/* <Header header="MY CHALLENGES" /> */}
             <h1 class="fw-light">Challenge Dashboard</h1>
             <p class="lead text-muted">
               This dashboard displays the most recent challenges you have
@@ -92,25 +94,16 @@ const DashBoard = () => {
         </div>
       </section>
 
+      {/* <Header header="MY CHALLENGES" /> */}
       <div className="table-responsive" class="py-5 text-center container">
-        <table
-          className="table table-sm table-bordered table-hover"
-          class="col-lg-6 col-md-8 mx-auto"
-        >
-          <thead>
-            <th>My badges</th>
-          </thead>
-          <tbody>
+          <h3>MY BADGES</h3>
+          <div>
             {badges.map((item, i) => (
-              <tr key={i}>
-                <td>{item.badgeName}</td>
-              </tr>
+                <img src={item.badgeURL} alt="" width="50" height="60"/>
             ))}
-          </tbody>
-        </table>
+            </div>
       </div>
 
-      <Header header="MY CHALLENGES" />
       <div>
         {challenges.map((item, index) => {
           return (
