@@ -68,7 +68,7 @@ const Navbar = () => {
                 {/* show createAccount in login page instead*/}
                 <li className="nav-item">
                   <button
-                    class="btn btn-primary"
+                    className="btn btn-primary"
                     type="button"
                     aria-expanded="false"
                     onClick={() => navigate("/login")}
@@ -82,7 +82,7 @@ const Navbar = () => {
                 {/* dropdown menu with user info and logout */}
                 <li className="nav-item dropdown">
                   <button
-                    class="btn btn-primary dropdown-toggle"
+                    className="btn btn-primary dropdown-toggle"
                     type="button"
                     id="dropdownMenuButton"
                     data-bs-toggle="dropdown"
@@ -111,7 +111,7 @@ const Navbar = () => {
                     />
                     {localStorage.getItem("username")}
                   </button>
-                  <ul class="dropdown-menu">
+                  <ul className="dropdown-menu">
                     <li >
                       <button className="dropdown-item" onClick={handleLogout}>
                         Logout

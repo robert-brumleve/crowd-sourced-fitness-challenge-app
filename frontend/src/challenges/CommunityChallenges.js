@@ -1,10 +1,11 @@
+// require("dotenv").config();
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
 import Header from "../components/Header";
 import ChallengeList from "../components/ChallengesList";
-import TableHeader from "../components/TableHeader";
-import challengeURL from "../data/challengeURL";
+import url from "../components/Backend_URL";
+
 
 const AllChallenges = () => {
   const [challenges, setChallenges] = useState([]);
@@ -13,7 +14,7 @@ const AllChallenges = () => {
 
   useEffect(() => {
     axios
-      .get(`${challengeURL}`)
+      .get(`${url}/challenges`)
       .then((res) => {
         setChallenges(res.data);
         setFilteredChallenges(res.data);
@@ -48,22 +49,23 @@ const AllChallenges = () => {
         </Link>
       </div>
       <div className="table-responsive">
-        <table className="table table-sm table-bordered table-hover">
-          <TableHeader />
-          <tbody>
-            {filteredChallenges.map((item) => {
-              return (
-                <ChallengeList
-                  key={item.challengeID}
-                  challengeID={item.challengeID}
-                  type={item.type}
-                  name={item.name}
-                  difficulty={item.difficulty}
-                />
-              );
-            })}
-          </tbody>
-        </table>
+        <div className="row g-3">
+          {filteredChallenges.map((item) => (
+            <div
+              key={item.challengeID}
+              className="col-lg-2 col-md-3 col-sm-6 col-12"
+            >
+              <ChallengeList
+                challengeID={item.challengeID}
+                imageURL={item.imageURL}
+                type={item.type}
+                name={item.name}
+                difficulty={item.difficulty}
+                description={item.description}
+              />
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   );

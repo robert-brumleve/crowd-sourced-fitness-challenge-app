@@ -4,7 +4,7 @@ import { Link, useParams} from "react-router-dom";
 import Header from "../components/Header";
 import ChallengeList from "../components/ChallengesList";
 import TableHeader from "../components/TableHeader";
-import challengeURL from "../data/challengeURL";
+import url from "../components/Backend_URL";
 import { CloseIcon} from "../components/Icons";
 
 const Search = () => {
@@ -12,7 +12,7 @@ const Search = () => {
   const [challenges, setChallenges] = useState([]);
   useEffect(() => {
     axios
-      .get(`${challengeURL}/search/${keywords}`)
+      .get(`${url}/challenges/search/${keywords}`)
       .then((res) => {
         console.log(res);
         setChallenges(res.data);
@@ -22,7 +22,7 @@ const Search = () => {
 
   const handleDelete = (id) => {
     axios
-      .delete(`${challengeURL}/delete/${id}`)
+      .delete(`${url}/challenges/delete/${id}`)
       .then((res) => {
         setChallenges((prevChallenges) =>
           prevChallenges.filter((challenge) => challenge.challengeID !== id)
