@@ -1,20 +1,15 @@
-// require("dotenv").config();
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
 import Header from "../components/Header";
 import ChallengeList from "../components/ChallengesList";
 import url from "../components/Backend_URL";
-import Pagination from "../components/Pagination";
-import Select from "react-select";
-import types from "../data/types";
 
 const AllChallenges = () => {
   const [challenges, setChallenges] = useState([]);
   const [filteredChallenges, setFilteredChallenges] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
-  const postsPerPage = 12;
-  const [selectedType, setSelectedType] = useState([]);
+  const [postsPerPage, setPostsPerPage] = useState(8);
 
   useEffect(() => {
     axios
@@ -26,35 +21,27 @@ const AllChallenges = () => {
       .catch((err) => console.log(err));
   }, []);
 
-  // live filter challenge by input
-  const FilterByName = (event) => {
+  const Filter = (event) => {
     let keyword = event.target.value.toLowerCase();
     setFilteredChallenges(
-      challenges.filter((c) => c.name.toLowerCase().includes(keyword))
+      challenges.filter(
+        (c) =>
+          c.name.toLowerCase().includes(keyword) ||
+          c.type.toLowerCase().includes(keyword)
+      )
     );
+    setCurrentPage(1); // Reset to the first page on filter change
   };
 
-  // drop down select for specific type
-  const FilterByType = (selectedOption) => {
-    setSelectedType(selectedOption);
-    if (selectedOption) {
-      setFilteredChallenges(
-        challenges.filter((c) => c.type === selectedOption.label)
-      );
-    } else {
-      setFilteredChallenges(challenges);
-    }
-  };
-
-  // pagination
   const lastPostIndex = currentPage * postsPerPage;
   const firstPostIndex = lastPostIndex - postsPerPage;
   const currentPosts = filteredChallenges.slice(firstPostIndex, lastPostIndex);
 
-  console.log("lastPostIndex", lastPostIndex);
-  console.log("firstPostIndex", firstPostIndex);
-  console.log("currentPosts", currentPosts);
-  console.log("filteredChallenges", filteredChallenges);
+  const totalPages = Math.ceil(filteredChallenges.length / postsPerPage);
+
+  const handlePageChange = (pageNumber) => {
+    setCurrentPage(pageNumber);
+  };
 
   return (
     <div className="border p-3">
@@ -63,19 +50,10 @@ const AllChallenges = () => {
         <input
           type="text"
           className="form-control"
-          onChange={FilterByName}
-          placeholder="Search by name"
+          onChange={Filter}
+          placeholder="Search by name or type"
           style={{ width: "300px", marginBottom: "20px" }}
         />
-
-        <Select
-          options={types}
-          onChange={FilterByType}
-          isClearable
-          placeholder="Filter by type"
-          value={selectedType}
-        />
-
         <Link to="/challenges/create" className="btn btn-outline-success">
           ADD NEW CHALLENGE
         </Link>
@@ -97,13 +75,34 @@ const AllChallenges = () => {
               />
             </div>
           ))}
-          <Pagination
-            totalPosts={filteredChallenges.length}
-            postsPerPage={postsPerPage}
-            setCurrentPage={setCurrentPage}
-            currentPage={currentPage}
-          />
         </div>
+      </div>
+      <div className="pagination d-flex justify-content-center mt-3">
+        <button
+          className="btn btn-outline-primary mx-1"
+          disabled={currentPage === 1}
+          onClick={() => handlePageChange(currentPage - 1)}
+        >
+          Previous
+        </button>
+        {Array.from({ length: totalPages }, (_, index) => (
+          <button
+            key={index}
+            className={`btn mx-1 ${
+              currentPage === index + 1 ? "btn-primary" : "btn-outline-primary"
+            }`}
+            onClick={() => handlePageChange(index + 1)}
+          >
+            {index + 1}
+          </button>
+        ))}
+        <button
+          className="btn btn-outline-primary mx-1"
+          disabled={currentPage === totalPages}
+          onClick={() => handlePageChange(currentPage + 1)}
+        >
+          Next
+        </button>
       </div>
     </div>
   );
