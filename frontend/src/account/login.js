@@ -25,6 +25,7 @@ const Login = () => {
         username,
         password,
       });
+      console.log("response", response);
 
       // Check if the response contains a token
       if (response.data && response.data.token) {
@@ -36,11 +37,14 @@ const Login = () => {
         localStorage.setItem("userID", response.data.user.userID);
         localStorage.setItem("username", response.data.user.username);
         localStorage.setItem("email", response.data.user.email);
-        localStorage.setItem("profile_picture", response.data.user.profile_picture);
-        
+        localStorage.setItem(
+          "profile_picture",
+          response.data.user.profile_picture
+        );
+
         //login/register to firebase chat
         login_chat();
-        
+
         // Redirect to the dashboard or another page after successful login
         navigate("/dashboard");
       } else {
