@@ -8,7 +8,7 @@ import ChallengesListDashboard from "../components/ChallengesListDashboard";
 const DashBoard = () => {
   const [challenges, setChallenges] = useState([]);
   const [badges, setBadges] = useState([]);
-  const [errorJoinMessage, setErrorJoinMessage] = useState();
+  // const [errorJoinMessage, setErrorJoinMessage] = useState();
   const [currentPage, setCurrentPage] = useState(1);
   const postsPerPage = 12;
   // pagination
@@ -47,15 +47,15 @@ const DashBoard = () => {
 
   // Function to handle when user click on Complete Challenge
   const handleCompleteClick = async (value) => {
-    if (!userInfo.username || !userInfo.userID) {
-      setErrorJoinMessage(
-        <>
-          You should log in to complete this challenge. Click{" "}
-          <Link to="/login">here</Link> to login.
-        </>
-      );
-      return;
-    }
+    // if (!userInfo.username || !userInfo.userID) {
+    //   setErrorJoinMessage(
+    //     <>
+    //       You should log in to complete this challenge. Click{" "}
+    //       <Link to="/login">here</Link> to login.
+    //     </>
+    //   );
+    //   return;
+    // }
     // When user click on Complete challenge, the completed column in
     // users_has_challenges will be updated to 1 (True)
     const cid = value;
@@ -82,7 +82,7 @@ const DashBoard = () => {
       .catch((err) => console.log(err));
 
 
-      setErrorJoinMessage(null);
+      // setErrorJoinMessage(null);
       // console.log(result.response.data);
     } catch (error) {
       console.error(error.response.data);
@@ -132,7 +132,6 @@ const DashBoard = () => {
                 difficulty={item.difficulty}
                 completed={item.completed}
                 handleCompleteClick={handleCompleteClick}
-                errorJoinMessage={errorJoinMessage}
               />
             </div>
           ))}
