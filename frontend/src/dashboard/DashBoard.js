@@ -72,7 +72,7 @@ const DashBoard = () => {
             : challenge
         )
       );
-      
+
       axios
       .get(`${url}/dashboard/userbadges/${id}`)
       .then((res) => {
@@ -132,6 +132,7 @@ const DashBoard = () => {
                 difficulty={item.difficulty}
                 completed={item.completed}
                 handleCompleteClick={handleCompleteClick}
+                errorJoinMessage={errorJoinMessage}
               />
             </div>
           ))}
