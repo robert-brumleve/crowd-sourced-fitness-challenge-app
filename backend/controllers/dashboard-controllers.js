@@ -18,7 +18,7 @@ const getUserChallenges = async (req, res, next) => {
 const getChallengesByUserId = async (req, res, next) => {
     const id = req.params.id;
     console.log("Chalenges for userID " + id);
-    const sql = `SELECT uc.userID, uc.challengeID, c.name, c.imageURL
+    const sql = `SELECT uc.userID, uc.challengeID, uc.completed, c.name, c.imageURL
     FROM users_has_challenges uc
     JOIN challenges c ON uc.challengeID = c.challengeID
     WHERE uc.userID = ?
